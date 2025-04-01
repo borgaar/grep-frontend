@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import Button from 'primevue/button'
+import Button from "primevue/button";
 </script>
 
 <template>
   <main>
-    <Button label="Hello world!" @click="console.log('bruh')" severity="success" />
+    <Button label="Hello world!" severity="success" @click="console.log('bruh')" />
   </main>
 </template>
