@@ -2,6 +2,7 @@
 import { ref } from "vue";
 import { zodResolver } from "@primevue/forms/resolvers/zod";
 import { z } from "zod";
+
 const initialValues = ref({
   email: "",
   password: "",
@@ -11,18 +12,18 @@ const initialValues = ref({
 const resolver = zodResolver(
   z.object({
     email: z.string().email("Invalid email address"),
-    password: z.string().min(6, "Password must be at least 6 characters long"),
+    password: z.string(),
     rememberMe: z.boolean(),
   }),
 );
 
 const isLoading = ref(false);
 
-const onSubmit = ({ valid }) => {
+const onSubmit = ({ valid, values }) => {
   isLoading.value = true;
   if (valid) {
     // toast.add({ severity: 'success', summary: 'Form is submitted.', life: 3000 });
-    console.log("Form is submitted.");
+    console.log("Form is submitted.", values);
   }
   isLoading.value = false;
 };
