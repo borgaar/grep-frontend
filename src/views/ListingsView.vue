@@ -1,24 +1,39 @@
 <script lang="ts" setup>
-import ListingThumbnail from "@/components/listing/ListingThumbnail.vue";
+import GridListing from "@/components/listing/grid/GridListing.vue";
+import ListListings from "@/components/listing/list/ListListings.vue";
 import PageContainer from "@/components/PageContainer.vue";
-import mockListings from "@/data/mock/listings";
+import { ref } from "vue";
+
+const selectedValue = ref("grid");
+const viewMethods = ref([
+  { icon: "pi pi-th-large", value: "grid" },
+  { icon: "pi pi-list", value: "list" },
+]);
 </script>
 
 <template>
   <PageContainer>
-    <h1>Listings</h1>
-    <div class="listing-grid">
-      <ListingThumbnail v-for="listing in mockListings" :key="listing.id" :listing="listing" />
+    <div class="filters">
+      <SelectButton
+        v-model="selectedValue"
+        :allow-empty="false"
+        :options="viewMethods"
+        option-value="value"
+      >
+        <template #option="slotProps">
+          <i :class="slotProps.option.icon"></i>
+        </template>
+      </SelectButton>
     </div>
+    <ListListings v-if="selectedValue === 'list'" />
+    <GridListing v-if="selectedValue === 'grid'" />
   </PageContainer>
 </template>
 
 <style scoped>
-.listing-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  grid-auto-rows: 300px;
-  gap: 16px;
-  width: 100%;
+.filters {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
 }
 </style>

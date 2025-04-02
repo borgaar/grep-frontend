@@ -7,7 +7,7 @@ const mockListings: Listing[] = [
       name: "John Doe",
       phone: "+1234567890",
     },
-    id: "listing-1",
+    id: "1",
     image: "https://picsum.photos/200/300",
     bookmarks: 10,
     category: {
@@ -31,7 +31,7 @@ const mockListings: Listing[] = [
       name: "Jane Smith",
       phone: "+1987654321",
     },
-    id: "listing-2",
+    id: "2",
     image: "https://picsum.photos/200/300",
     bookmarks: 5,
     category: {
@@ -56,7 +56,7 @@ const mockListings: Listing[] = [
       phone: "+1122334455",
     },
     image: "https://picsum.photos/200/300",
-    id: "listing-3",
+    id: "3",
     bookmarks: 15,
     category: {
       id: "category-3",
@@ -79,7 +79,7 @@ const mockListings: Listing[] = [
       name: "Emily Davis",
       phone: "+1567891234",
     },
-    id: "listing-4",
+    id: "4",
     image: "https://picsum.photos/200/300",
     bookmarks: 8,
     category: {
@@ -103,7 +103,7 @@ const mockListings: Listing[] = [
       name: "Michael Brown",
       phone: "+1654987321",
     },
-    id: "listing-5",
+    id: "5",
     image: "https://picsum.photos/200/300",
     bookmarks: 3,
     category: {
@@ -127,7 +127,7 @@ const mockListings: Listing[] = [
       name: "Sarah Wilson",
       phone: "+1789456123",
     },
-    id: "listing-6",
+    id: "6",
     image: "https://picsum.photos/200/300",
     bookmarks: 12,
     category: {
@@ -151,7 +151,7 @@ const mockListings: Listing[] = [
       name: "David Miller",
       phone: "+1321654987",
     },
-    id: "listing-7",
+    id: "7",
     image: "https://picsum.photos/200/300",
     bookmarks: 7,
     category: {
@@ -175,7 +175,7 @@ const mockListings: Listing[] = [
       name: "Lisa Anderson",
       phone: "+1456789123",
     },
-    id: "listing-8",
+    id: "8",
     image: "https://picsum.photos/200/300",
     bookmarks: 20,
     category: {
@@ -199,7 +199,7 @@ const mockListings: Listing[] = [
       name: "James Taylor",
       phone: "+1234987654",
     },
-    id: "listing-9",
+    id: "9",
     image: "https://picsum.photos/200/300",
     bookmarks: 4,
     category: {
@@ -223,7 +223,7 @@ const mockListings: Listing[] = [
       name: "Patricia Martinez",
       phone: "+1876543219",
     },
-    id: "listing-10",
+    id: "10",
     image: "https://picsum.photos/200/300",
     bookmarks: 9,
     category: {
@@ -247,7 +247,7 @@ const mockListings: Listing[] = [
       name: "Thomas Clark",
       phone: "+1654321789",
     },
-    id: "listing-11",
+    id: "11",
     image: "https://picsum.photos/200/300",
     bookmarks: 6,
     category: {
