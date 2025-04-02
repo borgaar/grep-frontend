@@ -1,8 +1,10 @@
-<script lang="ts" setup />
+<script lang="ts" setup>
+import PageContainer from "@/components/PageContainer.vue";
+</script>
 
 <template>
-  <div class="listings-view">
+  <PageContainer>
     <h1>Listings</h1>
     <p>Here you can find a list of all available listings.</p>
-  </div>
+  </PageContainer>
 </template>
