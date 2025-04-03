@@ -1,3 +1,6 @@
+/* import primeicons */
+@import url('https://cdn.jsdelivr.net/npm/primeicons@latest/primeicons.css');
+
 /* color palette from <https://github.com/vuejs/theme> */
 :root {
   --vt-c-white: #ffffff;
