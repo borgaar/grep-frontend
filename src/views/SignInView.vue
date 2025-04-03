@@ -19,7 +19,13 @@ const resolver = zodResolver(
 
 const isLoading = ref(false);
 
-const onSubmit = ({ valid, values }) => {
+const onSubmit = ({
+  valid,
+  values,
+}: {
+  valid: boolean;
+  values: (typeof initialValues)["value"];
+}) => {
   isLoading.value = true;
   if (valid) {
     // toast.add({ severity: 'success', summary: 'Form is submitted.', life: 3000 });
