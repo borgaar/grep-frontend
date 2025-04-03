@@ -3,6 +3,8 @@ import { ref } from "vue";
 import { zodResolver } from "@primevue/forms/resolvers/zod";
 import { z } from "zod";
 import { useToast } from "primevue";
+import { authService } from "@/api/auth-service";
+import router from "@/router";
 
 const initialValues = ref({
   phone: "",
@@ -37,7 +39,7 @@ const resolver = zodResolver(
 const isLoading = ref(false);
 const toast = useToast();
 
-const onSubmit = ({
+const onSubmit = async ({
   valid,
   values,
 }: {
@@ -49,6 +51,8 @@ const onSubmit = ({
     toast.add({ severity: "success", summary: "Form is submitted.", life: 3000 });
     console.log("Form is submitted.", values);
   }
+  await authService.register(values.phone, values.password, values.firstName, values.lastName);
+  router.push({ name: "listings" });
   isLoading.value = false;
 };
 </script>
@@ -131,8 +135,8 @@ const onSubmit = ({
         <Button type="submit" label="Sign In" class="sign-in-button" :loading="isLoading" />
 
         <div class="signup-prompt">
-          <span>Don't have an account? </span>
-          <a class="signup-link">Sign up</a>
+          <span>Already have an account? </span>
+          <RouterLink :to="{ name: 'sign-in' }" class="signin-link">Sign In</RouterLink>
         </div>
       </Form>
     </div>
@@ -212,11 +216,13 @@ const onSubmit = ({
   margin-top: 1rem;
 }
 
-.signup-link {
+.signin-link {
+  text-decoration: none;
+  color: inherit;
   cursor: pointer;
 }
 
-.signup-link:hover {
+.signin-link:hover {
   text-decoration: underline;
 }
 

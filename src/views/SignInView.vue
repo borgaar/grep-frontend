@@ -3,18 +3,24 @@ import { ref } from "vue";
 import { zodResolver } from "@primevue/forms/resolvers/zod";
 import { z } from "zod";
 import { useI18n } from "vue-i18n";
-
 const { t } = useI18n();
+import { authService } from "@/api/auth-service";
+import router from "@/router";
+import { RouterLink } from "vue-router";
 
 const initialValues = ref({
-  email: "",
+  phone: "",
   password: "",
   rememberMe: false,
 });
 
+const norwegianPhoneRegex = /^(?:(?:\+|00)47)?[2-9]\d{7}$/;
+
 const resolver = zodResolver(
   z.object({
-    email: z.string().email(t("validation.email")),
+    phone: z.string().regex(new RegExp(norwegianPhoneRegex), {
+      message: "Invalid phone number",
+    }),
     password: z.string(),
     rememberMe: z.boolean(),
   }),
@@ -22,7 +28,7 @@ const resolver = zodResolver(
 
 const isLoading = ref(false);
 
-const onSubmit = ({
+const onSubmit = async ({
   valid,
   values,
 }: {
@@ -34,6 +40,8 @@ const onSubmit = ({
     // toast.add({ severity: 'success', summary: 'Form is submitted.', life: 3000 });
     console.log("Form is submitted.", values);
   }
+  await authService.login(values.phone, values.password);
+  router.push({ name: "listings" });
   isLoading.value = false;
 };
 </script>
@@ -46,11 +54,11 @@ const onSubmit = ({
       <Form v-slot="$form" class="login-form" :initial-values :resolver @submit="onSubmit">
         <div class="field">
           <FloatLabel variant="in">
-            <InputText name="email" type="text" fluid />
-            <label for="in_label">Email</label>
+            <InputText name="phone" type="text" fluid />
+            <label for="in_label">Phone</label>
           </FloatLabel>
-          <Message v-if="$form.email?.invalid" severity="error" size="small" variant="simple">{{
-            $form.email.error?.message
+          <Message v-if="$form.phone?.invalid" severity="error" size="small" variant="simple">{{
+            $form.phone.error?.message
           }}</Message>
         </div>
 
@@ -76,7 +84,7 @@ const onSubmit = ({
 
         <div class="signup-prompt">
           <span>Don't have an account? </span>
-          <a class="signup-link">Sign up</a>
+          <RouterLink :to="{ name: 'sign-up' }" class="signup-link">Sign up</RouterLink>
         </div>
       </Form>
     </div>
@@ -157,6 +165,8 @@ const onSubmit = ({
 }
 
 .signup-link {
+  text-decoration: none;
+  color: inherit;
   cursor: pointer;
 }
 
