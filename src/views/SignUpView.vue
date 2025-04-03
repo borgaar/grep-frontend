@@ -3,6 +3,8 @@ import { ref } from "vue";
 import { zodResolver } from "@primevue/forms/resolvers/zod";
 import { z } from "zod";
 import { useToast } from "primevue";
+import { authService } from "@/api/auth-service";
+import router from "@/router";
 
 const initialValues = ref({
   phone: "",
@@ -37,7 +39,7 @@ const resolver = zodResolver(
 const isLoading = ref(false);
 const toast = useToast();
 
-const onSubmit = ({
+const onSubmit = async ({
   valid,
   values,
 }: {
@@ -49,6 +51,8 @@ const onSubmit = ({
     toast.add({ severity: "success", summary: "Form is submitted.", life: 3000 });
     console.log("Form is submitted.", values);
   }
+  await authService.register(values.phone, values.password, values.firstName, values.lastName);
+  router.push({ name: "listings" });
   isLoading.value = false;
 };
 </script>

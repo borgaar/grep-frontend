@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
+import { authService } from "@/api/auth-service";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -33,9 +34,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to, _, next) => {
-  const isAuthenticated = localStorage.getItem("Authorization") !== null;
-
-  if (to.name !== "sign-in" && to.name !== "sign-up" && !isAuthenticated) {
+  if (to.name !== "sign-in" && to.name !== "sign-up" && !authService.isAuthenticated()) {
     next({ name: "sign-in" });
   } else {
     next();

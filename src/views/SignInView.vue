@@ -2,16 +2,23 @@
 import { ref } from "vue";
 import { zodResolver } from "@primevue/forms/resolvers/zod";
 import { z } from "zod";
+import { httpClient } from "@/api/http-client";
+import { authService } from "@/api/auth-service";
+import router from "@/router";
 
 const initialValues = ref({
-  email: "",
+  phone: "",
   password: "",
   rememberMe: false,
 });
 
+const norwegianPhoneRegex = /^(?:(?:\+|00)47)?[2-9]\d{7}$/;
+
 const resolver = zodResolver(
   z.object({
-    email: z.string().email("Invalid email address"),
+    phone: z.string().regex(new RegExp(norwegianPhoneRegex), {
+      message: "Invalid phone number",
+    }),
     password: z.string(),
     rememberMe: z.boolean(),
   }),
@@ -19,7 +26,7 @@ const resolver = zodResolver(
 
 const isLoading = ref(false);
 
-const onSubmit = ({
+const onSubmit = async ({
   valid,
   values,
 }: {
@@ -31,6 +38,8 @@ const onSubmit = ({
     // toast.add({ severity: 'success', summary: 'Form is submitted.', life: 3000 });
     console.log("Form is submitted.", values);
   }
+  await authService.login(values.phone, values.password);
+  router.push({ name: "listings" });
   isLoading.value = false;
 };
 </script>
@@ -43,11 +52,11 @@ const onSubmit = ({
       <Form v-slot="$form" class="login-form" :initial-values :resolver @submit="onSubmit">
         <div class="field">
           <FloatLabel variant="in">
-            <InputText name="email" type="text" fluid />
-            <label for="in_label">Email</label>
+            <InputText name="phone" type="text" fluid />
+            <label for="in_label">Phone</label>
           </FloatLabel>
-          <Message v-if="$form.email?.invalid" severity="error" size="small" variant="simple">{{
-            $form.email.error?.message
+          <Message v-if="$form.phone?.invalid" severity="error" size="small" variant="simple">{{
+            $form.phone.error?.message
           }}</Message>
         </div>
 
