@@ -7,7 +7,7 @@ defineProps<{
 </script>
 
 <template>
-  <RouterLink :to="`/listings/${listing.id}`" class="remove-link-decoration">
+  <RouterLink :to="`/${listing.id}`" class="remove-link-decoration">
     <div class="listing-thumbnail">
       <img :src="listing.image" alt="listing image" class="image" />
       <div class="listing-details">

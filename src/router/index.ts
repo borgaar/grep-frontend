@@ -1,15 +1,9 @@
 import { createRouter, createWebHistory } from "vue-router";
-import HomeView from "../views/HomeView.vue";
 import { authService } from "@/api/auth-service";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    {
-      path: "/",
-      name: "home",
-      component: HomeView,
-    },
     {
       path: "/sign-in",
       name: "sign-in",
@@ -21,12 +15,12 @@ const router = createRouter({
       component: () => import("../views/SignUpView.vue"),
     },
     {
-      path: "/listings",
+      path: "/",
       name: "listings",
       component: () => import("../views/ListingsView.vue"),
     },
     {
-      path: "/listings/:id",
+      path: "/:id",
       name: "listing",
       component: () => import("../views/ListingView.vue"),
     },

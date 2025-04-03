@@ -33,6 +33,9 @@ class AuthService {
       const response = await axios.post(API_URL + "/login", {
         phone: phone,
         password: password,
+        // This is temporary as login and register uses same RequestBody class in backend
+        firstName: "temp",
+        lastName: "orary",
       });
 
       if (response.data.token) {

@@ -135,8 +135,8 @@ const onSubmit = async ({
         <Button type="submit" label="Sign In" class="sign-in-button" :loading="isLoading" />
 
         <div class="signup-prompt">
-          <span>Don't have an account? </span>
-          <a class="signup-link">Sign up</a>
+          <span>Already have an account? </span>
+          <RouterLink :to="{ name: 'sign-in' }" class="signin-link">Sign In</RouterLink>
         </div>
       </Form>
     </div>
@@ -216,11 +216,13 @@ const onSubmit = async ({
   margin-top: 1rem;
 }
 
-.signup-link {
+.signin-link {
+  text-decoration: none;
+  color: inherit;
   cursor: pointer;
 }
 
-.signup-link:hover {
+.signin-link:hover {
   text-decoration: underline;
 }
 

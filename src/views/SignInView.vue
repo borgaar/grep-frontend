@@ -5,6 +5,7 @@ import { z } from "zod";
 import { httpClient } from "@/api/http-client";
 import { authService } from "@/api/auth-service";
 import router from "@/router";
+import { RouterLink } from "vue-router";
 
 const initialValues = ref({
   phone: "",
@@ -82,7 +83,7 @@ const onSubmit = async ({
 
         <div class="signup-prompt">
           <span>Don't have an account? </span>
-          <a class="signup-link">Sign up</a>
+          <RouterLink :to="{ name: 'sign-up' }" class="signup-link">Sign up</RouterLink>
         </div>
       </Form>
     </div>
@@ -163,6 +164,8 @@ const onSubmit = async ({
 }
 
 .signup-link {
+  text-decoration: none;
+  color: inherit;
   cursor: pointer;
 }
 
