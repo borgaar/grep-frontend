@@ -41,6 +41,7 @@ const listings = ref(mockListings);
 .container {
   display: flex;
   width: 100%;
+  justify-content: center;
   height: 100%;
 }
 
