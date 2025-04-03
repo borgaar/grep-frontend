@@ -11,5 +11,6 @@
   align-self: center;
   max-width: 1200px;
   width: 100%;
+  padding-inline: 20px;
 }
 </style>

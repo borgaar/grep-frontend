@@ -27,11 +27,18 @@ defineProps<{
   text-decoration: none;
 }
 
+.listing-thumbnail:hover {
+  transform: scale(1.03);
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
+}
+
 .listing-thumbnail {
   border: 1px solid #ccc;
   border-radius: 8px;
   display: flex;
   flex-direction: column;
+  transition: transform 0.1s ease;
+  transform: scale(1);
   height: 100%;
   overflow: hidden; /* Clipping the border radius */
 }

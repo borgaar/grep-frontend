@@ -1,11 +1,15 @@
 <script lang="ts" setup>
-import mockListings from "@/data/mock/listings";
 import ListingThumbnail from "./ListingThumbnail.vue";
+import type { Listing } from "@/data/types/listings/Listing";
+
+defineProps<{
+  listings: Listing[];
+}>();
 </script>
 
 <template>
   <div class="listing-grid">
-    <ListingThumbnail v-for="listing in mockListings" :key="listing.id" :listing="listing" />
+    <ListingThumbnail v-for="listing in listings" :key="listing.id" :listing="listing" />
   </div>
 </template>
 
