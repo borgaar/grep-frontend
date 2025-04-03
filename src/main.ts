@@ -12,6 +12,15 @@ import ToastService from "primevue/toastservice";
 
 const app = createApp(App);
 
+import { createI18n } from "vue-i18n";
+
+const i18n = createI18n({
+  legacy: false,
+  locale: "no",
+  fallbackLocale: "en",
+});
+app.use(i18n);
+
 app.use(PrimeVue, {
   theme: {
     preset: Aura,

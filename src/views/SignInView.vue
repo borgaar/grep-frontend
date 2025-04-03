@@ -2,6 +2,9 @@
 import { ref } from "vue";
 import { zodResolver } from "@primevue/forms/resolvers/zod";
 import { z } from "zod";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 const initialValues = ref({
   email: "",
@@ -11,7 +14,7 @@ const initialValues = ref({
 
 const resolver = zodResolver(
   z.object({
-    email: z.string().email("Invalid email address"),
+    email: z.string().email(t("validation.email")),
     password: z.string(),
     rememberMe: z.boolean(),
   }),
@@ -38,7 +41,7 @@ const onSubmit = ({
 <template>
   <div class="login-container">
     <div class="login-panel">
-      <h1 class="login-title">Login</h1>
+      <h1 class="login-title">{{ $t("hello") }}</h1>
 
       <Form v-slot="$form" class="login-form" :initial-values :resolver @submit="onSubmit">
         <div class="field">
@@ -173,3 +176,14 @@ const onSubmit = ({
   justify-content: center;
 }
 </style>
+
+<i18n>
+{
+  "en": {
+    "hello": "Hello!"
+  },
+  "no": {
+    "hello": "Halla!"
+  }
+}
+</i18n>
