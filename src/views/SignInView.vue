@@ -2,8 +2,6 @@
 import { ref } from "vue";
 import { zodResolver } from "@primevue/forms/resolvers/zod";
 import { z } from "zod";
-import { useI18n } from "vue-i18n";
-const { t } = useI18n();
 import { authService } from "@/api/auth-service";
 import router from "@/router";
 import { RouterLink } from "vue-router";
@@ -186,14 +184,3 @@ const onSubmit = async ({
   justify-content: center;
 }
 </style>
-
-<i18n>
-{
-  "en": {
-    "hello": "Hello!"
-  },
-  "no": {
-    "hello": "Halla!"
-  }
-}
-</i18n>
