@@ -2,7 +2,6 @@
 import { ref } from "vue";
 import { zodResolver } from "@primevue/forms/resolvers/zod";
 import { z } from "zod";
-import { httpClient } from "@/api/http-client";
 import { authService } from "@/api/auth-service";
 import router from "@/router";
 import { RouterLink } from "vue-router";
