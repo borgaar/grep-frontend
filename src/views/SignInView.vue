@@ -47,7 +47,7 @@ const onSubmit = async ({
 <template>
   <div class="login-container">
     <div class="login-panel">
-      <h1 class="login-title">Login</h1>
+      <h1 class="login-title">{{ $t("hello") }}</h1>
 
       <Form v-slot="$form" class="login-form" :initial-values :resolver @submit="onSubmit">
         <div class="field">

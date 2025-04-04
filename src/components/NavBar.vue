@@ -1,8 +1,14 @@
 <template>
   <div class="card main">
     <Menubar :model="items" class="menubar-full">
+      <template #start>
+        <div class="user-info">
+          <span class="username">{{ user?.firstName + " " + user?.lastName }}</span>
+        </div>
+      </template>
       <template #item="{ item, props, hasSubmenu, root }">
         <a v-ripple class="menu-item" v-bind="props.action">
+          <i v-if="item.icon" :class="['menu-icon', item.icon]"></i>
           <span>{{ item.label }}</span>
           <Badge
             v-if="item.badge"
@@ -12,19 +18,25 @@
           <span v-if="item.shortcut" class="shortcut">{{ item.shortcut }}</span>
           <i
             v-if="hasSubmenu"
-            :class="[
-              'pi pi-angle-down submenu-icon',
-              { 'pi-angle-down': root, 'pi-angle-right': !root },
-            ]"
+            :class="['pi submenu-icon', { 'pi-angle-down': root, 'pi-angle-right': !root }]"
           ></i>
         </a>
       </template>
       <template #end>
         <div class="end-container">
-          <InputText placeholder="Search" type="text" class="search-input" />
-          <Avatar
-            image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png"
-            shape="circle"
+          <Button
+            v-tooltip.bottom="'Toggle theme'"
+            :icon="theme === 'dark' ? 'pi pi-moon' : 'pi pi-sun'"
+            :class="['theme-toggle']"
+            @click="toggleTheme"
+          />
+          <Select
+            v-model="language"
+            :options="$i18n.availableLocales"
+            :option-label="(v) => new Intl.DisplayNames(['en'], { type: 'language' }).of(v)"
+            placeholder="Select Language"
+            class="language-dropdown"
+            @change="(e) => setLanguage(e.value)"
           />
         </div>
       </template>
@@ -33,37 +45,27 @@
 </template>
 
 <script setup lang="ts">
+import { useUserStore } from "@/state/user";
+import { storeToRefs } from "pinia";
 import { ref } from "vue";
 
+const { toggleTheme, setLanguage } = useUserStore();
+const { theme, user, language } = storeToRefs(useUserStore());
+
+// Navigation items
 const items = ref([
   {
-    label: "Home",
-    icon: "pi pi-home",
+    label: "Listings",
+    icon: "pi pi-list",
   },
   {
-    label: "Projects",
-    icon: "pi pi-search",
+    label: "Messages",
+    icon: "pi pi-envelope",
     badge: 3,
-    items: [
-      {
-        label: "Core",
-        icon: "pi pi-bolt",
-        shortcut: "⌘+S",
-      },
-      {
-        label: "Blocks",
-        icon: "pi pi-server",
-        shortcut: "⌘+B",
-      },
-      {
-        separator: true,
-      },
-      {
-        label: "UI Kit",
-        icon: "pi pi-pencil",
-        shortcut: "⌘+U",
-      },
-    ],
+  },
+  {
+    label: "Profile",
+    icon: "pi pi-user",
   },
 ]);
 </script>
@@ -74,10 +76,26 @@ const items = ref([
   width: 100%;
 }
 
+/* User info styling */
+.user-info {
+  display: flex;
+  align-items: center;
+  margin-right: 1rem;
+}
+
+.username {
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
 /* Menu item styling */
 .menu-item {
   display: flex;
   align-items: center;
+}
+
+.menu-icon {
+  margin-right: 0.5rem;
 }
 
 /* Badge positioning */
@@ -109,18 +127,28 @@ const items = ref([
 .end-container {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.75rem;
 }
 
-/* Search input styling */
-.search-input {
+/* Theme toggle styling */
+.theme-toggle {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.theme-toggle.dark .pi-sun:before {
+  content: "\e9c4"; /* PrimeIcons moon icon code */
+}
+
+/* Language dropdown styling */
+.language-dropdown {
   width: 8rem;
 }
 
-/* Media query for responsive search input */
+/* Media query for responsive elements */
 @media (min-width: 640px) {
-  .search-input {
-    width: auto;
+  .language-dropdown {
+    width: 10rem;
   }
 }
 </style>
