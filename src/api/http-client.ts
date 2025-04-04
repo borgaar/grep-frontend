@@ -7,7 +7,15 @@ import axios, {
 import router from "@/router";
 import { authService } from "./auth-service";
 
-class ApiService {
+interface HttpService {
+  get<T = any>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>>;
+  post<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<AxiosResponse<T>>;
+  put<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<AxiosResponse<T>>;
+  patch<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<AxiosResponse<T>>;
+  delete<T = any>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>>;
+}
+
+class ApiService implements HttpService {
   private api: AxiosInstance;
 
   constructor() {
