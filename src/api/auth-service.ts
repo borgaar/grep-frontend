@@ -13,9 +13,22 @@ interface DecodedToken {
   exp: number;
 }
 
+interface AuthService {
+  getToken(): string | null;
+  isAuthenticated(): boolean;
+  login(phone: string, password: string): Promise<{ token: string }>;
+  register(
+    phone: string,
+    password: string,
+    firstName: string,
+    lastName: string,
+  ): Promise<{ token: string }>;
+  logout(): void;
+}
+
 const API_URL = "http://localhost:8080/api/auth";
 
-class AuthService {
+class AuthApiService implements AuthService {
   private storeToken(token: string): void {
     localStorage.setItem("Authorization", token);
   }
@@ -97,4 +110,4 @@ class AuthService {
   }
 }
 
-export const authService = new AuthService();
+export const authService = new AuthApiService();
