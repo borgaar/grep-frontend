@@ -34,7 +34,6 @@ const applyFilters = () => {
 .container {
   display: flex;
   flex-direction: column;
-  box-shadow: 4px 0px 4px rgba(0, 0, 0, 0.25);
   height: 100vh;
   row-gap: 20px;
   padding-block: 20px;
