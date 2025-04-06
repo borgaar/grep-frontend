@@ -5,6 +5,9 @@ import { z } from "zod";
 import { authService } from "@/api/auth-service";
 import router from "@/router";
 import { RouterLink } from "vue-router";
+import { useToast } from "primevue";
+
+const toast = useToast();
 
 const initialValues = ref({
   phone: "",
@@ -34,18 +37,48 @@ const onSubmit = async ({
   values: (typeof initialValues)["value"];
 }) => {
   isLoading.value = true;
-  if (valid) {
-    // toast.add({ severity: 'success', summary: 'Form is submitted.', life: 3000 });
-    console.log("Form is submitted.", values);
+  if (!valid) {
+    toast.add({
+      severity: "error",
+      summary: "Please make sure that all the fields are valid",
+      life: 3000,
+    });
+    return;
   }
-  await authService.login(values.phone, values.password);
-  router.push({ name: "listings" });
+
+  try {
+    const response = await authService.login(values.phone, values.password);
+
+    if (response.status !== 200) {
+      toast.add({
+        severity: "error",
+        summary: "Login failed",
+        detail: "Invalid phone number or password.",
+        life: 3000,
+      });
+      isLoading.value = false;
+      return;
+    }
+
+    router.push({ name: "listings" });
+  } catch (error) {
+    toast.add({
+      severity: "error",
+      summary: "Login failed",
+      detail:
+        process.env.NODE_ENV === "development"
+          ? error
+          : "Could not reach the server. Are you connected to the internet?",
+      life: 3000,
+    });
+  }
   isLoading.value = false;
 };
 </script>
 
 <template>
   <div class="login-container">
+    <Toast />
     <div class="login-panel">
       <h1 class="login-title">{{ $t("hello") }}</h1>
 

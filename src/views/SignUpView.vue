@@ -47,13 +47,44 @@ const onSubmit = async ({
   values: (typeof initialValues)["value"];
 }) => {
   isLoading.value = true;
-  if (valid) {
-    toast.add({ severity: "success", summary: "Form is submitted.", life: 3000 });
-    console.log("Form is submitted.", values);
+  if (!valid) {
+    toast.add({
+      severity: "error",
+      summary: "Please make sure that all the fields are valid",
+      life: 3000,
+    });
+    return;
   }
-  await authService.register(values.phone, values.password, values.firstName, values.lastName);
-  router.push({ name: "listings" });
-  isLoading.value = false;
+  try {
+    const response = await authService.register(
+      values.phone,
+      values.password,
+      values.firstName,
+      values.lastName,
+    );
+
+    if (response.status !== 200) {
+      toast.add({
+        severity: "error",
+        summary: "Registration failed",
+        detail: "This phone number is already registered.",
+        life: 3000,
+      });
+      isLoading.value = false;
+      return;
+    }
+
+    router.push({ name: "listings" });
+  } catch (error) {
+    toast.add({
+      severity: "error",
+      summary: "Registration failed",
+      detail:
+        process.env.NODE_ENV === "development" ? error : "An error occurred during registration.",
+      life: 3000,
+    });
+    isLoading.value = false;
+  }
 };
 </script>
 

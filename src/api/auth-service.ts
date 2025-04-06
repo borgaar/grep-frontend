@@ -1,6 +1,8 @@
 import router from "@/router";
-import axios from "axios";
+import axios, { type AxiosResponse } from "axios";
 import { jwtDecode } from "jwt-decode";
+
+const API_URL = "http://localhost:8080/api/auth";
 
 interface DecodedToken {
   // Phone number
@@ -16,19 +18,25 @@ interface DecodedToken {
 interface AuthService {
   getToken(): string | null;
   isAuthenticated(): boolean;
-  login(phone: string, password: string): Promise<{ token: string }>;
+  login(phone: string, password: string): Promise<AxiosResponse<any, any>>;
   register(
     phone: string,
     password: string,
     firstName: string,
     lastName: string,
-  ): Promise<{ token: string }>;
+  ): Promise<AxiosResponse<any, any>>;
   logout(): void;
 }
 
-const API_URL = "http://localhost:8080/api/auth";
-
 class AuthApiService implements AuthService {
+  private axiosClient = axios.create({
+    baseURL: API_URL,
+    validateStatus: () => true, // Accept all status codes
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
   private storeToken(token: string): void {
     localStorage.setItem("Authorization", token);
   }
@@ -41,24 +49,20 @@ class AuthApiService implements AuthService {
     return !this.isTokenExpired();
   }
 
-  public async login(phone: string, password: string): Promise<{ token: string }> {
-    try {
-      const response = await axios.post(API_URL + "/login", {
-        phone: phone,
-        password: password,
-        // TODO: This is temporary as login and register uses same RequestBody class in backend
-        firstName: "temp",
-        lastName: "orary",
-      });
+  public async login(phone: string, password: string): Promise<AxiosResponse<any, any>> {
+    const response = await this.axiosClient.post("/login", {
+      phone: phone,
+      password: password,
+      // TODO: This is temporary as login and register uses same RequestBody class in backend
+      firstName: "temp",
+      lastName: "orary",
+    });
 
-      if (response.data.token) {
-        this.storeToken(response.data.token);
-      }
-
-      return response.data;
-    } catch (error) {
-      throw error;
+    if (response.data.token) {
+      this.storeToken(response.data.token);
     }
+
+    return response;
   }
 
   public async register(
@@ -66,9 +70,9 @@ class AuthApiService implements AuthService {
     password: string,
     firstName: string,
     lastName: string,
-  ): Promise<{ token: string }> {
+  ): Promise<AxiosResponse<any, any>> {
     try {
-      const response = await axios.post(API_URL + "/register", {
+      const response = await this.axiosClient.post("/register", {
         phone,
         password,
         firstName,
@@ -79,7 +83,7 @@ class AuthApiService implements AuthService {
         this.storeToken(response.data.token);
       }
 
-      return response.data;
+      return response;
     } catch (error) {
       throw error;
     }
