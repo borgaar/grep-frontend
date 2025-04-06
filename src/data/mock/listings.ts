@@ -15,7 +15,9 @@ const mockListings: Listing[] = [
       name: "Electronics",
     },
     createdAt: new Date("2023-01-01"),
-    description: "A great product for sale.",
+    shortDescription: "A great product for sale.",
+    description:
+      "This is a detailed description of the product. It includes all the features and specifications. It is a must-have item for anyone looking for quality and reliability. Don't miss out on this amazing deal! Get it now before it's gone! Limited stock available. Order today and enjoy the benefits of this fantastic product. Satisfaction guaranteed or your money back. Act fast and take advantage of this special offer! Hurry, while supplies last! This is a limited time offer, so don't wait too long. Get your hands on this incredible product and experience the difference it can make in your life. You won't regret it! This is a once-in-a-lifetime opportunity to own something truly special. Don't let it slip away! Contact us now for more information and to place your order. We are here to help you every step of the way. Thank you for considering our product. We look forward to serving you soon! Best regards, The Sales Team. We appreciate your business and are committed to providing you with the best service possible. If you have any questions or concerns, please don't hesitate to reach out to us. We value your feedback and strive to improve our products and services continuously. Thank you for choosing us! We are grateful for your support and trust in our brand. Your satisfaction is our top priority, and we are dedicated to exceeding your expectations. We hope you enjoy your purchase and look forward to serving you again in the future. Have a great day! Best wishes, The Customer Service Team.",
     isBookmarked: false,
     location: {
       lat: 37.7749,
@@ -39,7 +41,9 @@ const mockListings: Listing[] = [
       name: "Furniture",
     },
     createdAt: new Date("2023-01-05"),
-    description: "Vintage wooden desk in excellent condition.",
+    shortDescription: "A great product for sale.",
+    description:
+      "This is a detailed description of the product. It includes all the features and specifications. It is a must-have item for anyone looking for quality and reliability. Don't miss out on this amazing deal! Get it now before it's gone! Limited stock available. Order today and enjoy the benefits of this fantastic product. Satisfaction guaranteed or your money back. Act fast and take advantage of this special offer! Hurry, while supplies last! This is a limited time offer, so don't wait too long. Get your hands on this incredible product and experience the difference it can make in your life. You won't regret it! This is a once-in-a-lifetime opportunity to own something truly special. Don't let it slip away! Contact us now for more information and to place your order. We are here to help you every step of the way. Thank you for considering our product. We look forward to serving you soon! Best regards, The Sales Team. We appreciate your business and are committed to providing you with the best service possible. If you have any questions or concerns, please don't hesitate to reach out to us. We value your feedback and strive to improve our products and services continuously. Thank you for choosing us! We are grateful for your support and trust in our brand. Your satisfaction is our top priority, and we are dedicated to exceeding your expectations. We hope you enjoy your purchase and look forward to serving you again in the future. Have a great day! Best wishes, The Customer Service Team.",
     isBookmarked: true,
     location: {
       lat: 40.7128,
@@ -63,7 +67,9 @@ const mockListings: Listing[] = [
       name: "Vehicles",
     },
     createdAt: new Date("2023-01-10"),
-    description: "Low mileage sedan with all service records.",
+    shortDescription: "A great product for sale.",
+    description:
+      "This is a detailed description of the product. It includes all the features and specifications. It is a must-have item for anyone looking for quality and reliability. Don't miss out on this amazing deal! Get it now before it's gone! Limited stock available. Order today and enjoy the benefits of this fantastic product. Satisfaction guaranteed or your money back. Act fast and take advantage of this special offer! Hurry, while supplies last! This is a limited time offer, so don't wait too long. Get your hands on this incredible product and experience the difference it can make in your life. You won't regret it! This is a once-in-a-lifetime opportunity to own something truly special. Don't let it slip away! Contact us now for more information and to place your order. We are here to help you every step of the way. Thank you for considering our product. We look forward to serving you soon! Best regards, The Sales Team. We appreciate your business and are committed to providing you with the best service possible. If you have any questions or concerns, please don't hesitate to reach out to us. We value your feedback and strive to improve our products and services continuously. Thank you for choosing us! We are grateful for your support and trust in our brand. Your satisfaction is our top priority, and we are dedicated to exceeding your expectations. We hope you enjoy your purchase and look forward to serving you again in the future. Have a great day! Best wishes, The Customer Service Team.",
     isBookmarked: false,
     location: {
       lat: 34.0522,
@@ -87,7 +93,9 @@ const mockListings: Listing[] = [
       name: "Clothing",
     },
     createdAt: new Date("2023-01-18"),
-    description: "Brand new designer jacket, never worn.",
+    shortDescription: "A great product for sale.",
+    description:
+      "This is a detailed description of the product. It includes all the features and specifications. It is a must-have item for anyone looking for quality and reliability. Don't miss out on this amazing deal! Get it now before it's gone! Limited stock available. Order today and enjoy the benefits of this fantastic product. Satisfaction guaranteed or your money back. Act fast and take advantage of this special offer! Hurry, while supplies last! This is a limited time offer, so don't wait too long. Get your hands on this incredible product and experience the difference it can make in your life. You won't regret it! This is a once-in-a-lifetime opportunity to own something truly special. Don't let it slip away! Contact us now for more information and to place your order. We are here to help you every step of the way. Thank you for considering our product. We look forward to serving you soon! Best regards, The Sales Team. We appreciate your business and are committed to providing you with the best service possible. If you have any questions or concerns, please don't hesitate to reach out to us. We value your feedback and strive to improve our products and services continuously. Thank you for choosing us! We are grateful for your support and trust in our brand. Your satisfaction is our top priority, and we are dedicated to exceeding your expectations. We hope you enjoy your purchase and look forward to serving you again in the future. Have a great day! Best wishes, The Customer Service Team.",
     isBookmarked: true,
     location: {
       lat: 51.5074,
@@ -111,7 +119,9 @@ const mockListings: Listing[] = [
       name: "Sports",
     },
     createdAt: new Date("2023-01-22"),
-    description: "Professional mountain bike, lightly used.",
+    shortDescription: "A great product for sale.",
+    description:
+      "This is a detailed description of the product. It includes all the features and specifications. It is a must-have item for anyone looking for quality and reliability. Don't miss out on this amazing deal! Get it now before it's gone! Limited stock available. Order today and enjoy the benefits of this fantastic product. Satisfaction guaranteed or your money back. Act fast and take advantage of this special offer! Hurry, while supplies last! This is a limited time offer, so don't wait too long. Get your hands on this incredible product and experience the difference it can make in your life. You won't regret it! This is a once-in-a-lifetime opportunity to own something truly special. Don't let it slip away! Contact us now for more information and to place your order. We are here to help you every step of the way. Thank you for considering our product. We look forward to serving you soon! Best regards, The Sales Team. We appreciate your business and are committed to providing you with the best service possible. If you have any questions or concerns, please don't hesitate to reach out to us. We value your feedback and strive to improve our products and services continuously. Thank you for choosing us! We are grateful for your support and trust in our brand. Your satisfaction is our top priority, and we are dedicated to exceeding your expectations. We hope you enjoy your purchase and look forward to serving you again in the future. Have a great day! Best wishes, The Customer Service Team.",
     isBookmarked: false,
     location: {
       lat: 47.6062,
@@ -135,7 +145,9 @@ const mockListings: Listing[] = [
       name: "Electronics",
     },
     createdAt: new Date("2023-01-28"),
-    description: "Latest model with all accessories included.",
+    shortDescription: "A great product for sale.",
+    description:
+      "This is a detailed description of the product. It includes all the features and specifications. It is a must-have item for anyone looking for quality and reliability. Don't miss out on this amazing deal! Get it now before it's gone! Limited stock available. Order today and enjoy the benefits of this fantastic product. Satisfaction guaranteed or your money back. Act fast and take advantage of this special offer! Hurry, while supplies last! This is a limited time offer, so don't wait too long. Get your hands on this incredible product and experience the difference it can make in your life. You won't regret it! This is a once-in-a-lifetime opportunity to own something truly special. Don't let it slip away! Contact us now for more information and to place your order. We are here to help you every step of the way. Thank you for considering our product. We look forward to serving you soon! Best regards, The Sales Team. We appreciate your business and are committed to providing you with the best service possible. If you have any questions or concerns, please don't hesitate to reach out to us. We value your feedback and strive to improve our products and services continuously. Thank you for choosing us! We are grateful for your support and trust in our brand. Your satisfaction is our top priority, and we are dedicated to exceeding your expectations. We hope you enjoy your purchase and look forward to serving you again in the future. Have a great day! Best wishes, The Customer Service Team.",
     isBookmarked: true,
     location: {
       lat: 41.8781,
@@ -159,7 +171,9 @@ const mockListings: Listing[] = [
       name: "Real Estate",
     },
     createdAt: new Date("2023-02-05"),
-    description: "Spacious apartment with great city views.",
+    shortDescription: "A great product for sale.",
+    description:
+      "This is a detailed description of the product. It includes all the features and specifications. It is a must-have item for anyone looking for quality and reliability. Don't miss out on this amazing deal! Get it now before it's gone! Limited stock available. Order today and enjoy the benefits of this fantastic product. Satisfaction guaranteed or your money back. Act fast and take advantage of this special offer! Hurry, while supplies last! This is a limited time offer, so don't wait too long. Get your hands on this incredible product and experience the difference it can make in your life. You won't regret it! This is a once-in-a-lifetime opportunity to own something truly special. Don't let it slip away! Contact us now for more information and to place your order. We are here to help you every step of the way. Thank you for considering our product. We look forward to serving you soon! Best regards, The Sales Team. We appreciate your business and are committed to providing you with the best service possible. If you have any questions or concerns, please don't hesitate to reach out to us. We value your feedback and strive to improve our products and services continuously. Thank you for choosing us! We are grateful for your support and trust in our brand. Your satisfaction is our top priority, and we are dedicated to exceeding your expectations. We hope you enjoy your purchase and look forward to serving you again in the future. Have a great day! Best wishes, The Customer Service Team.",
     isBookmarked: false,
     location: {
       lat: 48.8566,
@@ -183,7 +197,9 @@ const mockListings: Listing[] = [
       name: "Books",
     },
     createdAt: new Date("2023-02-12"),
-    description: "First edition collection in mint condition.",
+    shortDescription: "A great product for sale.",
+    description:
+      "This is a detailed description of the product. It includes all the features and specifications. It is a must-have item for anyone looking for quality and reliability. Don't miss out on this amazing deal! Get it now before it's gone! Limited stock available. Order today and enjoy the benefits of this fantastic product. Satisfaction guaranteed or your money back. Act fast and take advantage of this special offer! Hurry, while supplies last! This is a limited time offer, so don't wait too long. Get your hands on this incredible product and experience the difference it can make in your life. You won't regret it! This is a once-in-a-lifetime opportunity to own something truly special. Don't let it slip away! Contact us now for more information and to place your order. We are here to help you every step of the way. Thank you for considering our product. We look forward to serving you soon! Best regards, The Sales Team. We appreciate your business and are committed to providing you with the best service possible. If you have any questions or concerns, please don't hesitate to reach out to us. We value your feedback and strive to improve our products and services continuously. Thank you for choosing us! We are grateful for your support and trust in our brand. Your satisfaction is our top priority, and we are dedicated to exceeding your expectations. We hope you enjoy your purchase and look forward to serving you again in the future. Have a great day! Best wishes, The Customer Service Team.",
     isBookmarked: true,
     location: {
       lat: 52.52,
@@ -207,7 +223,9 @@ const mockListings: Listing[] = [
       name: "Pets",
     },
     createdAt: new Date("2023-02-18"),
-    description: "High-quality aquarium with all accessories.",
+    shortDescription: "A great product for sale.",
+    description:
+      "This is a detailed description of the product. It includes all the features and specifications. It is a must-have item for anyone looking for quality and reliability. Don't miss out on this amazing deal! Get it now before it's gone! Limited stock available. Order today and enjoy the benefits of this fantastic product. Satisfaction guaranteed or your money back. Act fast and take advantage of this special offer! Hurry, while supplies last! This is a limited time offer, so don't wait too long. Get your hands on this incredible product and experience the difference it can make in your life. You won't regret it! This is a once-in-a-lifetime opportunity to own something truly special. Don't let it slip away! Contact us now for more information and to place your order. We are here to help you every step of the way. Thank you for considering our product. We look forward to serving you soon! Best regards, The Sales Team. We appreciate your business and are committed to providing you with the best service possible. If you have any questions or concerns, please don't hesitate to reach out to us. We value your feedback and strive to improve our products and services continuously. Thank you for choosing us! We are grateful for your support and trust in our brand. Your satisfaction is our top priority, and we are dedicated to exceeding your expectations. We hope you enjoy your purchase and look forward to serving you again in the future. Have a great day! Best wishes, The Customer Service Team.",
     isBookmarked: false,
     location: {
       lat: 35.6762,
@@ -231,7 +249,9 @@ const mockListings: Listing[] = [
       name: "Art",
     },
     createdAt: new Date("2023-02-22"),
-    description: "Original oil painting by local artist.",
+    shortDescription: "A great product for sale.",
+    description:
+      "This is a detailed description of the product. It includes all the features and specifications. It is a must-have item for anyone looking for quality and reliability. Don't miss out on this amazing deal! Get it now before it's gone! Limited stock available. Order today and enjoy the benefits of this fantastic product. Satisfaction guaranteed or your money back. Act fast and take advantage of this special offer! Hurry, while supplies last! This is a limited time offer, so don't wait too long. Get your hands on this incredible product and experience the difference it can make in your life. You won't regret it! This is a once-in-a-lifetime opportunity to own something truly special. Don't let it slip away! Contact us now for more information and to place your order. We are here to help you every step of the way. Thank you for considering our product. We look forward to serving you soon! Best regards, The Sales Team. We appreciate your business and are committed to providing you with the best service possible. If you have any questions or concerns, please don't hesitate to reach out to us. We value your feedback and strive to improve our products and services continuously. Thank you for choosing us! We are grateful for your support and trust in our brand. Your satisfaction is our top priority, and we are dedicated to exceeding your expectations. We hope you enjoy your purchase and look forward to serving you again in the future. Have a great day! Best wishes, The Customer Service Team.",
     isBookmarked: true,
     location: {
       lat: 19.4326,
@@ -255,7 +275,9 @@ const mockListings: Listing[] = [
       name: "Music",
     },
     createdAt: new Date("2023-03-01"),
-    description: "Vintage vinyl records from the 70s and 80s.",
+    shortDescription: "A great product for sale.",
+    description:
+      "This is a detailed description of the product. It includes all the features and specifications. It is a must-have item for anyone looking for quality and reliability. Don't miss out on this amazing deal! Get it now before it's gone! Limited stock available. Order today and enjoy the benefits of this fantastic product. Satisfaction guaranteed or your money back. Act fast and take advantage of this special offer! Hurry, while supplies last! This is a limited time offer, so don't wait too long. Get your hands on this incredible product and experience the difference it can make in your life. You won't regret it! This is a once-in-a-lifetime opportunity to own something truly special. Don't let it slip away! Contact us now for more information and to place your order. We are here to help you every step of the way. Thank you for considering our product. We look forward to serving you soon! Best regards, The Sales Team. We appreciate your business and are committed to providing you with the best service possible. If you have any questions or concerns, please don't hesitate to reach out to us. We value your feedback and strive to improve our products and services continuously. Thank you for choosing us! We are grateful for your support and trust in our brand. Your satisfaction is our top priority, and we are dedicated to exceeding your expectations. We hope you enjoy your purchase and look forward to serving you again in the future. Have a great day! Best wishes, The Customer Service Team.",
     isBookmarked: false,
     location: {
       lat: 55.7558,

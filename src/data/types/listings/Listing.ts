@@ -7,6 +7,7 @@ export interface Listing {
   image: string;
   title: string;
   description: string;
+  shortDescription: string;
   location: ListingLocation;
   price: number;
   category: Category;

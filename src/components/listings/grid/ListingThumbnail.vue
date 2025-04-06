@@ -13,7 +13,7 @@ defineProps<{
       <div class="listing-details">
         <h2 class="listing-title">{{ listing.title }}</h2>
         <p class="description-container">
-          {{ listing.description }}
+          {{ listing.shortDescription }}
         </p>
         <p>Price: {{ listing.price }}</p>
       </div>

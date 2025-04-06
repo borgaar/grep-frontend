@@ -10,7 +10,7 @@ defineProps<{
   <div class="container">
     <div class="title-desciption">
       <h1 class="title">{{ listing.title }}</h1>
-      <p>{{ listing.description }}</p>
+      <p>{{ listing.shortDescription }}</p>
     </div>
   </div>
 </template>

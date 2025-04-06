@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import FilterList from "@/components/listing/FilterList.vue";
-import GridListing from "@/components/listing/grid/GridListing.vue";
-import ListListings from "@/components/listing/list/ListListings.vue";
+import FilterList from "@/components/listings/FilterList.vue";
+import GridListing from "@/components/listings/grid/GridListing.vue";
+import ListListings from "@/components/listings/list/ListListings.vue";
 import PageContainer from "@/components/PageContainer.vue";
 import mockListings from "@/data/mock/listings";
 import { ref } from "vue";
