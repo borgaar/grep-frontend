@@ -7,12 +7,14 @@ type User = {
   firstName: string;
   lastName: string;
   phone: string;
+  role: "admin" | "user";
 };
 
 export const useUserStore = defineStore("user", () => {
   const user = ref<User>();
   const theme = ref<"light" | "dark">("light");
   const language = ref<typeof i18n.global.locale.value>("en");
+  const role = ref<"admin" | "user">("admin");
 
   function set(newUser: User) {
     user.value = newUser;
@@ -32,5 +34,5 @@ export const useUserStore = defineStore("user", () => {
     language.value = newLanguage;
   }
 
-  return { user, set, theme, toggleTheme, language, setLanguage };
+  return { user, set, theme, toggleTheme, language, setLanguage, role };
 });

@@ -7,7 +7,7 @@
         </div>
       </template>
       <template #item="{ item, props, hasSubmenu, root }">
-        <a v-ripple class="menu-item" v-bind="props.action">
+        <RouterLink v-ripple :to="item.route" class="menu-item" v-bind="props.action">
           <i v-if="item.icon" :class="['menu-icon', item.icon]"></i>
           <span>{{ item.label }}</span>
           <Badge
@@ -20,7 +20,7 @@
             v-if="hasSubmenu"
             :class="['pi submenu-icon', { 'pi-angle-down': root, 'pi-angle-right': !root }]"
           ></i>
-        </a>
+        </RouterLink>
       </template>
       <template #end>
         <div class="end-container">
@@ -48,6 +48,7 @@
 import { useUserStore } from "@/state/user";
 import { storeToRefs } from "pinia";
 import { ref } from "vue";
+import { RouterLink } from "vue-router";
 
 const { toggleTheme, setLanguage } = useUserStore();
 const { theme, user, language } = storeToRefs(useUserStore());
@@ -57,6 +58,7 @@ const items = ref([
   {
     label: "Listings",
     icon: "pi pi-list",
+    route: "/",
   },
   {
     label: "Messages",

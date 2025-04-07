@@ -1,4 +1,5 @@
 import router from "@/router";
+import { useUserStore } from "@/state/user";
 import axios, { type AxiosResponse } from "axios";
 import { jwtDecode } from "jwt-decode";
 
@@ -64,6 +65,13 @@ export class AuthApiService implements AuthService {
     if (response.data.token) {
       this.storeToken(response.data.token);
     }
+
+    useUserStore().set({
+      firstName: response.data.firstName,
+      lastName: response.data.lastName,
+      phone: response.data.phone,
+      role: "admin", // response.data.role,
+    });
 
     return response;
   }

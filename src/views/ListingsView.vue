@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import FilterList from "@/components/listings/FilterList.vue";
+import FilterList from "@/components/listings/filter/FilterList.vue";
 import GridListing from "@/components/listings/grid/GridListing.vue";
 import ListListings from "@/components/listings/list/ListListings.vue";
 import PageContainer from "@/components/PageContainer.vue";
