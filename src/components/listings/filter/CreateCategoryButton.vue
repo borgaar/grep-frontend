@@ -29,6 +29,7 @@ import { ref } from "vue";
 import Button from "primevue/button";
 import Dialog from "primevue/dialog";
 import InputText from "primevue/inputtext";
+import { CategoryControllerService } from "@/api/services";
 
 const dialogVisible = ref(false);
 const inputText = ref("");
@@ -44,11 +45,15 @@ const closeDialog = () => {
   dialogVisible.value = false;
 };
 
-const submitForm = () => {
+const submitForm = async () => {
   submitted.value = true;
 
   if (inputText.value) {
-    console.log("Submitted text:", inputText.value);
+    await CategoryControllerService.create({
+      requestBody: {
+        name: inputText.value,
+      },
+    });
 
     dialogVisible.value = false;
 

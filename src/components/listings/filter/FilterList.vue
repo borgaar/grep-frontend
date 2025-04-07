@@ -5,6 +5,7 @@ import { useUserStore } from "@/state/user";
 import { storeToRefs } from "pinia";
 import { ref } from "vue";
 import CreateCategoryButton from "./CreateCategoryButton.vue";
+import CategoryFilter from "./CategoryFilter.vue";
 
 const priceRange = ref([0, 100]);
 
@@ -29,6 +30,7 @@ const applyFilters = () => {
       <p>{{ priceRange[0] * 100 }}kr - {{ priceRange[1] * 100 }}kr</p>
       <Slider v-model="priceRange" range class="price-range-slider" />
     </div>
+    <CategoryFilter />
     <Button :onclick="applyFilters">Apply filters</Button>
     <CreateCategoryButton v-if="role === 'admin'" />
   </div>

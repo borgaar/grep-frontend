@@ -57,23 +57,7 @@ const onSubmit = async ({
     return;
   }
   try {
-    const response = await authService.register(
-      values.phone,
-      values.password,
-      values.firstName,
-      values.lastName,
-    );
-
-    if (response.status !== 200) {
-      toast.add({
-        severity: "error",
-        summary: "Registration failed",
-        detail: "This phone number is already registered.",
-        life: 3000,
-      });
-      isLoading.value = false;
-      return;
-    }
+    await authService.register(values.phone, values.password, values.firstName, values.lastName);
 
     router.push({ name: "listings" });
   } catch (error) {

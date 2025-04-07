@@ -2,6 +2,7 @@ import router from "@/router";
 import { useUserStore } from "@/state/user";
 import axios, { type AxiosResponse } from "axios";
 import { jwtDecode } from "jwt-decode";
+import { AuthControllerService, type AuthResponse } from "./services";
 
 const API_URL = "http://localhost:8080/api/auth";
 
@@ -19,13 +20,13 @@ interface DecodedToken {
 interface AuthService {
   getToken(): string | null;
   isAuthenticated(): boolean;
-  login(phone: string, password: string): Promise<AxiosResponse<any, any>>;
+  login(phone: string, password: string): Promise<AuthResponse>;
   register(
     phone: string,
     password: string,
     firstName: string,
     lastName: string,
-  ): Promise<AxiosResponse<any, any>>;
+  ): Promise<AuthResponse>;
   logout(): void;
 }
 
@@ -33,13 +34,6 @@ export class AuthApiService implements AuthService {
   getToken(): string | null {
     throw new Error("Method not implemented.");
   }
-  private axiosClient = axios.create({
-    baseURL: API_URL,
-    validateStatus: () => true, // Accept all status codes
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
 
   private storeToken(token: string): void {
     localStorage.setItem("Authorization", token);
@@ -53,23 +47,24 @@ export class AuthApiService implements AuthService {
     return !this.isTokenExpired();
   }
 
-  public async login(phone: string, password: string): Promise<AxiosResponse<any, any>> {
-    const response = await this.axiosClient.post("/login", {
-      phone: phone,
-      password: password,
-      // TODO: This is temporary as login and register uses same RequestBody class in backend
-      firstName: "temp",
-      lastName: "orary",
+  public async login(phone: string, password: string): Promise<AuthResponse> {
+    const response = await AuthControllerService.login({
+      requestBody: {
+        phone,
+        password,
+        // Temporary values for firstName and lastName since backend uses same model
+        // for login and register
+        firstName: "temp",
+        lastName: "orary",
+      },
     });
 
-    if (response.data.token) {
-      this.storeToken(response.data.token);
+    if (response.token) {
+      this.storeToken(response.token);
     }
 
     useUserStore().set({
-      firstName: response.data.firstName,
-      lastName: response.data.lastName,
-      phone: response.data.phone,
+      phone: phone,
       role: "admin", // response.data.role,
     });
 
@@ -81,17 +76,19 @@ export class AuthApiService implements AuthService {
     password: string,
     firstName: string,
     lastName: string,
-  ): Promise<AxiosResponse<any, any>> {
+  ): Promise<AuthResponse> {
     try {
-      const response = await this.axiosClient.post("/register", {
-        phone,
-        password,
-        firstName,
-        lastName,
+      const response = await AuthControllerService.register({
+        requestBody: {
+          phone,
+          password,
+          firstName: firstName,
+          lastName: lastName,
+        },
       });
 
-      if (response.data.token) {
-        this.storeToken(response.data.token);
+      if (response.token) {
+        this.storeToken(response.token);
       }
 
       return response;

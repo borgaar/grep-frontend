@@ -16,8 +16,11 @@ export const useUserStore = defineStore("user", () => {
   const language = ref<typeof i18n.global.locale.value>("en");
   const role = ref<"admin" | "user">("admin");
 
-  function set(newUser: User) {
-    user.value = newUser;
+  function set(newUserData: Partial<User>) {
+    user.value = {
+      ...user.value,
+      ...newUserData,
+    } as User;
   }
 
   function toggleTheme() {

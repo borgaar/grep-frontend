@@ -50,18 +50,7 @@ const onSubmit = async ({
   }
 
   try {
-    const response = await authService.login(values.phone, values.password);
-
-    if (response.status !== 200) {
-      toast.add({
-        severity: "error",
-        summary: "Login failed",
-        detail: "Invalid phone number or password.",
-        life: 3000,
-      });
-      isLoading.value = false;
-      return;
-    }
+    await authService.login(values.phone, values.password);
 
     router.push({ name: "listings" });
   } catch (error) {

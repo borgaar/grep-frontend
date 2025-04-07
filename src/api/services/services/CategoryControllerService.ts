@@ -4,7 +4,6 @@
 /* eslint-disable */
 import type { CategoryResponse } from '../models/CategoryResponse';
 import type { CreateCategoryRequest } from '../models/CreateCategoryRequest';
-import type { PaginationDetail } from '../models/PaginationDetail';
 import type { UpdateCategoryRequest } from '../models/UpdateCategoryRequest';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -47,15 +46,19 @@ export class CategoryControllerService {
      * @throws ApiError
      */
     public static getAll({
-        requestBody,
+        page,
+        pageSize,
     }: {
-        requestBody: PaginationDetail,
+        page: number,
+        pageSize: number,
     }): CancelablePromise<Array<CategoryResponse>> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/api/category/get',
-            body: requestBody,
-            mediaType: 'application/json',
+            url: '/api/category',
+            query: {
+                'page': page,
+                'pageSize': pageSize,
+            },
         });
     }
     /**
