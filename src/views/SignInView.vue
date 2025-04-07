@@ -19,9 +19,12 @@ const norwegianPhoneRegex = /^(?:(?:\+|00)47)?[2-9]\d{7}$/;
 
 const resolver = zodResolver(
   z.object({
-    phone: z.string().regex(new RegExp(norwegianPhoneRegex), {
-      message: "Invalid phone number",
-    }),
+    phone: z
+      .string()
+      .regex(new RegExp(norwegianPhoneRegex), {
+        message: "Invalid phone number",
+      })
+      .transform((v) => v.trim().replace(" ", "")),
     password: z.string(),
     rememberMe: z.boolean(),
   }),
