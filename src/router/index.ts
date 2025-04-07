@@ -20,7 +20,7 @@ const router = createRouter({
       component: () => import("../views/ListingsView.vue"),
     },
     {
-      path: "/:id",
+      path: "/listing/:id",
       name: "listing",
       component: () => import("../views/ListingView.vue"),
     },
@@ -29,10 +29,16 @@ const router = createRouter({
       name: "profile",
       component: () => import("../views/ProfileView.vue"),
     },
+    {
+      path: "/messages",
+      name: "messages",
+      component: () => import("../views/MessagesView.vue"),
+    },
   ],
 });
 
 router.beforeEach((to, _, next) => {
+  // TODO remove sockets
   if (to.name !== "sign-in" && to.name !== "sign-up" && !authService.isAuthenticated()) {
     next({ name: "sign-in" });
   } else {
