@@ -4,5 +4,6 @@
   "posted": "Publisert",
   "name": "Navn",
   "phone": "Telefon",
-  "currency": "kr"
+  "currency": "kr",
+  "profile": "Profil"
 }
