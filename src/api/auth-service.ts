@@ -28,7 +28,10 @@ interface AuthService {
   logout(): void;
 }
 
-class AuthApiService implements AuthService {
+export class AuthApiService implements AuthService {
+  getToken(): string | null {
+    throw new Error("Method not implemented.");
+  }
   private axiosClient = axios.create({
     baseURL: API_URL,
     validateStatus: () => true, // Accept all status codes
@@ -41,7 +44,7 @@ class AuthApiService implements AuthService {
     localStorage.setItem("Authorization", token);
   }
 
-  public getToken(): string | null {
+  public static getToken(): string | null {
     return localStorage.getItem("Authorization");
   }
 
@@ -95,7 +98,7 @@ class AuthApiService implements AuthService {
   }
 
   private decodeToken(): DecodedToken | null {
-    const token = this.getToken();
+    const token = AuthApiService.getToken();
     if (!token) return null;
 
     try {
