@@ -34,6 +34,7 @@
             v-if="Boolean(user)"
             v-tooltip.bottom="'Sign out'"
             icon="pi pi-sign-out"
+            severity="danger"
             variant="text"
             @click="signOut"
           />
@@ -82,7 +83,6 @@ const items = ref([
   {
     label: "Messages",
     icon: "pi pi-envelope",
-    badge: 3,
     route: "/messages",
   },
   {
