@@ -6,7 +6,7 @@ import NavBar from "@/components/NavBar.vue";
 <template>
   <main>
     <NavBar />
-    <RouterView />
+    <RouterView class="view" />
   </main>
 </template>
 
@@ -16,5 +16,11 @@ main {
   flex-direction: column;
   width: 100%;
   position: relative;
+  height: 100vh;
+}
+
+.view {
+  height: calc(100vh - 60px);
+  overflow-y: auto;
 }
 </style>

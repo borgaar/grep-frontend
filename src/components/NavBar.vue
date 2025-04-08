@@ -1,12 +1,12 @@
 <template>
   <div class="card main">
     <Menubar :model="items" class="menubar-full">
-      <template #start>
+      <template v-if="Boolean(user)" #start>
         <div class="user-info">
           <span class="username">{{ user?.firstName + " " + user?.lastName }}</span>
         </div>
       </template>
-      <template #item="{ item, props, hasSubmenu, root }">
+      <template v-if="Boolean(user)" #item="{ item, props, hasSubmenu, root }">
         <RouterLink v-ripple :to="item.route" class="menu-item" v-bind="props.action">
           <i v-if="item.icon" :class="['menu-icon', item.icon]"></i>
           <span>{{ item.label }}</span>

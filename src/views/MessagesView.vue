@@ -12,8 +12,8 @@
         <div
           v-for="contact in contacts"
           :key="contact.id"
-          :class="['contact-item', { active: contact.id === selectedContact.id }]"
-          @click="selectContact(contact)"
+          :class="['contact-item', { active: contact.id === selectedContact?.id }]"
+          @click="setSelectedContact(contact.id)"
         >
           <div class="avatar">
             <div class="name-initials">{{ contact.firstName[0] }}{{ contact.lastName[0] }}</div>
@@ -35,14 +35,15 @@
         <div class="chat-user-info">
           <div class="avatar">
             <div class="name-initials">
-              {{ selectedContact.firstName?.[0] || "" }}{{ selectedContact.lastName?.[0] || "" }}
+              {{ selectedContactId.firstName?.[0] || ""
+              }}{{ selectedContactId.lastName?.[0] || "" }}
             </div>
             <span
-              :class="['status-indicator', selectedContact.isOnline ? 'online' : 'offline']"
+              :class="['status-indicator', selectedContactId.isOnline ? 'online' : 'offline']"
             ></span>
           </div>
           <div class="contact-name">
-            {{ selectedContact.firstName }} {{ selectedContact.lastName }}
+            {{ selectedContactId.firstName }} {{ selectedContactId.lastName }}
           </div>
         </div>
       </div>
@@ -77,135 +78,19 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from "vue";
+import { useMessageStore } from "@/state/message";
+import { storeToRefs } from "pinia";
 
-// Define types
-interface Contact {
-  id: number;
-  firstName: string;
-  lastName: string;
-  isOnline: boolean;
-  lastMessage: string;
-  lastMessageTime: string;
-}
+const { sendMessage, setSelectedContact } = useMessageStore();
+const { messages, selectedContact, currentMessage, contacts } = storeToRefs(useMessageStore());
 
-interface Message {
-  id: number;
-  senderId: number;
-  content: string;
-  time: string;
-}
-
-// Data
-const currentUserId = ref<number>(1);
-const newMessage = ref<string>("");
-const selectedContact = ref<Contact>({} as Contact);
-
-const contacts = ref<Contact[]>([
-  {
-    id: 2,
-    firstName: "John",
-    lastName: "Doe",
-    isOnline: true,
-    lastMessage: "Hey, how are you doing?",
-    lastMessageTime: "10:30 AM",
-  },
-  {
-    id: 3,
-    firstName: "Jane",
-    lastName: "Smith",
-    isOnline: false,
-    lastMessage: "Let me know when you're free",
-    lastMessageTime: "Yesterday",
-  },
-  {
-    id: 4,
-    firstName: "Mike",
-    lastName: "Johnson",
-    isOnline: true,
-    lastMessage: "Sure, no problem!",
-    lastMessageTime: "Yesterday",
-  },
-  {
-    id: 5,
-    firstName: "Sarah",
-    lastName: "Williams",
-    isOnline: true,
-    lastMessage: "Thanks for your help!",
-    lastMessageTime: "Monday",
-  },
-  {
-    id: 6,
-    firstName: "David",
-    lastName: "Brown",
-    isOnline: false,
-    lastMessage: "Will get back to you soon",
-    lastMessageTime: "Sunday",
-  },
-]);
-
-const messages = ref<Message[]>([
-  {
-    id: 1,
-    senderId: 2,
-    content: "Hey, how are you doing?",
-    time: "10:30 AM",
-  },
-  {
-    id: 2,
-    senderId: 1,
-    content: "I'm good, thanks! How about you?",
-    time: "10:32 AM",
-  },
-  {
-    id: 3,
-    senderId: 2,
-    content: "Doing well. Did you check the project I sent yesterday?",
-    time: "10:33 AM",
-  },
-  {
-    id: 4,
-    senderId: 1,
-    content: "Yes, I did. It looks great! I have a few suggestions though.",
-    time: "10:36 AM",
-  },
-  {
-    id: 5,
-    senderId: 2,
-    content: "I'd love to hear them. Can we discuss over a call?",
-    time: "10:37 AM",
-  },
-]);
-
-// Methods
-const selectContact = (contact: Contact): void => {
-  selectedContact.value = contact;
-  // In a real app, you would load messages for this contact here
-};
-
-const sendMessage = (): void => {
-  if (newMessage.value.trim() === "") return;
-
-  // In a real app, you would send this message to your backend
-  // Here we just add it to the local messages array
-  const newMsg: Message = {
-    id: messages.value.length + 1,
-    senderId: currentUserId.value,
-    content: newMessage.value,
-    time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-  };
-
-  messages.value.push(newMsg);
-  newMessage.value = "";
-};
-
-// Lifecycle hooks
-onMounted(() => {
-  // Set default selected contact
-  if (contacts.value.length > 0) {
-    selectedContact.value = contacts.value[0];
-  }
-});
+// // Lifecycle hooks
+// onMounted(() => {
+//   // Set default selected contact
+//   if (contacts.value.length > 0) {
+//     selectedContact.value = contacts.value[0];
+//   }
+// });
 </script>
 
 <style scoped>

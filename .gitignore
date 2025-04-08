@@ -35,3 +35,4 @@ components.d.ts
 
 src/api/services/
 !src/api/services/core
+src/api/spec.json
