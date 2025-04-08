@@ -11,19 +11,20 @@
       <div class="contacts-list">
         <div
           v-for="contact in contacts"
-          :key="contact.id"
-          :class="['contact-item', { active: contact.id === selectedContact?.id }]"
-          @click="setSelectedContact(contact.id)"
+          :key="contact.phone"
+          :class="['contact-item', { active: contact.phone === selectedContact?.phone }]"
+          @click="setSelectedContact(contact.phone)"
         >
           <div class="avatar">
             <div class="name-initials">{{ contact.firstName[0] }}{{ contact.lastName[0] }}</div>
-            <span :class="['status-indicator', contact.isOnline ? 'online' : 'offline']"></span>
           </div>
           <div class="contact-info">
             <div class="contact-name">{{ contact.firstName }} {{ contact.lastName }}</div>
-            <div class="contact-last-message">{{ contact.lastMessage }}</div>
+            <div class="contact-last-message">{{ contact.lastMessageContent }}</div>
           </div>
-          <div class="contact-time">{{ contact.lastMessageTime }}</div>
+          <div class="contact-time">
+            {{ formatShort(new Date(contact.lastMessageTimestamp)) }}
+          </div>
         </div>
       </div>
     </div>
@@ -35,15 +36,11 @@
         <div class="chat-user-info">
           <div class="avatar">
             <div class="name-initials">
-              {{ selectedContactId.firstName?.[0] || ""
-              }}{{ selectedContactId.lastName?.[0] || "" }}
+              {{ selectedContact?.firstName?.[0] || "" }}{{ selectedContact?.lastName?.[0] || "" }}
             </div>
-            <span
-              :class="['status-indicator', selectedContactId.isOnline ? 'online' : 'offline']"
-            ></span>
           </div>
           <div class="contact-name">
-            {{ selectedContactId.firstName }} {{ selectedContactId.lastName }}
+            {{ selectedContact?.firstName }} {{ selectedContact?.lastName }}
           </div>
         </div>
       </div>
@@ -53,36 +50,39 @@
         <div
           v-for="message in messages"
           :key="message.id"
-          :class="['message', message.senderId === currentUserId ? 'sent' : 'received']"
+          :class="['message', message.senderId === currentUserPhone ? 'sent' : 'received']"
         >
           <div class="message-content">{{ message.content }}</div>
-          <div class="message-time">{{ message.time }}</div>
+          <div class="message-time">{{ formatShort(new Date(message.timestamp)) }}</div>
         </div>
       </div>
 
       <!-- Message input area -->
       <div class="message-input-container">
-        <input
-          v-model="newMessage"
+        <Input
+          v-model="currentMessage"
           type="text"
           placeholder="Skriv en melding ..."
           class="message-input"
           @keyup.enter="sendMessage"
         />
-        <button class="send-button" @click="sendMessage">
+        <Button class="send-button" @click="sendMessage">
           <i class="icon icon-send"></i>
-        </button>
+        </Button>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { formatShort } from "@/locale/date";
 import { useMessageStore } from "@/state/message";
+import { useUserStore } from "@/state/user";
 import { storeToRefs } from "pinia";
 
 const { sendMessage, setSelectedContact } = useMessageStore();
 const { messages, selectedContact, currentMessage, contacts } = storeToRefs(useMessageStore());
+const { phone: currentUserPhone } = useUserStore();
 
 // // Lifecycle hooks
 // onMounted(() => {

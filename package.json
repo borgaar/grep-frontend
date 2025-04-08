@@ -25,6 +25,7 @@
     "@scalar/api-reference": "^1.28.13",
     "@studiometa/vue-mapbox-gl": "^2.7.2",
     "axios": "^1.8.4",
+    "date-fns": "^4.1.0",
     "dotenv": "^16.4.7",
     "form-data": "^4.0.2",
     "jwt-decode": "^4.0.0",

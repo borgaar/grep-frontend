@@ -1,72 +1,77 @@
 // stores/counter.js
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
-import { MessageControllerService, type ChatMessage } from "../api/services";
+import { MessageControllerService, type ChatContactDTO, type SendResponse } from "../api/services";
 
 /**
  * Message mapped to userId (other user)
  */
 type Messages = {
-  [key: string]: ChatMessage[];
+  [key: string]: Message[];
 };
 
-type Contact = {
-  id: string;
-};
+export type Message = SendResponse;
 
 export const useMessageStore = defineStore("message", () => {
   const messages = ref<Messages>({});
-  const selectedContactId = ref<string | null>(null);
+  const selectedContactPhone = ref<string | null>(null);
   const currentMessage = ref<string>("");
-  const contacts = ref<Contact[]>([]);
+  const contacts = ref<ChatContactDTO[]>([]);
 
-  async function sendMessage(content: string) {
-    if (!selectedContactId.value) return;
+  async function sendMessage() {
+    if (!selectedContactPhone.value) return;
+    const content = currentMessage.value.trim();
 
-    const response = await MessageControllerService.sendMessage({
+    const message = await MessageControllerService.sendMessage({
       requestBody: {
-        recipientId: selectedContactId.value,
+        recipientId: selectedContactPhone.value,
         content,
       },
     });
 
     currentMessage.value = "";
-
-    // TODO capture id of message etc
+    messages.value[selectedContactPhone.value].push(message);
   }
 
-  async function setSelectedContact(contactId: string) {
-    selectedContactId.value = contactId;
+  async function setSelectedContact(contactPhone: string) {
+    selectedContactPhone.value = contactPhone;
 
     // TODO fetch history
     const response = await MessageControllerService.getHistory({
-      otherUser: contactId,
+      otherUser: contactPhone,
       page: 0,
       pageSize: 10,
     });
 
     const newMessages = dedupeMessages(response);
-    messages.value[contactId] = newMessages;
+    messages.value[contactPhone] = newMessages;
     currentMessage.value = "";
   }
 
   const selectedContact = computed(() =>
-    contacts.value.find((c) => c.id === selectedContactId.value),
+    contacts.value.find((c) => c.phone === selectedContactPhone.value),
+  );
+
+  const currentMessages = computed(() =>
+    Boolean(selectedContactPhone) ? (messages.value[selectedContactPhone.value!] ?? []) : [],
   );
 
   return {
     setSelectedContact,
     sendMessage,
-    messages,
+    messages: currentMessages,
     currentMessage,
     contacts,
     selectedContact,
   };
 });
 
-function dedupeMessages(messages: ChatMessage[]): ChatMessage[] {
+/**
+ * Removes all duplicate messages if overlapping after API fetch
+ */
+function dedupeMessages(messages: Message[]): Message[] {
   // Remove all duplicate messages by id
-  const uniqueMessages = new Map<string, ChatMessage>();
+  const uniqueMessages = new Map<string, Message>();
 
   messages.forEach((message) => {
     if (!uniqueMessages.has(message.id)) {

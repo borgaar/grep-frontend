@@ -2,22 +2,22 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import { i18n } from "../main";
-import { authService } from "../api/auth-service";
-
-export type User = {
-  firstName: string;
-  lastName: string;
-  phone: string;
-  role: UserRole;
-};
-
-export type UserRole = "admin" | "user";
+import { authService, type User } from "../api/auth-service";
 
 export const useUserStore = defineStore("user", () => {
+  function ensureInitialized() {
+    const user = authService.getUser();
+
+    if (user) {
+      set(user);
+    }
+  }
+
   const user = ref<User>();
   const theme = ref<"light" | "dark">("light");
   const language = ref<typeof i18n.global.locale.value>("en");
   const role = ref<"admin" | "user">("admin");
+  const phone = ref<string | null>(null);
 
   function set(newUserData: Partial<User>) {
     user.value = {
@@ -46,5 +46,16 @@ export const useUserStore = defineStore("user", () => {
     authService.logout();
   }
 
-  return { user, set, theme, toggleTheme, language, setLanguage, role, signOut };
+  return {
+    user,
+    set,
+    theme,
+    toggleTheme,
+    language,
+    setLanguage,
+    role,
+    signOut,
+    ensureInitialized,
+    phone,
+  };
 });

@@ -1,5 +1,5 @@
 <template>
-  <div class="card main">
+  <nav>
     <Menubar :model="items" class="menubar-full">
       <template v-if="Boolean(user)" #start>
         <div class="user-info">
@@ -55,7 +55,7 @@
         </div>
       </template>
     </Menubar>
-  </div>
+  </nav>
 </template>
 
 <script setup lang="ts">
@@ -99,6 +99,10 @@ const items = ref([
 </script>
 
 <style>
+nav {
+  position: sticky;
+  width: 100%;
+}
 /* Full-width menubar */
 .menubar-full {
   width: 100%;

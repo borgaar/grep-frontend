@@ -43,7 +43,6 @@ const router = createRouter({
 });
 
 router.beforeEach((to, _, next) => {
-  // TODO remove sockets
   if (to.name !== "sign-in" && to.name !== "sign-up" && !authService.isAuthenticated()) {
     next({ name: "sign-in" });
   } else {

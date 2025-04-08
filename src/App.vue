@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { RouterView } from "vue-router";
 import NavBar from "@/components/NavBar.vue";
+import { useUserStore } from "./state/user";
+const { ensureInitialized } = useUserStore();
+ensureInitialized();
 </script>
 
 <template>

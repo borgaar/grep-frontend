@@ -13,7 +13,17 @@ interface DecodedToken {
   exp: number;
 }
 
+export interface User {
+  firstName: string;
+  lastName: string;
+  phone: string;
+  role: UserRole;
+}
+
+export type UserRole = "admin" | "user";
+
 interface AuthService {
+  getUser(): User | null;
   getToken(): string | null;
   isAuthenticated(): boolean;
   login(phone: string, password: string): Promise<LoginResponse>;
@@ -27,6 +37,20 @@ interface AuthService {
 }
 
 export class AuthApiService implements AuthService {
+  getUser(): User | null {
+    const data = localStorage.getItem("User");
+    if (!Boolean(data)) return null;
+
+    const [firstName, lastName, role, phone] = data ? data.split(";") : [];
+
+    return {
+      firstName,
+      lastName,
+      role: (role as UserRole) || "user",
+      phone,
+    };
+  }
+
   getToken(): string | null {
     throw new Error("Method not implemented.");
   }
@@ -53,9 +77,15 @@ export class AuthApiService implements AuthService {
 
     if (response.token) {
       this.storeToken(response.token);
+      this.storeUser({ ...response, phone });
     }
 
     return response;
+  }
+
+  storeUser(arg: { phone: string; firstName: string; lastName: string; role: string }) {
+    const { phone, firstName, lastName, role } = arg;
+    localStorage.setItem("User", [firstName, lastName, role, phone].join(";"));
   }
 
   public async register(
@@ -76,6 +106,7 @@ export class AuthApiService implements AuthService {
 
       if (response.token) {
         this.storeToken(response.token);
+        this.storeUser({ phone, firstName, lastName, role: "user" });
       }
 
       return response;

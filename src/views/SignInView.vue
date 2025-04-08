@@ -2,11 +2,11 @@
 import { ref } from "vue";
 import { zodResolver } from "@primevue/forms/resolvers/zod";
 import { z } from "zod";
-import { authService } from "@/api/auth-service";
+import { authService, type UserRole } from "@/api/auth-service";
 import router from "@/router";
 import { RouterLink } from "vue-router";
 import { useToast } from "primevue";
-import { useUserStore, type UserRole } from "@/state/user";
+import { useUserStore } from "@/state/user";
 
 const { set: setUser } = useUserStore();
 
