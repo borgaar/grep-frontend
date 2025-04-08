@@ -64,10 +64,12 @@ const items = ref([
     label: "Messages",
     icon: "pi pi-envelope",
     badge: 3,
+    route: "/messages",
   },
   {
     label: "Profile",
     icon: "pi pi-user",
+    route: "/profile",
   },
 ]);
 </script>

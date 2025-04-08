@@ -267,7 +267,7 @@ onMounted(() => {
 }
 
 .contact-item.active {
-  background-color: #e1f5fe;
+  background-color: var(--p-emerald-100);
 }
 
 .avatar {
@@ -279,7 +279,7 @@ onMounted(() => {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: #2196f3;
+  background-color: var(--p-emerald-400);
   color: white;
   display: flex;
   align-items: center;
@@ -395,7 +395,7 @@ onMounted(() => {
 
 .message.sent {
   align-self: flex-end;
-  background-color: #e3f2fd;
+  background-color: var(--p-emerald-200);
   color: #333;
 }
 
