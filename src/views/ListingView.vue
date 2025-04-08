@@ -1,10 +1,14 @@
 <script lang="ts" setup>
-import { MessageControllerService } from "@/api/services";
+import {
+  ListingControllerService,
+  MessageControllerService,
+  type ListingDTO,
+} from "@/api/services";
 import MapBox from "@/components/listing/MapBox.vue";
 import PageContainer from "@/components/PageContainer.vue";
-import mockListings from "@/data/mock/listings";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import Popover from "primevue/popover";
+import { useRoute } from "vue-router";
 
 const op = ref();
 const currentMessage = ref("");
@@ -14,44 +18,55 @@ const showContactForm = (event: MouseEvent) => {
 };
 
 const sendMessage = (event: Event) => {
+  if (listing.value === undefined) {
+    return;
+  }
+
   op.value.hide(event);
   MessageControllerService.sendMessage({
     requestBody: {
       content: currentMessage.value,
-      recipientId: listing.author.phone,
+      recipientId: listing.value.author.phone,
     },
   });
 
   currentMessage.value = "";
 };
 
-const listing = mockListings[0];
+const route = useRoute();
+
+onMounted(async () => {
+  listing.value = await ListingControllerService.get({ id: route.params.id as string });
+});
+
+const listing = ref<ListingDTO>();
 </script>
 
 <template>
-  <PageContainer class="container">
-    <img :src="listing.image" class="listing-image" :height="500" />
+  <PageContainer v-if="listing !== undefined" class="container">
+    <img :src="'https://picsum.photos/200/300'" class="listing-image" :height="500" />
     <div class="content-area">
       <div class="listing-text">
         <h1 class="listing-title">{{ listing.title }}</h1>
-        <h2 class="listing-short-description">{{ listing.shortDescription }}</h2>
         <p>{{ listing.description }}</p>
       </div>
       <div class="interactive-area">
         <h2 class="listing-price">{{ listing.price }} {{ $t("currency") }}</h2>
         <div class="listing-author">
           <p>{{ $t("name") }}:</p>
-          <p style="text-align: end">{{ listing.author.name }}</p>
+          <p style="text-align: end">
+            {{ listing.author.firstName }} {{ listing.author.lastName }}
+          </p>
           <p>{{ $t("phone") }}:</p>
           <p style="text-align: end">{{ listing.author.phone }}</p>
           <p>{{ $t("posted") }}:</p>
           <p style="text-align: end">
-            {{ listing.createdAt.toLocaleString() }}
+            {{ new Date().toLocaleDateString() }}
           </p>
         </div>
         <MapBox
           class="listing-map"
-          :location="{ lat: listing.location.lat, lng: listing.location.lng }"
+          :location="{ lat: listing.location.lat, lng: listing.location.lon }"
         />
         <Button class="contact-button" @click="showContactForm">{{ $t("contact") }}</Button>
         <Popover ref="op" :dismissable="false">
@@ -131,6 +146,7 @@ const listing = mockListings[0];
 .content-area {
   display: flex;
   margin-top: 20px;
+  justify-content: space-between;
   gap: 20px;
 }
 

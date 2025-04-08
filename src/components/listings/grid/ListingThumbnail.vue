@@ -1,19 +1,19 @@
 <script lang="ts" setup>
-import type { Listing } from "@/data/types/listings/Listing";
+import type { ListingDTO } from "@/api/services";
 
 defineProps<{
-  listing: Listing;
+  listing: ListingDTO;
 }>();
 </script>
 
 <template>
   <RouterLink :to="`/listing/${listing.id}`" class="remove-link-decoration">
     <div class="listing-thumbnail">
-      <img :src="listing.image" alt="listing image" class="image" />
+      <img :src="'https://picsum.photos/200/300'" alt="listing image" class="image" />
       <div class="listing-details">
         <h2 class="listing-title">{{ listing.title }}</h2>
         <p class="description-container">
-          {{ listing.shortDescription }}
+          {{ listing.description }}
         </p>
         <p>Price: {{ listing.price }}</p>
       </div>

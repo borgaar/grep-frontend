@@ -1,9 +1,9 @@
 <script lang="ts" setup>
+import type { ListingDTO } from "@/api/services";
 import ListingThumbnail from "./ListingThumbnail.vue";
-import type { Listing } from "@/data/types/listings/Listing";
 
 defineProps<{
-  listings: Listing[];
+  listings: ListingDTO[];
 }>();
 </script>
 
@@ -20,5 +20,6 @@ defineProps<{
   grid-auto-rows: 400px;
   gap: 16px;
   width: 100%;
+  padding-bottom: 15px;
 }
 </style>

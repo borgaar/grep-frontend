@@ -8,7 +8,8 @@
 
 <style scoped>
 .page-container {
-  align-self: center;
+  align-self: start;
+  justify-self: center;
   max-width: 1200px;
   width: 100%;
   padding-inline: 20px;

@@ -1,18 +1,41 @@
 <script lang="ts" setup>
+import { ListingControllerService, type ListingDTO } from "@/api/services";
 import FilterList from "@/components/listings/filter/FilterList.vue";
 import GridListing from "@/components/listings/grid/GridListing.vue";
 import ListListings from "@/components/listings/list/ListListings.vue";
 import PageContainer from "@/components/PageContainer.vue";
-import mockListings from "@/data/mock/listings";
 import router from "@/router";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 
 const selectedValue = ref("grid");
 const viewMethods = ref([
   { icon: "pi pi-th-large", value: "grid" },
   { icon: "pi pi-list", value: "list" },
 ]);
-const listings = ref(mockListings);
+const listings = ref<ListingDTO[]>([]);
+
+const fetchListings = async () => {
+  try {
+    const response = await ListingControllerService.getPaginated({
+      page: 0,
+      size: 100,
+      priceLower: 0,
+      priceUpper: 100000,
+      sortDirection: "asc",
+    });
+    if (response.length === 0) {
+      console.warn("No listings found");
+    }
+    listings.value = response;
+  } catch (error) {
+    console.error("Error fetching listings:", error);
+  }
+};
+
+onMounted(() => {
+  fetchListings();
+});
+
 const visible = ref(false);
 </script>
 
@@ -56,6 +79,7 @@ const visible = ref(false);
   width: 100%;
   height: 100%;
   justify-content: center;
+  align-items: start;
 }
 
 .sidebar-content {
