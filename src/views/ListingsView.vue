@@ -4,6 +4,7 @@ import GridListing from "@/components/listings/grid/GridListing.vue";
 import ListListings from "@/components/listings/list/ListListings.vue";
 import PageContainer from "@/components/PageContainer.vue";
 import mockListings from "@/data/mock/listings";
+import router from "@/router";
 import { ref } from "vue";
 
 const selectedValue = ref("grid");
@@ -25,7 +26,7 @@ const visible = ref(false);
     <FilterList v-model="listings" class="filters" />
 
     <PageContainer>
-      <div class="view-method">
+      <div class="toolbar">
         <div class="open-filters">
           <Button icon="pi pi-filter" @click="visible = !visible" />
         </div>
@@ -39,6 +40,9 @@ const visible = ref(false);
             <i :class="slotProps.option.icon"></i>
           </template>
         </SelectButton>
+        <Button @click="router.push({ name: 'create-listing' })">
+          {{ $t("create-listing") }}</Button
+        >
       </div>
       <ListListings v-if="selectedValue === 'list'" :listings="listings" />
       <GridListing v-if="selectedValue === 'grid'" :listings="listings" />
@@ -66,7 +70,7 @@ const visible = ref(false);
   align-items: start;
 }
 
-.view-method {
+.toolbar {
   display: flex;
   justify-content: space-between;
   padding: 10px;
