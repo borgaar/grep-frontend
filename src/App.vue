@@ -9,7 +9,9 @@ ensureInitialized();
 <template>
   <main>
     <NavBar class="navbar" />
-    <RouterView class="router-view" />
+    <div class="router-view">
+      <RouterView />
+    </div>
   </main>
 </template>
 
