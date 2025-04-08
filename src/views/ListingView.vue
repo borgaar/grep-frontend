@@ -9,11 +9,11 @@ import Popover from "primevue/popover";
 const op = ref();
 const currentMessage = ref("");
 
-const showContactForm = (event) => {
+const showContactForm = (event: MouseEvent) => {
   op.value.show(event);
 };
 
-const sendMessage = (event: any) => {
+const sendMessage = (event: Event) => {
   op.value.hide(event);
   MessageControllerService.sendMessage({
     requestBody: {

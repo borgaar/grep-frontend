@@ -50,7 +50,7 @@
         <div
           v-for="message in messages"
           :key="message.id"
-          :class="['message', message.senderId === currentUserPhone ? 'sent' : 'received']"
+          :class="['message', message.senderId === currentUser?.phone ? 'sent' : 'received']"
         >
           <div class="message-content">{{ message.content }}</div>
           <div class="message-time">{{ formatShort(new Date(message.timestamp)) }}</div>
@@ -59,16 +59,14 @@
 
       <!-- Message input area -->
       <div class="message-input-container">
-        <Input
+        <InputText
           v-model="currentMessage"
           type="text"
           placeholder="Skriv en melding ..."
           class="message-input"
           @keyup.enter="sendMessage"
         />
-        <Button class="send-button" @click="sendMessage">
-          <i class="icon icon-send"></i>
-        </Button>
+        <Button icon="pi pi-send" @click="sendMessage"> </Button>
       </div>
     </div>
   </div>
@@ -79,18 +77,16 @@ import { formatShort } from "@/locale/date";
 import { useMessageStore } from "@/state/message";
 import { useUserStore } from "@/state/user";
 import { storeToRefs } from "pinia";
+import { onMounted } from "vue";
 
-const { sendMessage, setSelectedContact } = useMessageStore();
+const { sendMessage, setSelectedContact, fetchContacts } = useMessageStore();
 const { messages, selectedContact, currentMessage, contacts } = storeToRefs(useMessageStore());
-const { phone: currentUserPhone } = useUserStore();
+const { user: currentUser } = useUserStore();
 
-// // Lifecycle hooks
-// onMounted(() => {
-//   // Set default selected contact
-//   if (contacts.value.length > 0) {
-//     selectedContact.value = contacts.value[0];
-//   }
-// });
+// Lifecycle hooks
+onMounted(() => {
+  fetchContacts();
+});
 </script>
 
 <style scoped>
@@ -266,7 +262,7 @@ const { phone: currentUserPhone } = useUserStore();
   overflow-y: auto;
   background-color: #f5f5f5;
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
 }
 
 .message {

@@ -8,7 +8,7 @@ const toast = useToast();
 
 // Mock password service
 const passwordService = {
-  changePassword: async (currentPassword: string, newPassword: string) => {
+  changePassword: async (currentPassword: string) => {
     // Simulate API call
     return new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -68,10 +68,7 @@ const onSubmit = async ({
   }
 
   try {
-    const response = await passwordService.changePassword(
-      values.currentPassword,
-      values.newPassword,
-    );
+    const response = await passwordService.changePassword(values.currentPassword);
 
     if (response.status === 200) {
       toast.add({

@@ -1,6 +1,6 @@
 // stores/counter.js
 import { defineStore } from "pinia";
-import { computed, ref } from "vue";
+import { computed, onUnmounted, ref } from "vue";
 import { MessageControllerService, type ChatContactDTO, type SendResponse } from "../api/services";
 
 /**
@@ -17,6 +17,8 @@ export const useMessageStore = defineStore("message", () => {
   const selectedContactPhone = ref<string | null>(null);
   const currentMessage = ref<string>("");
   const contacts = ref<ChatContactDTO[]>([]);
+  const contactPage = ref(0);
+  const interval = ref<number | null>(null);
 
   async function sendMessage() {
     if (!selectedContactPhone.value) return;
@@ -30,13 +32,15 @@ export const useMessageStore = defineStore("message", () => {
     });
 
     currentMessage.value = "";
-    messages.value[selectedContactPhone.value].push(message);
+    messages.value[selectedContactPhone.value].unshift(message);
   }
 
   async function setSelectedContact(contactPhone: string) {
+    if (interval.value) {
+      clearInterval(interval.value);
+    }
     selectedContactPhone.value = contactPhone;
 
-    // TODO fetch history
     const response = await MessageControllerService.getHistory({
       otherUser: contactPhone,
       page: 0,
@@ -46,6 +50,31 @@ export const useMessageStore = defineStore("message", () => {
     const newMessages = dedupeMessages(response);
     messages.value[contactPhone] = newMessages;
     currentMessage.value = "";
+
+    // Start polling for messages
+    interval.value = window.setInterval(async () => {
+      const newMessages = await MessageControllerService.getHistory({
+        otherUser: contactPhone,
+        page: 0,
+        pageSize: 10,
+      });
+
+      const dedupedMessages = dedupeMessages(newMessages);
+      messages.value[contactPhone] = dedupedMessages;
+    }, 1000);
+  }
+
+  async function fetchContacts() {
+    const response = await MessageControllerService.getContacts({
+      page: contactPage.value,
+      pageSize: 10,
+    });
+    contactPage.value++;
+    contacts.value.push(...response);
+
+    if (!Boolean(selectedContactPhone.value)) {
+      setSelectedContact(response[0].phone);
+    }
   }
 
   const selectedContact = computed(() =>
@@ -56,9 +85,14 @@ export const useMessageStore = defineStore("message", () => {
     Boolean(selectedContactPhone) ? (messages.value[selectedContactPhone.value!] ?? []) : [],
   );
 
+  onUnmounted(() => {
+    if (interval.value) clearInterval(interval.value);
+  });
+
   return {
     setSelectedContact,
     sendMessage,
+    fetchContacts,
     messages: currentMessages,
     currentMessage,
     contacts,

@@ -16,8 +16,6 @@ export const useUserStore = defineStore("user", () => {
   const user = ref<User>();
   const theme = ref<"light" | "dark">("light");
   const language = ref<typeof i18n.global.locale.value>("en");
-  const role = ref<"admin" | "user">("admin");
-  const phone = ref<string | null>(null);
 
   function set(newUserData: Partial<User>) {
     user.value = {
@@ -42,7 +40,6 @@ export const useUserStore = defineStore("user", () => {
 
   function signOut() {
     user.value = undefined;
-    role.value = "user";
     authService.logout();
   }
 
@@ -53,9 +50,7 @@ export const useUserStore = defineStore("user", () => {
     toggleTheme,
     language,
     setLanguage,
-    role,
     signOut,
     ensureInitialized,
-    phone,
   };
 });
