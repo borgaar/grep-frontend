@@ -1,7 +1,28 @@
 <script lang="ts" setup>
+import { MessageControllerService } from "@/api/services";
 import MapBox from "@/components/listing/MapBox.vue";
 import PageContainer from "@/components/PageContainer.vue";
 import mockListings from "@/data/mock/listings";
+import { ref, type VNodeRef } from "vue";
+
+const op: VNodeRef = ref();
+const currentMessage = ref("");
+
+const showContactForm = () => {
+  op.value.show();
+};
+
+const sendMessage = () => {
+  op.value.hide();
+  MessageControllerService.sendMessage({
+    requestBody: {
+      content: currentMessage.value,
+      recipientId: listing.author.phone,
+    },
+  });
+
+  currentMessage.value = "";
+};
 
 const listing = mockListings[0];
 </script>
@@ -31,9 +52,23 @@ const listing = mockListings[0];
           class="listing-map"
           :location="{ lat: listing.location.lat, lng: listing.location.lng }"
         />
-        <Button class="contact-button" :disabled="false" @click="() => {}">{{
-          $t("contact")
-        }}</Button>
+        <Button class="contact-button" @click="showContactForm">{{ $t("contact") }}</Button>
+        <Popover ref="op">
+          <div class="flex flex-col gap-4">
+            <div class="message-input-container">
+              <Input
+                v-model="currentMessage"
+                type="text"
+                placeholder="Skriv en melding ..."
+                class="message-input"
+                @keyup.enter="sendMessage"
+              />
+              <Button class="send-button" @click="sendMessage">
+                <i class="icon icon-send"></i>
+              </Button>
+            </div>
+          </div>
+        </Popover>
       </div>
     </div>
   </PageContainer>

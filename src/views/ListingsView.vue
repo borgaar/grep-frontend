@@ -55,13 +55,7 @@ const visible = ref(false);
   display: flex;
   width: 100%;
   height: 100%;
-  justify-content: center;
-}
-
-@media (max-width: 50rem) {
-  .container {
-    justify-content: start;
-  }
+  justify-content: start;
 }
 
 .sidebar-content {
