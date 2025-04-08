@@ -8,6 +8,8 @@ import { RouterLink } from "vue-router";
 import { useToast } from "primevue";
 import { useUserStore } from "@/state/user";
 
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 const { set: setUser } = useUserStore();
 
 const toast = useToast();
@@ -39,7 +41,7 @@ const onSubmit = async ({
   if (!valid) {
     toast.add({
       severity: "error",
-      summary: "Please make sure that all the fields are valid",
+      summary: t("please-make-sure-that-all-the-fields-are-valid"),
       life: 3000,
     });
     return;
@@ -59,11 +61,11 @@ const onSubmit = async ({
   } catch (error) {
     toast.add({
       severity: "error",
-      summary: "Login failed",
+      summary: t("login-failed"),
       detail:
         process.env.NODE_ENV === "development"
           ? error
-          : "Could not reach the server. Are you connected to the internet?",
+          : t("could-not-reach-the-server-are-you-connected-to-the-internet"),
       life: 3000,
     });
   }
@@ -75,13 +77,13 @@ const onSubmit = async ({
   <div class="login-container">
     <Toast />
     <div class="login-panel">
-      <h1 class="login-title">{{ $t("hello") }}</h1>
+      <h1 class="login-title">{{ t("logg-inn") }}</h1>
 
       <Form v-slot="$form" class="login-form" :initial-values :resolver @submit="onSubmit as any">
         <div class="field">
           <FloatLabel variant="in">
             <InputText name="phone" type="text" fluid />
-            <label for="in_label">Phone</label>
+            <label for="in_label">{{ t("phone") }}</label>
           </FloatLabel>
           <Message v-if="$form.phone?.invalid" severity="error" size="small" variant="simple">{{
             $form.phone.error?.message
@@ -91,7 +93,7 @@ const onSubmit = async ({
         <div class="field">
           <FloatLabel variant="in">
             <Password name="password" type="text" fluid toggle-mask />
-            <label for="in_label">Password</label>
+            <label for="in_label">{{ t("password") }}</label>
           </FloatLabel>
           <Message v-if="$form.password?.invalid" severity="error" size="small" variant="simple">{{
             $form.password.error?.message
@@ -101,16 +103,15 @@ const onSubmit = async ({
         <div class="options-row">
           <div class="remember-me">
             <Checkbox name="rememberMe" :binary="true" />
-            <label for="remember" class="checkbox-label">Remember me</label>
+            <label for="remember" class="checkbox-label">{{ t("remember-me") }}</label>
           </div>
-          <a class="forgot-link">Forgot password?</a>
         </div>
 
         <Button type="submit" label="Sign In" class="sign-in-button" :loading="isLoading" />
 
         <div class="signup-prompt">
-          <span>Don't have an account? </span>
-          <RouterLink :to="{ name: 'sign-up' }" class="signup-link">Sign up</RouterLink>
+          <span>{{ t("dont-have-an-account") }}{{ " " }}</span>
+          <RouterLink :to="{ name: 'sign-up' }" class="signup-link">{{ t("sign-up") }}</RouterLink>
         </div>
       </Form>
     </div>

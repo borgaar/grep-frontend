@@ -6,6 +6,8 @@ import { useToast } from "primevue";
 import { authService } from "@/api/auth-service";
 import router from "@/router";
 import { useUserStore } from "@/state/user";
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 
 const initialValues = ref({
   phone: "",
@@ -20,22 +22,22 @@ const resolver = zodResolver(
     phone: z
       .string()
       .regex(/(0047|\+47|47)?(\d|\ ){8}/, {
-        message: "Invalid phone number",
+        message: t("invalid-phone-number"),
       })
       .transform((v) => v.trim().replace(/\ /g, "")),
     firstName: z.string().min(1, {
-      message: "First name must be at least 2 characters long",
+      message: t("first-name-must-be-at-least-2-characters-long"),
     }),
     lastName: z.string().min(1, {
-      message: "Last name must be at least 2 characters long",
+      message: t("last-name-must-be-at-least-2-characters-long"),
     }),
     password: z
       .string()
-      .min(8, { message: "Password must be at least 8 characters long" })
-      .regex(/[a-z]/, { message: "Password must contain at least one lowercase letter" })
-      .regex(/[A-Z]/, { message: "Password must contain at least one uppercase letter" })
-      .regex(/[0-9]/, { message: "Password must contain at least one number" })
-      .regex(/[^a-zA-Z0-9]/, { message: "Password must contain at least one special character" })
+      .min(8, { message: t("password-must-be-at-least-8-characters-long") })
+      .regex(/[a-z]/, { message: t("password-must-contain-at-least-one-lowercase-letter") })
+      .regex(/[A-Z]/, { message: t("password-must-contain-at-least-one-uppercase-letter") })
+      .regex(/[0-9]/, { message: t("password-must-contain-at-least-one-number") })
+      .regex(/[^a-zA-Z0-9]/, { message: t("password-must-contain-at-least-one-special-character") })
       .transform((v) => v.trim().replace(" ", "")),
     rememberMe: z.boolean(),
   }),
@@ -56,7 +58,7 @@ const onSubmit = async ({
   if (!valid) {
     toast.add({
       severity: "error",
-      summary: "Please make sure that all the fields are valid",
+      summary: t("please-make-sure-that-all-the-fields-are-valid"),
       life: 3000,
     });
     return;
@@ -75,9 +77,9 @@ const onSubmit = async ({
   } catch (error) {
     toast.add({
       severity: "error",
-      summary: "Registration failed",
+      summary: t("registration-failed"),
       detail:
-        process.env.NODE_ENV === "development" ? error : "An error occurred during registration.",
+        process.env.NODE_ENV === "development" ? error : t("an-error-occurred-during-registration"),
       life: 3000,
     });
     isLoading.value = false;
@@ -88,14 +90,14 @@ const onSubmit = async ({
 <template>
   <div class="login-container">
     <div class="login-panel">
-      <h1 class="login-title">Create an Account</h1>
+      <h1 class="login-title">{{ t("create-an-account") }}</h1>
 
       <Form v-slot="$form" class="login-form" :initial-values :resolver @submit="onSubmit as any">
         <div class="double-field">
           <div class="field">
             <FloatLabel variant="in">
               <InputText name="firstName" type="text" fluid />
-              <label for="in_label">First name</label>
+              <label for="in_label">{{ t("first-name") }}</label>
             </FloatLabel>
             <Message
               v-if="$form.firstName?.invalid"
@@ -108,7 +110,7 @@ const onSubmit = async ({
           <div class="field">
             <FloatLabel variant="in">
               <InputText name="lastName" type="text" fluid />
-              <label for="in_label">Last name</label>
+              <label for="in_label">{{ t("last-name") }}</label>
             </FloatLabel>
             <Message
               v-if="$form.lastName?.invalid"
@@ -125,7 +127,7 @@ const onSubmit = async ({
               <InputIcon>🇳🇴</InputIcon>
               <InputMask name="phone" type="text" fluid mask="999 99 999" />
             </IconField>
-            <label for="in_label">Phone number</label>
+            <label for="in_label">{{ t("phone") }}</label>
           </FloatLabel>
           <Message v-if="$form.phone?.invalid" severity="error" size="small" variant="simple">{{
             $form.phone.error?.message
@@ -135,7 +137,7 @@ const onSubmit = async ({
         <div class="field">
           <FloatLabel variant="in">
             <Password name="password" type="text" :feedback="false" fluid toggle-mask />
-            <label for="in_label">Password</label>
+            <label for="in_label">{{ t("password") }}</label>
           </FloatLabel>
           <!-- <Message v-if="$form.password?.invalid" severity="error" size="small" variant="simple">{{
             $form.password.error?.message
@@ -155,16 +157,15 @@ const onSubmit = async ({
         <div class="options-row">
           <div class="remember-me">
             <Checkbox name="rememberMe" :binary="true" />
-            <label for="remember" class="checkbox-label">Remember me</label>
+            <label for="remember" class="checkbox-label">{{ t("remember-me") }}</label>
           </div>
-          <a class="forgot-link">Forgot password?</a>
         </div>
 
         <Button type="submit" label="Sign In" class="sign-in-button" :loading="isLoading" />
 
         <div class="signup-prompt">
-          <span>Already have an account? </span>
-          <RouterLink :to="{ name: 'sign-in' }" class="signin-link">Sign In</RouterLink>
+          <span>{{ t("already-have-an-account") }} {{ " " }}</span>
+          <RouterLink :to="{ name: 'sign-in' }" class="signin-link">{{ t("sign-in") }}</RouterLink>
         </div>
       </Form>
     </div>

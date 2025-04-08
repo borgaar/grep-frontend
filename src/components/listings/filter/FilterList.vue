@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import CategoryFilter from "./CategoryFilter.vue";
-
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 const priceRange = ref([0, 100]);
 </script>
 
@@ -14,7 +15,9 @@ const priceRange = ref([0, 100]);
     <div class="category">
       <CategoryFilter />
     </div>
-    <Button class="apply-button" :disabled="priceRange[0] === priceRange[1]">Apply</Button>
+    <Button class="apply-button" :disabled="priceRange[0] === priceRange[1]">{{
+      t("apply")
+    }}</Button>
   </div>
 </template>
 

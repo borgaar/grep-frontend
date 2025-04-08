@@ -1,3 +1,11 @@
+<script lang="ts" setup>
+import PersonalInfoForm from "@/components/profile/PersonalInfoForm.vue";
+import PasswordForm from "@/components/profile/PasswordForm.vue";
+
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
+</script>
+
 <template>
   <div class="profile-container">
     <Toast />
@@ -6,10 +14,10 @@
 
       <div class="profile-tabs">
         <TabView>
-          <TabPanel header="Personal Information" value="personal">
+          <TabPanel :header="t('personal-information')" value="personal">
             <PersonalInfoForm />
           </TabPanel>
-          <TabPanel header="Change Password" value="password">
+          <TabPanel :header="t('change-password')" value="password">
             <PasswordForm />
           </TabPanel>
         </TabView>
@@ -17,11 +25,6 @@
     </div>
   </div>
 </template>
-
-<script lang="ts" setup>
-import PersonalInfoForm from "@/components/profile/PersonalInfoForm.vue";
-import PasswordForm from "@/components/profile/PasswordForm.vue";
-</script>
 
 <style scoped>
 .profile-container {

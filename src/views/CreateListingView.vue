@@ -5,6 +5,8 @@ import { Form } from "@primevue/forms";
 import { zodResolver } from "@primevue/forms/resolvers/zod";
 import { onMounted, ref } from "vue";
 import { z } from "zod";
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 
 interface AddressResponse {
   adresser: Address[];
@@ -59,11 +61,11 @@ const listing = ref({
 
 const resolver = zodResolver(
   z.object({
-    title: z.string().min(1, "Title is required"),
-    description: z.string().min(1, "Description is required"),
-    price: z.number().min(0, "Price must be a positive number").nullable(),
+    title: z.string().min(1, t("title-is-required")),
+    description: z.string().min(1, t("description-is-required")),
+    price: z.number().min(0, t("price-must-be-a-positive-number")).nullable(),
     category: z.object({
-      name: z.string().min(1, "Category is required"),
+      name: z.string().min(1, t("category-is-required")),
     }),
     location: z.object({
       lat: z.number(),
@@ -90,7 +92,7 @@ const searchAddress = async (event: { query: string }) => {
         displayText: `${address.postnummer} ${address.poststed}`,
       }));
     } catch (error) {
-      console.error("Error searching for address:", error);
+      console.error(t("error-searching-for-address"), error);
       addressSuggestions.value = [];
     }
   }
@@ -132,11 +134,11 @@ const onFormSubmit = async ({ valid }: { valid: boolean }) => {
 <template>
   <div class="container">
     <div class="card">
-      <h2>Create New Listing</h2>
+      <h2>{{ t("create-new-listing") }}</h2>
       <Form v-slot="$form" :resolver :initial-values="listing" @submit="onFormSubmit">
         <div class="p-fluid">
           <div class="field">
-            <label for="title">Title</label>
+            <label for="title">{{ t("title") }}</label>
             <InputText v-model="listing.title" name="title" type="text" required fluid />
             <Message v-if="$form.title?.invalid" severity="error" size="small" variant="simple">{{
               $form.title.error?.message
@@ -144,7 +146,7 @@ const onFormSubmit = async ({ valid }: { valid: boolean }) => {
           </div>
 
           <div class="field">
-            <label for="description">Description</label>
+            <label for="description">{{ t("description") }}</label>
             <Textarea
               id="description"
               v-model="listing.description"
@@ -162,7 +164,7 @@ const onFormSubmit = async ({ valid }: { valid: boolean }) => {
           </div>
 
           <div class="field">
-            <label for="price">Price</label>
+            <label for="price">{{ t("price") }}</label>
             <InputNumber
               id="price"
               v-model="listing.price"
@@ -176,12 +178,12 @@ const onFormSubmit = async ({ valid }: { valid: boolean }) => {
           </div>
 
           <div class="field">
-            <label for="category">Category</label>
+            <label for="category">{{ t("category") }}</label>
             <Dropdown
               id="category"
               v-model="listing.category.name"
               :options="categories"
-              placeholder="Select a Category"
+              :placeholder="t('select-a-category')"
               required
             />
             <Message
@@ -194,12 +196,12 @@ const onFormSubmit = async ({ valid }: { valid: boolean }) => {
           </div>
 
           <div class="field">
-            <label for="address">Address</label>
+            <label for="address">{{ t("address") }}</label>
             <AutoComplete
               id="address"
               v-model="addressSearch"
               :suggestions="addressSuggestions"
-              placeholder="Search for an address"
+              :placeholder="t('search-for-an-address')"
               option-label="adressetekst"
               :delay="500"
               field="displayText"
@@ -218,7 +220,7 @@ const onFormSubmit = async ({ valid }: { valid: boolean }) => {
 
           <!-- Submit Button -->
           <div class="field">
-            <Button type="submit" label="Create Listing" />
+            <Button type="submit" :label="t('create-listing')" />
           </div>
         </div>
       </Form>

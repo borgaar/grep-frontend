@@ -7,6 +7,8 @@ import PageContainer from "@/components/PageContainer.vue";
 import router from "@/router";
 import { onMounted, ref } from "vue";
 
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 const selectedValue = ref("grid");
 const viewMethods = ref([
   { icon: "pi pi-th-large", value: "grid" },
@@ -43,7 +45,7 @@ const visible = ref(false);
   <div class="container">
     <Sidebar v-model:visible="visible" class="sidebar-content" header="Sidebar">
       <FilterList v-model="listings" />
-      <Button label="Apply" class="p-button-text" />
+      <Button :label="t('apply')" class="p-button-text" />
     </Sidebar>
 
     <FilterList v-model="listings" class="filters" />

@@ -1,9 +1,28 @@
+<script lang="ts" setup>
+import { formatShort } from "@/locale/date";
+import { useMessageStore } from "@/state/message";
+import { useUserStore } from "@/state/user";
+import { storeToRefs } from "pinia";
+import { onMounted } from "vue";
+
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
+const { sendMessage, setSelectedContact, fetchContacts } = useMessageStore();
+const { messages, selectedContact, currentMessage, contacts } = storeToRefs(useMessageStore());
+const { user: currentUser } = useUserStore();
+
+// Lifecycle hooks
+onMounted(() => {
+  fetchContacts();
+});
+</script>
+
 <template>
   <div class="chat-container">
     <!-- Left sidebar with contacts -->
     <div class="sidebar">
       <div class="sidebar-header">
-        <h2>Meldinger</h2>
+        <h2>{{ t("meldinger") }}</h2>
         <div class="search-container">
           <input type="text" placeholder="Søk" class="search-input" />
         </div>
@@ -62,7 +81,7 @@
         <InputText
           v-model="currentMessage"
           type="text"
-          placeholder="Skriv en melding ..."
+          :placeholder="t('skriv-en-melding')"
           class="message-input"
           @keyup.enter="sendMessage"
         />
@@ -71,23 +90,6 @@
     </div>
   </div>
 </template>
-
-<script lang="ts" setup>
-import { formatShort } from "@/locale/date";
-import { useMessageStore } from "@/state/message";
-import { useUserStore } from "@/state/user";
-import { storeToRefs } from "pinia";
-import { onMounted } from "vue";
-
-const { sendMessage, setSelectedContact, fetchContacts } = useMessageStore();
-const { messages, selectedContact, currentMessage, contacts } = storeToRefs(useMessageStore());
-const { user: currentUser } = useUserStore();
-
-// Lifecycle hooks
-onMounted(() => {
-  fetchContacts();
-});
-</script>
 
 <style scoped>
 .chat-container {

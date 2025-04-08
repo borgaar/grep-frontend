@@ -8,6 +8,8 @@ import { UserControllerService } from "@/api/services";
 import { authService, type User } from "@/api/auth-service";
 import { storeToRefs } from "pinia";
 
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 const toast = useToast();
 const { set } = useUserStore();
 const { user } = storeToRefs(useUserStore());
@@ -39,7 +41,7 @@ const onSubmit = async ({
   if (!valid) {
     toast.add({
       severity: "error",
-      summary: "Please make sure that all the fields are valid",
+      summary: t("please-make-sure-that-all-the-fields-are-valid"),
       life: 3000,
     });
     isLoading.value = false;
@@ -60,18 +62,18 @@ const onSubmit = async ({
 
     toast.add({
       severity: "success",
-      summary: "Profile updated",
-      detail: "Your profile information has been updated successfully.",
+      summary: t("profile-updated"),
+      detail: t("your-profile-information-has-been-updated-successfully"),
       life: 3000,
     });
   } catch (error) {
     toast.add({
       severity: "error",
-      summary: "Update failed",
+      summary: t("update-failed"),
       detail:
         process.env.NODE_ENV === "development"
           ? error
-          : "Something went wrong while updating your profile.",
+          : t("something-went-wrong-while-updating-your-profile"),
       life: 3000,
     });
   }
@@ -90,7 +92,7 @@ const onSubmit = async ({
     <div class="field">
       <FloatLabel variant="in">
         <InputText name="firstName" type="text" fluid />
-        <label for="in_label">First Name</label>
+        <label for="in_label">{{ t("first-name") }}</label>
       </FloatLabel>
       <Message v-if="$form.firstName?.invalid" severity="error" size="small" variant="simple">
         {{ $form.firstName.error?.message }}
@@ -100,7 +102,7 @@ const onSubmit = async ({
     <div class="field">
       <FloatLabel variant="in">
         <InputText name="lastName" type="text" fluid />
-        <label for="in_label">Last Name</label>
+        <label for="in_label">{{ t("last-name") }}</label>
       </FloatLabel>
       <Message v-if="$form.lastName?.invalid" severity="error" size="small" variant="simple">
         {{ $form.lastName.error?.message }}
@@ -110,14 +112,14 @@ const onSubmit = async ({
     <div class="field">
       <FloatLabel variant="in">
         <InputText name="phone" type="text" fluid />
-        <label for="in_label">Phone</label>
+        <label for="in_label">{{ t("phone") }}</label>
       </FloatLabel>
       <Message v-if="$form.phone?.invalid" severity="error" size="small" variant="simple">
         {{ $form.phone.error?.message }}
       </Message>
     </div>
 
-    <Button type="submit" label="Update Profile" class="update-button" :loading="isLoading" />
+    <Button type="submit" :label="t('update-profile')" class="update-button" :loading="isLoading" />
   </Form>
 </template>
 

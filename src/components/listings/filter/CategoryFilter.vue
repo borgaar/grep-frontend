@@ -4,6 +4,8 @@ import { useUserStore } from "@/state/user";
 import { storeToRefs } from "pinia";
 import { onMounted, ref } from "vue";
 import CreateCategoryButton from "./CreateCategoryButton.vue";
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 
 const categories = ref<CategoryDTO[]>([]);
 const selectedCategories = ref<CategoryDTO[]>([]);
@@ -18,7 +20,7 @@ const fetchCategories = async () => {
 
     categories.value = response;
   } catch (error) {
-    console.error("Error fetching categories:", error);
+    console.error(t("error-fetching-categories"), error);
   }
 };
 
@@ -27,7 +29,7 @@ const deleteCategory = async (name: string) => {
     await CategoryControllerService.delete1({ name: name });
     categories.value = categories.value.filter((category) => category.name !== name);
   } catch (error) {
-    console.error("Error deleting category:", error);
+    console.error(t("error-deleting-category"), error);
   }
   fetchCategories();
 };
@@ -37,7 +39,7 @@ onMounted(fetchCategories);
 
 <template>
   <div class="category-filter">
-    <h3 class="title">Categories</h3>
+    <h3 class="title">{{ t("categories") }}</h3>
     <div v-for="category in categories" :key="category.name" class="p-field-checkbox">
       <Checkbox
         v-model="selectedCategories"
@@ -57,7 +59,7 @@ onMounted(fetchCategories);
     </div>
 
     <div v-if="selectedCategories.length > 0" class="filter-actions">
-      <Button label="Clear Filters" class="p-button-text p-button-sm" />
+      <Button :label="t('clear-filters')" class="p-button-text p-button-sm" />
     </div>
     <CreateCategoryButton v-if="role === 'admin'" @category-created="fetchCategories" />
   </div>

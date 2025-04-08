@@ -4,6 +4,8 @@ import { zodResolver } from "@primevue/forms/resolvers/zod";
 import { z } from "zod";
 import { useToast } from "primevue";
 import { AuthControllerService } from "@/api/services";
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 
 const toast = useToast();
 
@@ -16,17 +18,17 @@ const initialValues = ref({
 const resolver = zodResolver(
   z
     .object({
-      currentPassword: z.string().min(1, { message: "Current password is required" }),
+      currentPassword: z.string().min(1, { message: t("current-password-is-required") }),
       newPassword: z
         .string()
-        .min(8, { message: "Password must be at least 8 characters" })
-        .regex(/[A-Z]/, { message: "Password must contain at least one uppercase letter" })
-        .regex(/[a-z]/, { message: "Password must contain at least one lowercase letter" })
-        .regex(/[0-9]/, { message: "Password must contain at least one number" }),
-      confirmPassword: z.string().min(1, { message: "Please confirm your password" }),
+        .min(8, { message: t("password-must-be-at-least-8-characters") })
+        .regex(/[A-Z]/, { message: t("password-must-contain-at-least-one-uppercase-letter") })
+        .regex(/[a-z]/, { message: t("password-must-contain-at-least-one-lowercase-letter") })
+        .regex(/[0-9]/, { message: t("password-must-contain-at-least-one-number") }),
+      confirmPassword: z.string().min(1, { message: t("please-confirm-your-password") }),
     })
     .refine((data) => data.newPassword === data.confirmPassword, {
-      message: "Passwords don't match",
+      message: t("passwords-dont-match"),
       path: ["confirmPassword"],
     }),
 );
@@ -44,7 +46,7 @@ const onSubmit = async ({
   if (!valid) {
     toast.add({
       severity: "error",
-      summary: "Please make sure that all the fields are valid",
+      summary: t("please-make-sure-that-all-the-fields-are-valid"),
       life: 3000,
     });
     isLoading.value = false;
@@ -61,8 +63,8 @@ const onSubmit = async ({
 
     toast.add({
       severity: "success",
-      summary: "Password updated",
-      detail: "Your password has been changed successfully.",
+      summary: t("password-updated"),
+      detail: t("your-password-has-been-changed-successfully"),
       life: 3000,
     });
 
@@ -75,11 +77,11 @@ const onSubmit = async ({
   } catch (error) {
     toast.add({
       severity: "error",
-      summary: "Password change failed",
+      summary: t("password-change-failed"),
       detail:
         error instanceof Error
           ? error.message
-          : "Could not change your password. Please try again.",
+          : t("could-not-change-your-password-please-try-again"),
       life: 3000,
     });
   }
@@ -98,7 +100,7 @@ const onSubmit = async ({
     <div class="field">
       <FloatLabel variant="in">
         <Password name="currentPassword" type="text" fluid toggle-mask />
-        <label for="in_label">Current Password</label>
+        <label for="in_label">{{ t("current-password") }}</label>
       </FloatLabel>
       <Message v-if="$form.currentPassword?.invalid" severity="error" size="small" variant="simple">
         {{ $form.currentPassword.error?.message }}
@@ -108,7 +110,7 @@ const onSubmit = async ({
     <div class="field">
       <FloatLabel variant="in">
         <Password name="newPassword" type="text" fluid toggle-mask />
-        <label for="in_label">New Password</label>
+        <label for="in_label">{{ t("new-password") }}</label>
       </FloatLabel>
       <Message v-if="$form.newPassword?.invalid" severity="error" size="small" variant="simple">
         {{ $form.newPassword.error?.message }}
@@ -118,7 +120,7 @@ const onSubmit = async ({
     <div class="field">
       <FloatLabel variant="in">
         <Password name="confirmPassword" type="text" fluid toggle-mask />
-        <label for="in_label">Confirm Password</label>
+        <label for="in_label">{{ t("confirm-password") }}</label>
       </FloatLabel>
       <Message v-if="$form.confirmPassword?.invalid" severity="error" size="small" variant="simple">
         {{ $form.confirmPassword.error?.message }}
@@ -128,12 +130,12 @@ const onSubmit = async ({
     <Button type="submit" label="Change Password" class="update-button" :loading="isLoading" />
 
     <div class="password-requirements">
-      <h3>Password Requirements:</h3>
+      <h3>{{ t("password-requirements") }}</h3>
       <ul>
-        <li>At least 8 characters</li>
-        <li>At least one uppercase letter</li>
-        <li>At least one lowercase letter</li>
-        <li>At least one number</li>
+        <li>{{ t("at-least-8-characters") }}</li>
+        <li>{{ t("at-least-one-uppercase-letter") }}</li>
+        <li>{{ t("at-least-one-lowercase-letter") }}</li>
+        <li>{{ t("at-least-one-number") }}</li>
       </ul>
     </div>
   </Form>

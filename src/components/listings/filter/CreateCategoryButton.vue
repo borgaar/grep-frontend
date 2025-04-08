@@ -1,24 +1,34 @@
 <template>
   <div style="width: 100%">
-    <Button class="card" label="Create Category" icon="pi pi-plus" @click="openDialog" />
+    <Button class="card" :label="t('create-category')" icon="pi pi-plus" @click="openDialog" />
 
-    <Dialog v-model:visible="dialogVisible" modal header="Enter Text" :style="{ width: '30rem' }">
+    <Dialog
+      v-model:visible="dialogVisible"
+      modal
+      :header="t('enter-text')"
+      :style="{ width: '30rem' }"
+    >
       <div class="p-fluid">
         <div class="field">
           <InputText
             id="input-text"
             v-model="inputText"
-            placeholder="Category Name"
+            :placeholder="t('category-name')"
             autofocus
             :class="{ 'p-invalid': submitted && !inputText }"
           />
-          <small v-if="submitted && !inputText" class="p-error">Name is required.</small>
+          <small v-if="submitted && !inputText" class="p-error">{{ t("name-is-required") }}</small>
         </div>
       </div>
 
       <template #footer>
-        <Button label="Cancel" icon="pi pi-times" class="p-button-text" @click="closeDialog" />
-        <Button label="Submit" icon="pi pi-check" autofocus @click="submitForm" />
+        <Button
+          :label="t('cancel')"
+          icon="pi pi-times"
+          class="p-button-text"
+          @click="closeDialog"
+        />
+        <Button :label="t('submit')" icon="pi pi-check" autofocus @click="submitForm" />
       </template>
     </Dialog>
   </div>
@@ -30,6 +40,8 @@ import Button from "primevue/button";
 import Dialog from "primevue/dialog";
 import InputText from "primevue/inputtext";
 import { CategoryControllerService } from "@/api/services";
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 
 const dialogVisible = ref(false);
 const inputText = ref("");

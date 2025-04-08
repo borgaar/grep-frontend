@@ -10,6 +10,8 @@ import { onMounted, ref } from "vue";
 import Popover from "primevue/popover";
 import { useRoute } from "vue-router";
 
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 const op = ref();
 const currentMessage = ref("");
 
@@ -75,7 +77,7 @@ const listing = ref<ListingDTO>();
               <InputText
                 v-model="currentMessage"
                 type="text"
-                placeholder="Skriv en melding ..."
+                :placeholder="t('skriv-en-melding')"
                 class="message-input"
                 @keyup.enter="sendMessage"
               />

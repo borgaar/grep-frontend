@@ -68,6 +68,8 @@ import { RouterLink } from "vue-router";
 
 const { setLanguage, signOut } = useUserStore();
 const { user, language } = storeToRefs(useUserStore());
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 
 const signIn = () => {
   router.replace({ name: "sign-in" });
@@ -76,22 +78,22 @@ const signIn = () => {
 // Navigation items
 const items = ref([
   {
-    label: "Listings",
+    label: t("listings"),
     icon: "pi pi-list",
     route: "/",
   },
   {
-    label: "Messages",
+    label: t("messages"),
     icon: "pi pi-envelope",
     route: "/messages",
   },
   {
-    label: "Profile",
+    label: t("profile"),
     icon: "pi pi-user",
     route: "/profile",
   },
   {
-    label: "API Docs",
+    label: t("api-docs"),
     icon: "pi pi-book",
     route: "/docs",
   },
