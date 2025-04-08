@@ -5,6 +5,7 @@ import { z } from "zod";
 import { useToast } from "primevue";
 import { authService } from "@/api/auth-service";
 import router from "@/router";
+import { useUserStore } from "@/state/user";
 
 const initialValues = ref({
   phone: "",
@@ -16,9 +17,12 @@ const initialValues = ref({
 
 const resolver = zodResolver(
   z.object({
-    phone: z.string().regex(/(0047|\+47|47)?(\d|\ ){8}/, {
-      message: "Invalid phone number",
-    }),
+    phone: z
+      .string()
+      .regex(/(0047|\+47|47)?(\d|\ ){8}/, {
+        message: "Invalid phone number",
+      })
+      .transform((v) => v.trim().replace(/\ /g, "")),
     firstName: z.string().min(1, {
       message: "First name must be at least 2 characters long",
     }),
@@ -39,6 +43,7 @@ const resolver = zodResolver(
 
 const isLoading = ref(false);
 const toast = useToast();
+const { set: setUser } = useUserStore();
 
 const onSubmit = async ({
   valid,
@@ -58,6 +63,13 @@ const onSubmit = async ({
   }
   try {
     await authService.register(values.phone, values.password, values.firstName, values.lastName);
+
+    setUser({
+      firstName: values.firstName,
+      lastName: values.lastName,
+      phone: values.phone,
+      role: "user",
+    });
 
     router.push({ name: "listings" });
   } catch (error) {

@@ -2,6 +2,7 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import { i18n } from "../main";
+import { authService } from "../api/auth-service";
 
 export type User = {
   firstName: string;
@@ -39,5 +40,11 @@ export const useUserStore = defineStore("user", () => {
     language.value = newLanguage;
   }
 
-  return { user, set, theme, toggleTheme, language, setLanguage, role };
+  function signOut() {
+    user.value = undefined;
+    role.value = "user";
+    authService.logout();
+  }
+
+  return { user, set, theme, toggleTheme, language, setLanguage, role, signOut };
 });

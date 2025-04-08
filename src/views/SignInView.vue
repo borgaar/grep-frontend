@@ -20,7 +20,7 @@ const initialValues = ref({
 
 const resolver = zodResolver(
   z.object({
-    phone: z.string().transform((v) => v.trim().replace(" ", "")),
+    phone: z.string().transform((v) => v.trim().replace(/\ /g, "")),
     password: z.string(),
     rememberMe: z.boolean(),
   }),

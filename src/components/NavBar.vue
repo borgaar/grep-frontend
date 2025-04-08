@@ -30,6 +30,20 @@
             :class="['theme-toggle']"
             @click="toggleTheme"
           /> -->
+          <Button
+            v-if="Boolean(user)"
+            v-tooltip.bottom="'Sign out'"
+            icon="pi pi-sign-out"
+            variant="text"
+            @click="signOut"
+          />
+          <Button
+            v-if="!Boolean(user)"
+            v-tooltip.bottom="'Sign in'"
+            icon="pi pi-sign-in"
+            variant="text"
+            @click="signIn"
+          />
           <Select
             v-model="language"
             :options="$i18n.availableLocales"
@@ -45,13 +59,18 @@
 </template>
 
 <script setup lang="ts">
+import router from "@/router";
 import { useUserStore } from "@/state/user";
 import { storeToRefs } from "pinia";
 import { ref } from "vue";
 import { RouterLink } from "vue-router";
 
-const { setLanguage } = useUserStore();
+const { setLanguage, signOut } = useUserStore();
 const { user, language } = storeToRefs(useUserStore());
+
+const signIn = () => {
+  router.replace({ name: "sign-in" });
+};
 
 // Navigation items
 const items = ref([
