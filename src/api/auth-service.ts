@@ -1,6 +1,11 @@
 import router from "@/router";
 import { jwtDecode } from "jwt-decode";
-import { AuthControllerService, type LoginResponse, type RegisterResponse } from "./services";
+import {
+  AuthControllerService,
+  UserControllerService,
+  type LoginResponse,
+  type RegisterResponse,
+} from "./services";
 
 interface DecodedToken {
   // Phone number
@@ -23,7 +28,7 @@ export interface User {
 export type UserRole = "admin" | "user";
 
 interface AuthService {
-  getUser(): User | null;
+  getUser(): Promise<User | null>;
   getToken(): string | null;
   isAuthenticated(): boolean;
   login(phone: string, password: string): Promise<LoginResponse>;
@@ -37,17 +42,14 @@ interface AuthService {
 }
 
 export class AuthApiService implements AuthService {
-  getUser(): User | null {
-    const data = localStorage.getItem("User");
-    if (!Boolean(data)) return null;
-
-    const [firstName, lastName, role, phone] = data ? data.split(";") : [];
+  async getUser(): Promise<User | null> {
+    const profile = await UserControllerService.getProfile();
 
     return {
-      firstName,
-      lastName,
-      role: (role as UserRole) || "user",
-      phone,
+      firstName: profile.firstName,
+      lastName: profile.lastName,
+      phone: profile.phone,
+      role: profile.role as UserRole,
     };
   }
 
@@ -77,15 +79,9 @@ export class AuthApiService implements AuthService {
 
     if (response.token) {
       this.storeToken(response.token);
-      this.storeUser({ ...response, phone });
     }
 
     return response;
-  }
-
-  storeUser(arg: { phone: string; firstName: string; lastName: string; role: string }) {
-    const { phone, firstName, lastName, role } = arg;
-    localStorage.setItem("User", [firstName, lastName, role, phone].join(";"));
   }
 
   public async register(

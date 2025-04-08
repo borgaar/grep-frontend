@@ -90,7 +90,7 @@ const onSubmit = async ({
     <div class="login-panel">
       <h1 class="login-title">Create an Account</h1>
 
-      <Form v-slot="$form" class="login-form" :initial-values :resolver @submit="onSubmit">
+      <Form v-slot="$form" class="login-form" :initial-values :resolver @submit="onSubmit as any">
         <div class="double-field">
           <div class="field">
             <FloatLabel variant="in">

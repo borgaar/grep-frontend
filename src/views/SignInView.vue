@@ -77,7 +77,7 @@ const onSubmit = async ({
     <div class="login-panel">
       <h1 class="login-title">{{ $t("hello") }}</h1>
 
-      <Form v-slot="$form" class="login-form" :initial-values :resolver @submit="onSubmit">
+      <Form v-slot="$form" class="login-form" :initial-values :resolver @submit="onSubmit as any">
         <div class="field">
           <FloatLabel variant="in">
             <InputText name="phone" type="text" fluid />

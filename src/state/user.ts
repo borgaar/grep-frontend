@@ -5,8 +5,8 @@ import { i18n } from "../main";
 import { authService, type User } from "../api/auth-service";
 
 export const useUserStore = defineStore("user", () => {
-  function ensureInitialized() {
-    const user = authService.getUser();
+  async function refreshUser() {
+    const user = await authService.getUser();
 
     if (user) {
       set(user);
@@ -51,6 +51,6 @@ export const useUserStore = defineStore("user", () => {
     language,
     setLanguage,
     signOut,
-    ensureInitialized,
+    ensureInitialized: refreshUser,
   };
 });
