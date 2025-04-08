@@ -3,17 +3,18 @@ import { MessageControllerService } from "@/api/services";
 import MapBox from "@/components/listing/MapBox.vue";
 import PageContainer from "@/components/PageContainer.vue";
 import mockListings from "@/data/mock/listings";
-import { ref, type VNodeRef } from "vue";
+import { ref } from "vue";
+import Popover from "primevue/popover";
 
-const op: VNodeRef = ref();
+const op = ref();
 const currentMessage = ref("");
 
-const showContactForm = () => {
-  op.value.show();
+const showContactForm = (event) => {
+  op.value.show(event);
 };
 
-const sendMessage = () => {
-  op.value.hide();
+const sendMessage = (event: any) => {
+  op.value.hide(event);
   MessageControllerService.sendMessage({
     requestBody: {
       content: currentMessage.value,
@@ -53,19 +54,17 @@ const listing = mockListings[0];
           :location="{ lat: listing.location.lat, lng: listing.location.lng }"
         />
         <Button class="contact-button" @click="showContactForm">{{ $t("contact") }}</Button>
-        <Popover ref="op">
+        <Popover ref="op" :dismissable="false">
           <div class="flex flex-col gap-4">
             <div class="message-input-container">
-              <Input
+              <InputText
                 v-model="currentMessage"
                 type="text"
                 placeholder="Skriv en melding ..."
                 class="message-input"
                 @keyup.enter="sendMessage"
               />
-              <Button class="send-button" @click="sendMessage">
-                <i class="icon icon-send"></i>
-              </Button>
+              <Button class="send-button" icon="pi pi-send" @click="sendMessage" />
             </div>
           </div>
         </Popover>
@@ -77,6 +76,11 @@ const listing = mockListings[0];
 <style scoped>
 .container {
   margin-block: 20px;
+}
+
+.message-input-container {
+  display: flex;
+  gap: 10px;
 }
 
 .listing-price {
