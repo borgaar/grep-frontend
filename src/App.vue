@@ -8,8 +8,8 @@ ensureInitialized();
 
 <template>
   <main>
-    <NavBar />
-    <RouterView class="view" />
+    <NavBar class="navbar" />
+    <RouterView class="router-view" />
   </main>
 </template>
 
@@ -19,11 +19,18 @@ main {
   flex-direction: column;
   width: 100%;
   position: relative;
-  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
 }
 
-.view {
-  height: calc(100vh - 60px);
-  overflow-y: auto;
+.router-view {
+  position: relative;
+  overflow: auto;
+}
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 </style>
