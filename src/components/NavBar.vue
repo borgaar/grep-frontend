@@ -24,12 +24,12 @@
       </template>
       <template #end>
         <div class="end-container">
-          <Button
+          <!-- <Button
             v-tooltip.bottom="'Toggle theme'"
             :icon="theme === 'dark' ? 'pi pi-moon' : 'pi pi-sun'"
             :class="['theme-toggle']"
             @click="toggleTheme"
-          />
+          /> -->
           <Select
             v-model="language"
             :options="$i18n.availableLocales"
@@ -50,8 +50,8 @@ import { storeToRefs } from "pinia";
 import { ref } from "vue";
 import { RouterLink } from "vue-router";
 
-const { toggleTheme, setLanguage } = useUserStore();
-const { theme, user, language } = storeToRefs(useUserStore());
+const { setLanguage } = useUserStore();
+const { user, language } = storeToRefs(useUserStore());
 
 // Navigation items
 const items = ref([

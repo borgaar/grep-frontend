@@ -3,12 +3,14 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import { i18n } from "../main";
 
-type User = {
+export type User = {
   firstName: string;
   lastName: string;
   phone: string;
-  role: "admin" | "user";
+  role: UserRole;
 };
+
+export type UserRole = "admin" | "user";
 
 export const useUserStore = defineStore("user", () => {
   const user = ref<User>();

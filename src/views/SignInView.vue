@@ -6,6 +6,9 @@ import { authService } from "@/api/auth-service";
 import router from "@/router";
 import { RouterLink } from "vue-router";
 import { useToast } from "primevue";
+import { useUserStore, type UserRole } from "@/state/user";
+
+const { set: setUser } = useUserStore();
 
 const toast = useToast();
 
@@ -43,7 +46,14 @@ const onSubmit = async ({
   }
 
   try {
-    await authService.login(values.phone, values.password);
+    const response = await authService.login(values.phone, values.password);
+
+    setUser({
+      phone: values.phone,
+      role: response.role as UserRole,
+      firstName: response.firstName,
+      lastName: response.lastName,
+    });
 
     router.push({ name: "listings" });
   } catch (error) {

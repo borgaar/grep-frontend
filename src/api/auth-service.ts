@@ -1,10 +1,6 @@
 import router from "@/router";
-import { useUserStore } from "@/state/user";
-import axios, { type AxiosResponse } from "axios";
 import { jwtDecode } from "jwt-decode";
-import { AuthControllerService, type AuthResponse } from "./services";
-
-const API_URL = "http://localhost:8080/api/auth";
+import { AuthControllerService, type LoginResponse, type RegisterResponse } from "./services";
 
 interface DecodedToken {
   // Phone number
@@ -20,13 +16,13 @@ interface DecodedToken {
 interface AuthService {
   getToken(): string | null;
   isAuthenticated(): boolean;
-  login(phone: string, password: string): Promise<AuthResponse>;
+  login(phone: string, password: string): Promise<LoginResponse>;
   register(
     phone: string,
     password: string,
     firstName: string,
     lastName: string,
-  ): Promise<AuthResponse>;
+  ): Promise<RegisterResponse>;
   logout(): void;
 }
 
@@ -47,26 +43,17 @@ export class AuthApiService implements AuthService {
     return !this.isTokenExpired();
   }
 
-  public async login(phone: string, password: string): Promise<AuthResponse> {
+  public async login(phone: string, password: string): Promise<LoginResponse> {
     const response = await AuthControllerService.login({
       requestBody: {
         phone,
         password,
-        // Temporary values for firstName and lastName since backend uses same model
-        // for login and register
-        firstName: "temp",
-        lastName: "orary",
       },
     });
 
     if (response.token) {
       this.storeToken(response.token);
     }
-
-    useUserStore().set({
-      phone: phone,
-      role: "admin", // response.data.role,
-    });
 
     return response;
   }
@@ -76,7 +63,7 @@ export class AuthApiService implements AuthService {
     password: string,
     firstName: string,
     lastName: string,
-  ): Promise<AuthResponse> {
+  ): Promise<RegisterResponse> {
     try {
       const response = await AuthControllerService.register({
         requestBody: {
