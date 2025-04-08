@@ -3,25 +3,9 @@ import { ref } from "vue";
 import { zodResolver } from "@primevue/forms/resolvers/zod";
 import { z } from "zod";
 import { useToast } from "primevue";
+import { AuthControllerService } from "@/api/services";
 
 const toast = useToast();
-
-// Mock password service
-const passwordService = {
-  changePassword: async (currentPassword: string) => {
-    // Simulate API call
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        // For demo purposes, simulate success if current password is "password123"
-        if (currentPassword === "password123") {
-          resolve({ status: 200 });
-        } else {
-          reject(new Error("Current password is incorrect"));
-        }
-      }, 800);
-    });
-  },
-};
 
 const initialValues = ref({
   currentPassword: "",
@@ -68,23 +52,26 @@ const onSubmit = async ({
   }
 
   try {
-    const response = await passwordService.changePassword(values.currentPassword);
+    await AuthControllerService.updatePassword({
+      requestBody: {
+        newPassword: values.newPassword,
+        oldPassword: values.currentPassword,
+      },
+    });
 
-    if (response.status === 200) {
-      toast.add({
-        severity: "success",
-        summary: "Password updated",
-        detail: "Your password has been changed successfully.",
-        life: 3000,
-      });
+    toast.add({
+      severity: "success",
+      summary: "Password updated",
+      detail: "Your password has been changed successfully.",
+      life: 3000,
+    });
 
-      // Reset form
-      initialValues.value = {
-        currentPassword: "",
-        newPassword: "",
-        confirmPassword: "",
-      };
-    }
+    // Reset form
+    initialValues.value = {
+      currentPassword: "",
+      newPassword: "",
+      confirmPassword: "",
+    };
   } catch (error) {
     toast.add({
       severity: "error",
@@ -106,7 +93,7 @@ const onSubmit = async ({
     class="password-form"
     :initial-values="initialValues"
     :resolver="resolver"
-    @submit="onSubmit"
+    @submit="onSubmit as any"
   >
     <div class="field">
       <FloatLabel variant="in">

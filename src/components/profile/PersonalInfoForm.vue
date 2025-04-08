@@ -3,77 +3,26 @@ import { ref } from "vue";
 import { zodResolver } from "@primevue/forms/resolvers/zod";
 import { z } from "zod";
 import { useToast } from "primevue";
+import { useUserStore } from "@/state/user";
+import { UserControllerService } from "@/api/services";
+import { authService, type User } from "@/api/auth-service";
+import { storeToRefs } from "pinia";
 
 const toast = useToast();
-
-// Mock user profile service
-const userProfileService = {
-  updateProfile: async (firstName: string, lastName: string, phone: string) => {
-    // Simulate API call
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({ status: 200 });
-      }, 800);
-    });
-  },
-
-  getCurrentUser: async () => {
-    // Simulate API call to get current user data
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          firstName: "John",
-          lastName: "Doe",
-          phone: "+4798765432",
-        });
-      }, 300);
-    });
-  },
-};
-
-// Fetch user data when component mounts
-const userData = ref({
-  firstName: "",
-  lastName: "",
-  phone: "",
-});
-
-// Load user data
-const loadUserData = async () => {
-  try {
-    const user = await userProfileService.getCurrentUser();
-    userData.value = {
-      firstName: user.firstName,
-      lastName: user.lastName,
-      phone: user.phone,
-    };
-  } catch (error) {
-    toast.add({
-      severity: "error",
-      summary: "Error loading profile",
-      detail: "Could not load your profile information.",
-      life: 3000,
-    });
-  }
-};
-
-loadUserData();
+const { set } = useUserStore();
+const { user } = storeToRefs(useUserStore());
 
 const initialValues = ref({
-  firstName: userData.value.firstName,
-  lastName: userData.value.lastName,
-  phone: userData.value.phone,
+  firstName: user?.value?.firstName ?? "",
+  lastName: user?.value?.lastName ?? "",
+  phone: user?.value?.phone ?? "",
 });
-
-const norwegianPhoneRegex = /^(?:(?:\+|00)47)?[2-9]\d{7}$/;
 
 const resolver = zodResolver(
   z.object({
     firstName: z.string().min(1, { message: "First name is required" }),
     lastName: z.string().min(1, { message: "Last name is required" }),
-    phone: z.string().regex(new RegExp(norwegianPhoneRegex), {
-      message: "Invalid phone number",
-    }),
+    phone: z.string().transform((v) => v.trim().replace(/\ /g, "")),
   }),
 );
 
@@ -98,34 +47,23 @@ const onSubmit = async ({
   }
 
   try {
-    const response = await userProfileService.updateProfile(
-      values.firstName,
-      values.lastName,
-      values.phone,
-    );
-
-    if (response.status === 200) {
-      toast.add({
-        severity: "success",
-        summary: "Profile updated",
-        detail: "Your profile information has been updated successfully.",
-        life: 3000,
-      });
-
-      // Update local user data
-      userData.value = {
+    const response = await UserControllerService.updateProfile({
+      requestBody: {
         firstName: values.firstName,
         lastName: values.lastName,
         phone: values.phone,
-      };
-    } else {
-      toast.add({
-        severity: "error",
-        summary: "Update failed",
-        detail: "Could not update your profile information.",
-        life: 3000,
-      });
-    }
+      },
+    });
+
+    authService.storeUser(response);
+    set(response as User);
+
+    toast.add({
+      severity: "success",
+      summary: "Profile updated",
+      detail: "Your profile information has been updated successfully.",
+      life: 3000,
+    });
   } catch (error) {
     toast.add({
       severity: "error",
@@ -133,7 +71,7 @@ const onSubmit = async ({
       detail:
         process.env.NODE_ENV === "development"
           ? error
-          : "Could not reach the server. Are you connected to the internet?",
+          : "Something went wrong while updating your profile.",
       life: 3000,
     });
   }
@@ -145,9 +83,9 @@ const onSubmit = async ({
   <Form
     v-slot="$form"
     class="profile-form"
-    :initial-values="userData"
+    :initial-values="initialValues"
     :resolver="resolver"
-    @submit="onSubmit"
+    @submit="onSubmit as any"
   >
     <div class="field">
       <FloatLabel variant="in">
