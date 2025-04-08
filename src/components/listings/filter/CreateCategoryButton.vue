@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="width: 100%">
     <Button class="card" label="Create Category" icon="pi pi-plus" @click="openDialog" />
 
     <Dialog v-model:visible="dialogVisible" modal header="Enter Text" :style="{ width: '30rem' }">
@@ -45,11 +45,18 @@ const closeDialog = () => {
   dialogVisible.value = false;
 };
 
+const props = defineProps({
+  onCategoryCreated: {
+    type: Function,
+    required: true,
+  },
+});
+
 const submitForm = async () => {
   submitted.value = true;
 
   if (inputText.value) {
-    await CategoryControllerService.create({
+    await CategoryControllerService.create1({
       requestBody: {
         name: inputText.value,
       },
@@ -59,6 +66,8 @@ const submitForm = async () => {
 
     inputText.value = "";
     submitted.value = false;
+
+    props.onCategoryCreated();
   }
 };
 </script>
@@ -70,5 +79,14 @@ const submitForm = async () => {
 
 .card {
   width: 100%;
+  background-color: transparent;
+  color: var(--p-text-color);
+  border: none;
+}
+
+.card:hover {
+  background-color: transparent;
+  color: var(--p-primary-color);
+  border: none;
 }
 </style>
