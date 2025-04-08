@@ -32,3 +32,6 @@ coverage
 components.d.ts
 
 .env*
+
+src/api/services/
+!src/api/services/core
