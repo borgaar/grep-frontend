@@ -17,11 +17,12 @@
     "format": "prettier --write src/",
     "api": "pnpm pull-api && pnpm gen-api",
     "gen-api": "pnpm openapi --input src/api/spec.json --output src/api/services --client axios --useOptions --useUnionTypes --exportCore false",
-    "pull-api": "curl -o src/api/spec.json http://localhost:8080/v3/api-docs"
+    "pull-api": "curl -o src/api/spec.json http://localhost:8080/v3/api-docs && cp src/api/spec.json public/spec.json"
   },
   "dependencies": {
     "@primeuix/themes": "^1.0.0",
     "@primevue/forms": "^4.3.3",
+    "@scalar/api-reference": "^1.28.13",
     "@studiometa/vue-mapbox-gl": "^2.7.2",
     "axios": "^1.8.4",
     "dotenv": "^16.4.7",

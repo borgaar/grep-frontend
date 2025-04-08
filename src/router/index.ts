@@ -34,6 +34,11 @@ const router = createRouter({
       name: "messages",
       component: () => import("../views/MessagesView.vue"),
     },
+    {
+      path: "/docs",
+      name: "docs",
+      component: () => import("../views/ApiDocsView.vue"),
+    },
   ],
 });
 

@@ -71,6 +71,11 @@ const items = ref([
     icon: "pi pi-user",
     route: "/profile",
   },
+  {
+    label: "API Docs",
+    icon: "pi pi-book",
+    route: "/docs",
+  },
 ]);
 </script>
 
