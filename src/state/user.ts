@@ -1,4 +1,3 @@
-// stores/counter.js
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import { i18n } from "../main";

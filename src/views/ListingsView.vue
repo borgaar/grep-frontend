@@ -5,7 +5,9 @@ import GridListing from "@/components/listings/grid/GridListing.vue";
 import ListListings from "@/components/listings/list/ListListings.vue";
 import PageContainer from "@/components/PageContainer.vue";
 import router from "@/router";
-import { onMounted, ref } from "vue";
+import { useFilterStore } from "@/state/filter";
+import { storeToRefs } from "pinia";
+import { onMounted, ref, watch } from "vue";
 
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();
@@ -16,14 +18,26 @@ const viewMethods = ref([
 ]);
 const listings = ref<ListingDTO[]>([]);
 
+const filters = storeToRefs(useFilterStore());
+
+watch(
+  () => filters,
+  () => {
+    fetchListings();
+  },
+  { deep: true },
+);
+
 const fetchListings = async () => {
   try {
     const response = await ListingControllerService.getPaginated({
       page: 0,
       size: 100,
-      priceLower: 0,
-      priceUpper: 100000,
-      sortDirection: "asc",
+      priceLower: filters.priceLower.value,
+      priceUpper: filters.priceUpper.value,
+      sortDirection: filters.sort.value,
+      categories: filters.categories.value,
+      query: filters.query.value,
     });
     if (response.length === 0) {
       console.warn("No listings found");
@@ -48,7 +62,7 @@ const visible = ref(false);
       <Button :label="t('apply')" class="p-button-text" />
     </Sidebar>
 
-    <FilterList v-model="listings" class="filters" />
+    <FilterList v-model="listings" :on-apply="fetchListings" class="filters" />
 
     <PageContainer>
       <div class="toolbar">
@@ -82,6 +96,7 @@ const visible = ref(false);
   height: 100%;
   justify-content: center;
   align-items: start;
+  padding-inline: 10px;
 }
 
 .sidebar-content {

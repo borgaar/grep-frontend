@@ -1,23 +1,16 @@
 <script setup lang="ts">
-import { ref } from "vue";
 import CategoryFilter from "./CategoryFilter.vue";
-import { useI18n } from "vue-i18n";
-const { t } = useI18n();
-const priceRange = ref([0, 100]);
+import PriceSlider from "./PriceSlider.vue";
 </script>
 
 <template>
   <div class="container">
-    <div class="price-range">
-      <p>{{ priceRange[0] * 100 }}kr - {{ priceRange[1] * 100 }}kr</p>
-      <Slider v-model="priceRange" range class="price-range-slider" />
+    <div class="price-range-container">
+      <PriceSlider />
     </div>
-    <div class="category">
+    <div class="category-container">
       <CategoryFilter />
     </div>
-    <Button class="apply-button" :disabled="priceRange[0] === priceRange[1]">{{
-      t("apply")
-    }}</Button>
   </div>
 </template>
 
@@ -27,30 +20,20 @@ const priceRange = ref([0, 100]);
   flex-direction: column;
   height: 100vh;
   row-gap: 20px;
-  padding-block: 20px;
+  padding-top: 20px;
   align-items: center;
 }
 
-.category {
-  width: 80%;
+.category-container {
+  width: 100%;
   height: min-content;
 }
 
-.price-range {
+.price-range-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   row-gap: 10px;
   width: 100%;
-}
-
-.price-range-slider {
-  width: 80%;
-  margin-inline: auto;
-}
-
-.apply-button {
-  width: 80%;
-  margin: 0px;
 }
 </style>

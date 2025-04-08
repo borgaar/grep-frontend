@@ -5,14 +5,17 @@ import { storeToRefs } from "pinia";
 import { onMounted, ref } from "vue";
 import CreateCategoryButton from "./CreateCategoryButton.vue";
 import { useI18n } from "vue-i18n";
+import { useFilterStore } from "@/state/filter";
 const { t } = useI18n();
 
 const categories = ref<CategoryDTO[]>([]);
 const selectedCategories = ref<CategoryDTO[]>([]);
 
-const { role } = storeToRefs(useUserStore());
+const { user } = storeToRefs(useUserStore());
+const { toggleCategory } = useFilterStore();
 
 const fetchCategories = async () => {
+  console.log(user.value);
   try {
     const response = await CategoryControllerService.getAll({ page: 0, pageSize: 5 });
 
@@ -38,13 +41,18 @@ onMounted(fetchCategories);
 </script>
 
 <template>
-  <div class="category-filter">
+  <div class="container">
     <h3 class="title">{{ t("categories") }}</h3>
     <div v-for="category in categories" :key="category.name" class="p-field-checkbox">
       <Checkbox
         v-model="selectedCategories"
         :input-id="'category_' + category.name"
         :value="category.name"
+        @change="
+          () => {
+            toggleCategory(category.name);
+          }
+        "
       />
       <label class="p-checkbox-label">
         {{ category.name }}
@@ -61,12 +69,12 @@ onMounted(fetchCategories);
     <div v-if="selectedCategories.length > 0" class="filter-actions">
       <Button :label="t('clear-filters')" class="p-button-text p-button-sm" />
     </div>
-    <CreateCategoryButton v-if="role === 'admin'" @category-created="fetchCategories" />
+    <CreateCategoryButton v-if="user?.role === 'admin'" @category-created="fetchCategories" />
   </div>
 </template>
 
 <style scoped>
-.category-filter {
+.container {
   display: flex;
   flex-direction: column;
   align-items: center;
