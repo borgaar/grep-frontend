@@ -11,15 +11,24 @@ const viewMethods = ref([
   { icon: "pi pi-th-large", value: "grid" },
   { icon: "pi pi-list", value: "list" },
 ]);
-
 const listings = ref(mockListings);
+const visible = ref(false);
 </script>
 
 <template>
   <div class="container">
+    <Sidebar v-model:visible="visible" class="sidebar-content" header="Sidebar">
+      <FilterList v-model="listings" />
+      <Button label="Apply" class="p-button-text" />
+    </Sidebar>
+
     <FilterList v-model="listings" class="filters" />
+
     <PageContainer>
       <div class="view-method">
+        <div class="open-filters">
+          <Button icon="pi pi-filter" @click="visible = !visible" />
+        </div>
         <SelectButton
           v-model="selectedValue"
           :allow-empty="false"
@@ -31,7 +40,7 @@ const listings = ref(mockListings);
           </template>
         </SelectButton>
       </div>
-      <ListListings v-if="selectedValue === 'list'" />
+      <ListListings v-if="selectedValue === 'list'" :listings="listings" />
       <GridListing v-if="selectedValue === 'grid'" :listings="listings" />
     </PageContainer>
   </div>
@@ -41,20 +50,42 @@ const listings = ref(mockListings);
 .container {
   display: flex;
   width: 100%;
-  justify-content: center;
   height: 100%;
+}
+
+.sidebar-content {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
 }
 
 .view-method {
   display: flex;
-  justify-content: end;
+  justify-content: space-between;
   padding: 10px;
   height: 60px;
+}
+
+.open-filters {
+  display: none;
+}
+
+@media (max-width: 50rem) {
+  .open-filters {
+    display: block;
+  }
+  .filters {
+    display: none;
+  }
 }
 
 .filters {
   position: sticky;
   top: 0;
   width: 300px;
+}
+
+.filters-mobile {
+  width: 100%;
 }
 </style>

@@ -68,7 +68,6 @@ onMounted(fetchCategories);
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 1.5rem;
   row-gap: 0.5rem;
 }
 

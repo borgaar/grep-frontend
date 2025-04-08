@@ -30,6 +30,7 @@ const priceRange = ref([0, 100]);
 
 .category {
   width: 80%;
+  height: min-content;
 }
 
 .price-range {
@@ -46,7 +47,7 @@ const priceRange = ref([0, 100]);
 }
 
 .apply-button {
-  margin: 10px auto;
   width: 80%;
+  margin: 0px;
 }
 </style>
