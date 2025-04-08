@@ -15,7 +15,9 @@
     "type-check": "vue-tsc --build",
     "lint": "eslint . --fix",
     "format": "prettier --write src/",
-    "api": "pnpm openapi --input http://localhost:8080/v3/api-docs --output src/api/services --client axios --useOptions --useUnionTypes --exportCore false"
+    "api": "pnpm pull-api && pnpm gen-api",
+    "gen-api": "pnpm openapi --input src/api/spec.json --output src/api/services --client axios --useOptions --useUnionTypes --exportCore false",
+    "pull-api": "curl -o src/api/spec.json http://localhost:8080/v3/api-docs"
   },
   "dependencies": {
     "@primeuix/themes": "^1.0.0",
