@@ -1,10 +1,14 @@
 <script setup lang="ts">
 import CategoryFilter from "./CategoryFilter.vue";
 import PriceSlider from "./PriceSlider.vue";
+import QueryFilter from "./QueryFilter.vue";
 </script>
 
 <template>
   <div class="container">
+    <div class="query-container">
+      <QueryFilter />
+    </div>
     <div class="price-range-container">
       <PriceSlider />
     </div>

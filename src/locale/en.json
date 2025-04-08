@@ -80,5 +80,6 @@
   "an-error-occurred-during-registration": "An error occurred during registration.",
   "create-an-account": "Create an account",
   "already-have-an-account": "Already have an account?",
-  "sign-in": "Sign in"
+  "sign-in": "Sign in",
+  "search-by-keyword": "Search by keyword"
 }
