@@ -231,8 +231,6 @@ export const sendRequest = async <T>(
     cancelToken: source.token,
   };
 
-  console.log("Request config:", requestConfig);
-
   onCancel(() => source.cancel("The user aborted a request."));
 
   try {
