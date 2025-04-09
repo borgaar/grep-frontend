@@ -5,7 +5,7 @@ import GridListing from "@/components/listings/grid/GridListing.vue";
 import ListListings from "@/components/listings/list/ListListings.vue";
 import PageContainer from "@/components/PageContainer.vue";
 import router from "@/router";
-import { useFilterStore } from "@/state/filter";
+import { useFilterStore, type SortingMethod } from "@/state/filter";
 import { storeToRefs } from "pinia";
 import { onMounted, ref, watch } from "vue";
 
@@ -19,6 +19,8 @@ const viewMethods = ref([
 const listings = ref<ListingDTO[]>([]);
 
 const filters = storeToRefs(useFilterStore());
+
+const { setSort } = useFilterStore();
 
 watch(
   () => filters,
@@ -49,6 +51,19 @@ const fetchListings = async () => {
   }
 };
 
+const sortingMethods: { label: string; value: SortingMethod }[] = [
+  {
+    label: "Ascending price",
+    value: "asc",
+  },
+  {
+    label: "Descending price",
+    value: "desc",
+  },
+];
+
+const selectedSort = ref<(typeof sortingMethods)[0]>();
+
 onMounted(() => {
   fetchListings();
 });
@@ -66,19 +81,36 @@ const visible = ref(false);
 
     <PageContainer>
       <div class="toolbar">
-        <div class="open-filters">
-          <Button icon="pi pi-filter" @click="visible = !visible" />
+        <div class="view-methods">
+          <div class="open-filters">
+            <Button icon="pi pi-filter" @click="visible = !visible" />
+          </div>
+          <SelectButton
+            v-model="selectedValue"
+            :allow-empty="false"
+            :options="viewMethods"
+            option-value="value"
+            style="height: 100%"
+          >
+            <template #option="slotProps">
+              <i :class="slotProps.option.icon"></i>
+            </template>
+          </SelectButton>
+          <Dropdown
+            v-model="selectedSort"
+            :options="sortingMethods"
+            option-label="label"
+            placeholder="Sort by"
+            show-clear
+            checkmark
+            :highlight-on-select="false"
+            @change="
+              () => {
+                setSort(selectedSort?.value);
+              }
+            "
+          />
         </div>
-        <SelectButton
-          v-model="selectedValue"
-          :allow-empty="false"
-          :options="viewMethods"
-          option-value="value"
-        >
-          <template #option="slotProps">
-            <i :class="slotProps.option.icon"></i>
-          </template>
-        </SelectButton>
         <Button @click="router.push({ name: 'create-listing' })">
           {{ $t("create-listing") }}</Button
         >
@@ -127,6 +159,12 @@ const visible = ref(false);
   .filters {
     display: none;
   }
+}
+
+.view-methods {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .filters {

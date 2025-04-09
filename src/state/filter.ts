@@ -1,12 +1,14 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
+export type SortingMethod = "asc" | "desc";
+
 export const useFilterStore = defineStore("filter", () => {
   const categories = ref<string[]>([]);
   const priceLower = ref<number | undefined>(undefined);
   const priceUpper = ref<number | undefined>(undefined);
   const query = ref<string | undefined>(undefined);
-  const sort = ref<"asc" | "desc" | undefined>(undefined);
+  const sort = ref<SortingMethod | undefined>(undefined);
 
   function toggleCategory(category: string) {
     if (categories.value.includes(category)) {
@@ -32,7 +34,7 @@ export const useFilterStore = defineStore("filter", () => {
     query.value = newQuery === "" ? undefined : newQuery;
   }
 
-  function setSort(newSort: "asc" | "desc") {
+  function setSort(newSort: SortingMethod | undefined) {
     sort.value = newSort;
   }
 
