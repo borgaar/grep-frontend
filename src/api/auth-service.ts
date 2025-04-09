@@ -90,24 +90,20 @@ export class AuthApiService implements AuthService {
     firstName: string,
     lastName: string,
   ): Promise<AuthRegisterResponse> {
-    try {
-      const response = await AuthControllerService.register({
-        requestBody: {
-          phone,
-          password,
-          firstName: firstName,
-          lastName: lastName,
-        },
-      });
+    const response = await AuthControllerService.register({
+      requestBody: {
+        phone,
+        password,
+        firstName: firstName,
+        lastName: lastName,
+      },
+    });
 
-      if (response.token) {
-        this.storeToken(response.token);
-      }
-
-      return response;
-    } catch (error) {
-      throw error;
+    if (response.token) {
+      this.storeToken(response.token);
     }
+
+    return response;
   }
 
   public logout(): void {

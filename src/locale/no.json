@@ -102,5 +102,9 @@
   "could-not-mark-listing-as-sold": "Kunne ikke markere annonsen som solgt. Prøv igjen om noen sekunder.",
   "error": "Feil",
   "enter-phone-number": "Mobilnummer til kjøper",
-  "sold": "Solgt"
+  "sold": "Solgt",
+  "up-to": "Opp til",
+  "from": "Fra",
+  "to": "Til",
+  "all": "Alle"
 }

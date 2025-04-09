@@ -23,6 +23,7 @@ const filters = storeToRefs(useFilterStore());
 watch(
   () => filters,
   () => {
+    console.log("Filters changed, refetching listings:", filters);
     fetchListings();
   },
   { deep: true },
@@ -57,9 +58,8 @@ const visible = ref(false);
 
 <template>
   <div class="container">
-    <Sidebar v-model:visible="visible" class="sidebar-content" header="Sidebar">
-      <FilterList v-model="listings" />
-      <Button :label="t('apply')" class="p-button-text" />
+    <Sidebar v-model:visible="visible" class="sidebar">
+      <FilterList v-model="listings" class="sidebar-filters" />
     </Sidebar>
 
     <FilterList v-model="listings" :on-apply="fetchListings" class="filters" />
@@ -93,16 +93,20 @@ const visible = ref(false);
 .container {
   display: flex;
   width: 100%;
-  height: 100%;
+  height: min-content;
   justify-content: center;
   align-items: start;
   padding-inline: 10px;
 }
 
-.sidebar-content {
-  display: flex;
-  flex-direction: column;
-  align-items: start;
+.sidebar {
+  width: 430px;
+  height: 100%;
+  z-index: 1000;
+}
+
+.sidebar-filters {
+  width: 100%;
 }
 
 .toolbar {
@@ -128,10 +132,7 @@ const visible = ref(false);
 .filters {
   position: sticky;
   top: 0;
-  width: 300px;
-}
-
-.filters-mobile {
-  width: 100%;
+  width: 30rem;
+  max-width: 300px;
 }
 </style>

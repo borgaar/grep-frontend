@@ -23,6 +23,7 @@ main {
 }
 
 .router-view {
+  position: relative;
   overflow: auto;
 }
 
