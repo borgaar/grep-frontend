@@ -11,9 +11,11 @@ import Popover from "primevue/popover";
 import { useRoute } from "vue-router";
 
 import { useI18n } from "vue-i18n";
+import { useToast } from "primevue";
 const { t } = useI18n();
 const op = ref();
 const currentMessage = ref("");
+const { add: addToast } = useToast();
 
 const showContactForm = (event: MouseEvent) => {
   op.value.show(event);
@@ -57,6 +59,25 @@ const toggleBookmarked = async () => {
     },
   });
 };
+
+const reserve = async () => {
+  // Optimistic update
+  if (!listing.value) return;
+  listing.value.isReserved = true;
+
+  try {
+    await ListingControllerService.reserve({
+      id: listing.value.id,
+    });
+  } catch {
+    listing.value.isReserved = false;
+    addToast({
+      summary: t("reservation-failed"),
+      detail: t("could-not-reserve-listing"),
+      severity: "error",
+    });
+  }
+};
 </script>
 
 <template>
@@ -99,6 +120,15 @@ const toggleBookmarked = async () => {
             severity="help"
             :variant="listing?.isBookmarked ? 'outlined' : undefined"
             @click="toggleBookmarked"
+          />
+          <Button
+            class="contact-button"
+            icon="pi pi-calendar"
+            :label="Boolean(listing?.isReserved) ? t('reserved') : t('reserve')"
+            :disabled="Boolean(listing?.isReserved)"
+            severity="info"
+            :variant="listing?.isReserved ? 'outlined' : undefined"
+            @click="reserve"
           />
         </div>
         <Popover ref="op" :dismissable="false">

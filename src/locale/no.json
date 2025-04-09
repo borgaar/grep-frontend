@@ -86,5 +86,9 @@
   "invalid-credentials": "Telefonnummer eller passord er feil.",
   "add-to-favorites": "Legg til i favoritter",
   "save": "Lagre",
-  "saved": "Lagret"
+  "saved": "Lagret",
+  "reserve": "Reserver",
+  "reserved": "Reservert",
+  "reservation-failed": "Reservasjon feilet",
+  "could-not-reserve-listing": "Vi kunne ikke reservere denne annonsen. Last inn siden på nytt for å sjekke om noen andre har reservert den, eller prøv på nytt om noen sekunder."
 }
