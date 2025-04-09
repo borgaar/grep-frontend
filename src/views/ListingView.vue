@@ -11,13 +11,10 @@ import Popover from "primevue/popover";
 import { useRoute } from "vue-router";
 
 import { useI18n } from "vue-i18n";
-<<<<<<< HEAD
 import { useToast } from "primevue";
 import { useUserStore } from "@/state/user";
 import router from "@/router";
-=======
-import { format } from "date-fns";
->>>>>>> master
+import { formatShort } from "@/locale/date";
 const { t } = useI18n();
 const messagePopover = ref();
 const soldPopover = ref();
@@ -155,7 +152,7 @@ const deleteListing = async () => {
           <p style="text-align: end">{{ listing.author.phone }}</p>
           <p>{{ $t("posted") }}:</p>
           <p style="text-align: end">
-            {{ format(new Date(listing.createdAt), "dd.MM.yyyy HH:mm") }}
+            {{ formatShort(new Date(listing.createdAt)) }}
           </p>
         </div>
         <MapBox
