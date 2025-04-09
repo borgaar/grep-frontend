@@ -83,5 +83,8 @@
   "skriv-en-melding": "Skriv en melding ...",
   "search-by-keyword": "Søk etter nøkkelord",
   "phone-already-exists": "Dette telefonnummeret er allerede registrert.",
-  "invalid-credentials": "Telefonnummer eller passord er feil."
+  "invalid-credentials": "Telefonnummer eller passord er feil.",
+  "add-to-favorites": "Legg til i favoritter",
+  "save": "Lagre",
+  "saved": "Lagret"
 }

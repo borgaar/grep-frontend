@@ -83,5 +83,8 @@
   "sign-in": "Sign in",
   "search-by-keyword": "Search by keyword",
   "phone-already-exists": "This phone number is already registered.",
-  "invalid-credentials": "Phone number or password is incorrect."
+  "invalid-credentials": "Phone number or password is incorrect.",
+  "add-to-favorites": "Add to favorites",
+  "save": "Save",
+  "saved": "Saved"
 }

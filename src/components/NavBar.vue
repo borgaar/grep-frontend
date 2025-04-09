@@ -63,7 +63,7 @@
 import router from "@/router";
 import { useUserStore } from "@/state/user";
 import { storeToRefs } from "pinia";
-import { ref } from "vue";
+import { computed } from "vue";
 import { RouterLink } from "vue-router";
 
 const { setLanguage, signOut } = useUserStore();
@@ -76,7 +76,7 @@ const signIn = () => {
 };
 
 // Navigation items
-const items = ref([
+const items = computed(() => [
   {
     label: t("listings"),
     icon: "pi pi-list",

@@ -18,6 +18,8 @@ defineProps<{
       <h1 class="title">{{ listing.title }}</h1>
       <p>{{ listing.description }}</p>
     </div>
+    <div class="expand"></div>
+    <i v-if="listing.isBookmarked" class="pi pi-star bookmark"></i>
   </RouterLink>
 </template>
 
@@ -25,6 +27,10 @@ defineProps<{
 .title-description {
   display: flex;
   flex-direction: column;
+}
+
+.expand {
+  flex-grow: 1;
 }
 
 .image-container {
@@ -59,5 +65,10 @@ defineProps<{
   line-height: 1;
   font-size: 1.4rem;
   font-weight: 500;
+}
+
+.bookmark {
+  color: var(--p-yellow-400);
+  font-size: 1.5rem;
 }
 </style>

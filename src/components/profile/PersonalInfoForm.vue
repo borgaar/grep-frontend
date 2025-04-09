@@ -5,7 +5,7 @@ import { z } from "zod";
 import { useToast } from "primevue";
 import { useUserStore } from "@/state/user";
 import { UserControllerService } from "@/api/services";
-import { authService, type User } from "@/api/auth-service";
+import { type User } from "@/api/auth-service";
 import { storeToRefs } from "pinia";
 
 import { useI18n } from "vue-i18n";

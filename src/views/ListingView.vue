@@ -42,6 +42,21 @@ onMounted(async () => {
 });
 
 const listing = ref<ListingDTO>();
+
+const toggleBookmarked = async () => {
+  // Optimistic update
+  if (!listing.value) return;
+  listing.value.isBookmarked = !listing.value.isBookmarked;
+
+  await ListingControllerService.update({
+    id: listing.value.id,
+    requestBody: {
+      ...listing.value,
+      bookmarked: listing.value.isBookmarked,
+      category: listing.value.category.name,
+    },
+  });
+};
 </script>
 
 <template>
@@ -70,7 +85,22 @@ const listing = ref<ListingDTO>();
           class="listing-map"
           :location="{ lat: listing.location.lat, lng: listing.location.lon }"
         />
-        <Button class="contact-button" @click="showContactForm">{{ $t("contact") }}</Button>
+        <div class="button-container">
+          <Button
+            class="contact-button"
+            icon="pi pi-phone"
+            :label="t('contact')"
+            @click="showContactForm"
+          />
+          <Button
+            class="contact-button"
+            icon="pi pi-star"
+            :label="Boolean(listing?.isBookmarked) ? t('saved') : t('save')"
+            severity="help"
+            :variant="listing?.isBookmarked ? 'outlined' : undefined"
+            @click="toggleBookmarked"
+          />
+        </div>
         <Popover ref="op" :dismissable="false">
           <div class="flex flex-col gap-4">
             <div class="message-input-container">
@@ -172,5 +202,12 @@ const listing = ref<ListingDTO>();
   padding: 10px;
   background-color: #f0f8ff;
   align-items: center;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  width: 100%;
 }
 </style>

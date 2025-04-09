@@ -11,7 +11,10 @@ defineProps<{
     <div class="listing-thumbnail">
       <img :src="'https://picsum.photos/200/300'" alt="listing image" class="image" />
       <div class="listing-details">
-        <h2 class="listing-title">{{ listing.title }}</h2>
+        <div class="title-container">
+          <h2 class="listing-title">{{ listing.title }}</h2>
+          <i v-if="listing.isBookmarked" class="pi pi-star bookmark"></i>
+        </div>
         <p class="description-container">
           {{ listing.description }}
         </p>
@@ -32,6 +35,18 @@ defineProps<{
   box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
 }
 
+.title-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bookmark {
+  color: var(--p-yellow-400);
+  font-size: 1.5rem;
+}
+
 .listing-thumbnail {
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -44,6 +59,7 @@ defineProps<{
 }
 
 .listing-details {
+  position: relative;
   display: flex;
   padding: 10px;
   flex-direction: column;
