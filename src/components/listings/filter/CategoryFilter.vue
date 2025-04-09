@@ -1,36 +1,36 @@
 <script lang="ts" setup>
-import { CategoryControllerService, type CategoryDTO } from "@/api/services";
+import { CategoryControllerService } from "@/api/services";
 import { useUserStore } from "@/state/user";
 import { storeToRefs } from "pinia";
-import { onMounted, ref } from "vue";
+import { onMounted } from "vue";
 import CreateCategoryButton from "./CreateCategoryButton.vue";
 import { useI18n } from "vue-i18n";
-import { useFilterStore } from "@/state/filter";
+import { useFilterStore, type Category } from "@/state/filter";
 const { t } = useI18n();
-
-const categories = ref<CategoryDTO[]>([]);
-const selectedCategories = ref<CategoryDTO[]>([]);
 
 const { user } = storeToRefs(useUserStore());
 const { toggleCategory } = useFilterStore();
+const { categories } = storeToRefs(useFilterStore());
 
 const fetchCategories = async () => {
-  console.log(user.value);
   try {
     const response = await CategoryControllerService.getAll({ page: 0, pageSize: 5 });
 
     response.sort((a, b) => a.name.localeCompare(b.name));
 
-    categories.value = response;
+    categories.value = response.map((category) => ({
+      name: category.name,
+      isSelected: false,
+    }));
   } catch (error) {
     console.error(t("error-fetching-categories"), error);
   }
 };
 
-const deleteCategory = async (name: string) => {
+const deleteCategory = async (category: Category) => {
   try {
-    await CategoryControllerService.delete1({ name: name });
-    categories.value = categories.value.filter((category) => category.name !== name);
+    await CategoryControllerService.delete1({ name: category.name });
+    categories.value = categories.value.filter((c) => c.name !== category.name);
   } catch (error) {
     console.error(t("error-deleting-category"), error);
   }
@@ -44,31 +44,15 @@ onMounted(fetchCategories);
   <div class="container">
     <h3 class="title">{{ t("categories") }}</h3>
     <div v-for="category in categories" :key="category.name" class="p-field-checkbox">
-      <Checkbox
-        v-model="selectedCategories"
-        :input-id="'category_' + category.name"
-        :value="category.name"
-        @change="
-          () => {
-            toggleCategory(category.name);
-          }
-        "
-      />
+      <Checkbox :value="category.name" @change="() => toggleCategory(category)" />
       <label class="p-checkbox-label">
         {{ category.name }}
       </label>
       <div style="flex-grow: 1; display: flex; justify-content: end; align-items: center">
-        <i
-          style="cursor: pointer"
-          class="pi pi-trash"
-          @click="() => deleteCategory(category.name)"
-        />
+        <i style="cursor: pointer" class="pi pi-trash" @click="() => deleteCategory(category)" />
       </div>
     </div>
 
-    <div v-if="selectedCategories.length > 0" class="filter-actions">
-      <Button :label="t('clear-filters')" class="p-button-text p-button-sm" />
-    </div>
     <CreateCategoryButton v-if="user?.role === 'admin'" @category-created="fetchCategories" />
   </div>
 </template>

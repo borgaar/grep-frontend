@@ -10,7 +10,7 @@
 .page-container {
   align-self: start;
   justify-self: center;
-  max-width: 55rem;
+  max-width: 65rem;
   width: 100%;
   padding-inline: 20px;
 }

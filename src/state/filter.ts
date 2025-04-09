@@ -3,9 +3,13 @@ import { ref } from "vue";
 
 export type SortDirection = "asc" | "desc";
 export type SortingMethod = "price";
+export interface Category {
+  name: string;
+  isSelected: boolean;
+}
 
 export const useFilterStore = defineStore("filter", () => {
-  const categories = ref<string[]>([]);
+  const categories = ref<Category[]>([]);
   const priceLower = ref<number | undefined>(undefined);
   const priceUpper = ref<number | undefined>(undefined);
   const query = ref<string | undefined>(undefined);
@@ -14,12 +18,12 @@ export const useFilterStore = defineStore("filter", () => {
   const page = ref<number>(0);
   const pageSize = ref<number>(10);
 
-  function toggleCategory(category: string) {
-    if (categories.value.includes(category)) {
-      categories.value = categories.value.filter((cat) => cat !== category);
-    } else {
-      categories.value.push(category);
-    }
+  function toggleCategory(category: Category) {
+    categories.value.forEach((cat) => {
+      if (cat.name === category.name) {
+        cat.isSelected = !cat.isSelected;
+      }
+    });
   }
 
   function setPriceLower(newPriceLower: number) {
@@ -32,6 +36,12 @@ export const useFilterStore = defineStore("filter", () => {
 
   function setPageSize(newPageSize: number) {
     pageSize.value = newPageSize;
+  }
+
+  function resetCategories() {
+    categories.value.forEach((category) => {
+      category.isSelected = false;
+    });
   }
 
   function setPriceUpper(newPriceUpper: number) {
@@ -68,6 +78,7 @@ export const useFilterStore = defineStore("filter", () => {
     priceUpper,
     query,
     sort,
+    resetCategories,
     page,
     pageSize,
     toggleCategory,

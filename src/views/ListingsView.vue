@@ -22,15 +22,6 @@ const filters = storeToRefs(useFilterStore());
 
 const { setSortingDirection, setSortingMethod, setPage, setPageSize } = useFilterStore();
 
-watch(
-  () => filters,
-  () => {
-    console.log("Filters changed, refetching listings:", filters);
-    fetchListings();
-  },
-  { deep: true },
-);
-
 const fetchListings = async () => {
   try {
     const response = await ListingControllerService.getPaginated({
@@ -40,7 +31,9 @@ const fetchListings = async () => {
       priceUpper: filters.priceUpper.value,
       sortDirection: filters.sort.value,
       sort: filters.sortingMethod.value,
-      categories: filters.categories.value,
+      categories: filters.categories.value
+        .filter((c) => c.isSelected)
+        .map((category) => category.name),
       query: filters.query.value,
     });
     if (response.length === 0) {
@@ -52,6 +45,8 @@ const fetchListings = async () => {
     console.error("Error fetching listings:", error);
   }
 };
+
+watch(() => filters, fetchListings, { deep: true });
 
 const sortingDirections: { label: string; value: SortDirection }[] = [
   {
