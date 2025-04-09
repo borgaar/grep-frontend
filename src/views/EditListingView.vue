@@ -1,45 +1,25 @@
 <script lang="ts" setup>
 import { CategoryControllerService, ListingControllerService } from "@/api/services";
 import router from "@/router";
-import { Form } from "@primevue/forms";
 import { zodResolver } from "@primevue/forms/resolvers/zod";
-import { onMounted, ref } from "vue";
+import { nextTick, onMounted, ref, useTemplateRef } from "vue";
 import { z } from "zod";
 import { useI18n } from "vue-i18n";
 import { GeoNorge, type Address } from "@/api/geo-norge";
+import { useRoute } from "vue-router";
 const { t } = useI18n();
+const route = useRoute();
+
+import { Form, type FormInstance } from "@primevue/forms";
+
+const formRef = useTemplateRef<FormInstance>("formRef");
 
 const categories = ref<string[]>([]);
 const addressSearch = ref("");
 const addressSuggestions = ref<Address[]>([]);
 const selectedAddress = ref<Address | null>(null);
-const listing = ref({
-  title: "",
-  description: "",
-  price: null,
-  category: {
-    name: "",
-  },
-  location: {
-    lat: 0,
-    lon: 0,
-  },
-});
 
-const resolver = zodResolver(
-  z.object({
-    title: z.string().min(1, t("title-is-required")),
-    description: z.string().min(1, t("description-is-required")),
-    price: z.number().min(0, t("price-must-be-a-positive-number")).nullable(),
-    category: z.object({
-      name: z.string().min(1, t("category-is-required")),
-    }),
-    location: z.object({
-      lat: z.number(),
-      lon: z.number(),
-    }),
-  }),
-);
+const initialValues = ref();
 
 onMounted(async () => {
   categories.value = (
@@ -48,6 +28,20 @@ onMounted(async () => {
       pageSize: 100,
     })
   ).map((category) => category.name);
+
+  const existing = await ListingControllerService.get({
+    id: route.params.id as string,
+  });
+
+  initialValues.value = {
+    title: existing.title,
+    description: existing.description,
+    price: existing.price,
+    categoryName: existing.category.name,
+    location: { lat: existing.location.lat, lon: existing.location.lon },
+  };
+
+  await nextTick();
 });
 
 const searchAddress = async (event: { query: string }) => {
@@ -69,28 +63,33 @@ const selectAddress = (event: { value: Address }) => {
   selectedAddress.value = event.value;
 
   if (event.value.representasjonspunkt) {
-    listing.value.location.lat = event.value.representasjonspunkt.lat;
-    listing.value.location.lon = event.value.representasjonspunkt.lon;
+    formRef.value?.setFieldValue("location", event.value.representasjonspunkt);
   }
 };
 
-const onFormSubmit = async ({ valid }: { valid: boolean }) => {
-  if (!valid) {
-    return;
-  }
+const onFormSubmit = async ({ valid, values }: { valid: boolean; values: any }) => {
+  const newValues = {
+    ...initialValues.value,
+  };
 
-  const formData = { ...listing.value };
+  Object.entries(values).map(([key, value]) => {
+    if (value !== null) {
+      newValues[key] = value;
+    }
+  });
 
-  await ListingControllerService.create({
+  await ListingControllerService.update({
+    id: route.params.id as string,
     requestBody: {
-      title: formData.title,
-      description: formData.description,
-      price: formData.price!,
-      category: formData.category.name,
+      title: newValues.title,
+      description: newValues.description,
+      price: newValues.price!,
+      category: newValues.categoryName,
       location: {
-        lat: formData.location.lat,
-        lon: formData.location.lon,
+        lat: newValues.location.lat,
+        lon: newValues.location.lon,
       },
+      bookmarked: false,
     },
   });
 
@@ -101,12 +100,12 @@ const onFormSubmit = async ({ valid }: { valid: boolean }) => {
 <template>
   <div class="container">
     <div class="card">
-      <h2>{{ t("create-new-listing") }}</h2>
-      <Form v-slot="$form" :resolver :initial-values="listing" @submit="onFormSubmit">
+      <h2>{{ t("edit-listing") }}</h2>
+      <Form v-slot="$form" ref="formRef" :initial-values @submit="onFormSubmit as any">
         <div class="p-fluid">
           <div class="field">
             <label for="title">{{ t("title") }}</label>
-            <InputText v-model="listing.title" name="title" type="text" required fluid />
+            <InputText name="title" type="text" required fluid />
             <Message v-if="$form.title?.invalid" severity="error" size="small" variant="simple">{{
               $form.title.error?.message
             }}</Message>
@@ -114,13 +113,7 @@ const onFormSubmit = async ({ valid }: { valid: boolean }) => {
 
           <div class="field">
             <label for="description">{{ t("description") }}</label>
-            <Textarea
-              id="description"
-              v-model="listing.description"
-              auto-resize
-              rows="5"
-              required
-            />
+            <Textarea name="description" auto-resize rows="5" required />
             <Message
               v-if="$form.description?.invalid"
               severity="error"
@@ -132,13 +125,7 @@ const onFormSubmit = async ({ valid }: { valid: boolean }) => {
 
           <div class="field">
             <label for="price">{{ t("price") }}</label>
-            <InputNumber
-              id="price"
-              v-model="listing.price"
-              mode="currency"
-              currency="NOK"
-              required
-            />
+            <InputNumber name="price" mode="currency" currency="NOK" required />
             <Message v-if="$form.price?.invalid" severity="error" size="small" variant="simple">{{
               $form.price.error?.message
             }}</Message>
@@ -148,25 +135,25 @@ const onFormSubmit = async ({ valid }: { valid: boolean }) => {
             <label for="category">{{ t("category") }}</label>
             <Dropdown
               id="category"
-              v-model="listing.category.name"
               :options="categories"
               :placeholder="t('select-a-category')"
+              name="categoryName"
               required
             />
             <Message
-              v-if="$form.category?.invalid"
+              v-if="$form.categoryName?.invalid"
               severity="error"
               size="small"
               variant="simple"
-              >{{ $form.category.error?.message }}</Message
+              >{{ $form.categoryName.error?.message }}</Message
             >
           </div>
 
           <div class="field">
             <label for="address">{{ t("address") }}</label>
             <AutoComplete
-              id="address"
               v-model="addressSearch"
+              name="address"
               :suggestions="addressSuggestions"
               :placeholder="t('search-for-an-address')"
               option-label="adressetekst"
@@ -175,6 +162,9 @@ const onFormSubmit = async ({ valid }: { valid: boolean }) => {
               @complete="searchAddress"
               @item-select="selectAddress"
             />
+            <small class="address-details">
+              {{ t("address-is-persisted") }}
+            </small>
             <small v-if="selectedAddress" class="address-details">
               <i class="pi pi-map-marker" />
               {{ selectedAddress.adressetekst }}, {{ selectedAddress.postnummer }}

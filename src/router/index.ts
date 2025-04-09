@@ -41,8 +41,8 @@ const router = createRouter({
     },
     {
       path: "/edit-listing/:id",
-      name: "create-listing",
-      component: () => import("../views/CreateListingView.vue"),
+      name: "edit-listing",
+      component: () => import("../views/EditListingView.vue"),
     },
     {
       path: "/docs",

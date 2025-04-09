@@ -106,5 +106,7 @@
   "from": "Fra",
   "to": "Til",
   "all": "Alle",
-  "edit": "Rediger"
+  "edit": "Rediger",
+  "edit-listing": "Endre annonse",
+  "address-is-persisted": "Addressen forblir den samme dersom du ikke skriver noe inn her"
 }
