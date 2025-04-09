@@ -82,5 +82,6 @@
   "profile": "Profil",
   "skriv-en-melding": "Skriv en melding ...",
   "search-by-keyword": "Søk etter nøkkelord",
-  "phone-already-exists": "Dette telefonnummeret er allerede registrert."
+  "phone-already-exists": "Dette telefonnummeret er allerede registrert.",
+  "invalid-credentials": "Telefonnummer eller passord er feil."
 }

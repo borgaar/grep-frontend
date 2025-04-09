@@ -9,6 +9,7 @@ import { useToast } from "primevue";
 import { useUserStore } from "@/state/user";
 
 import { useI18n } from "vue-i18n";
+import type { ApiError } from "@/api/services/core/ApiError";
 const { t } = useI18n();
 const { set: setUser } = useUserStore();
 
@@ -59,15 +60,24 @@ const onSubmit = async ({
 
     router.push({ name: "listings" });
   } catch (error) {
-    toast.add({
-      severity: "error",
-      summary: t("login-failed"),
-      detail:
-        process.env.NODE_ENV === "development"
-          ? error
-          : t("could-not-reach-the-server-are-you-connected-to-the-internet"),
-      life: 3000,
-    });
+    const apiError = error as ApiError;
+    if (apiError.status === 403) {
+      toast.add({
+        severity: "error",
+        summary: t("invalid-credentials"),
+        life: 3000,
+      });
+    } else {
+      console.error(error);
+      toast.add({
+        severity: "error",
+        summary: t("login-failed"),
+        detail: import.meta.env.PROD
+          ? t("could-not-reach-the-server-are-you-connected-to-the-internet")
+          : error,
+        life: 3000,
+      });
+    }
   }
   isLoading.value = false;
 };
@@ -82,7 +92,10 @@ const onSubmit = async ({
       <Form v-slot="$form" class="login-form" :initial-values :resolver @submit="onSubmit as any">
         <div class="field">
           <FloatLabel variant="in">
-            <InputText name="phone" type="text" fluid />
+            <IconField>
+              <InputIcon>🇳🇴</InputIcon>
+              <InputMask name="phone" type="text" fluid mask="999 99 999" />
+            </IconField>
             <label for="in_label">{{ t("phone") }}</label>
           </FloatLabel>
           <Message v-if="$form.phone?.invalid" severity="error" size="small" variant="simple">{{

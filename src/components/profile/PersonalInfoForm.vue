@@ -57,7 +57,6 @@ const onSubmit = async ({
       },
     });
 
-    authService.storeUser(response);
     set(response as User);
 
     toast.add({

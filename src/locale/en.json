@@ -82,5 +82,6 @@
   "already-have-an-account": "Already have an account?",
   "sign-in": "Sign in",
   "search-by-keyword": "Search by keyword",
-  "phone-already-exists": "This phone number is already registered."
+  "phone-already-exists": "This phone number is already registered.",
+  "invalid-credentials": "Phone number or password is incorrect."
 }
