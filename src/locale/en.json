@@ -90,5 +90,20 @@
   "up-to": "Up to",
   "from": "From",
   "to": "To",
-  "all": "All"
+  "all": "All",
+  "author-marked-sold": "{user} marked the listing as sold to {buyer}",
+  "could-not-delete-listing": "We could not delete this listing. Please try again later.",
+  "could-not-mark-listing-as-sold": "We could not mark the listing as sold. Please try again in a couple of seconds.",
+  "could-not-reserve-listing": "We could not reserve this listing. Reload the page to check if anyone else has reserved it, or try again in a few seconds.",
+  "delete": "Delete",
+  "deleted-listing": "Deleted the listing",
+  "enter-phone-number": "Buyer's phone number",
+  "error": "Error",
+  "listing-delete-failed": "Deletion failed",
+  "mark-sold": "Mark as sold",
+  "reservation-failed": "Reservation failed",
+  "reserve": "Reserve",
+  "reserved": "Reserved",
+  "sold": "Sold",
+  "user-marked-as-reserved": "{user} reserved the listing."
 }

@@ -98,7 +98,6 @@
   "listing-delete-failed": "Sletting feilet",
   "could-not-delete-listing": "Vi kunne ikke slette denne annonsen. Vennligst prøv igjen senere.",
   "deleted-listing": "Slettet annonsen",
-  "mark-sold-failed": "Feil",
   "could-not-mark-listing-as-sold": "Kunne ikke markere annonsen som solgt. Prøv igjen om noen sekunder.",
   "error": "Feil",
   "enter-phone-number": "Mobilnummer til kjøper",
