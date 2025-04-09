@@ -3,8 +3,8 @@ import { jwtDecode } from "jwt-decode";
 import {
   AuthControllerService,
   UserControllerService,
-  type LoginResponse,
-  type RegisterResponse,
+  type AuthLoginResponse,
+  type AuthRegisterResponse,
 } from "./services";
 
 interface DecodedToken {
@@ -31,13 +31,13 @@ interface AuthService {
   getUser(): Promise<User | null>;
   getToken(): string | null;
   isAuthenticated(): boolean;
-  login(phone: string, password: string): Promise<LoginResponse>;
+  login(phone: string, password: string): Promise<AuthLoginResponse>;
   register(
     phone: string,
     password: string,
     firstName: string,
     lastName: string,
-  ): Promise<RegisterResponse>;
+  ): Promise<AuthRegisterResponse>;
   logout(): void;
 }
 
@@ -69,7 +69,7 @@ export class AuthApiService implements AuthService {
     return !this.isTokenExpired();
   }
 
-  public async login(phone: string, password: string): Promise<LoginResponse> {
+  public async login(phone: string, password: string): Promise<AuthLoginResponse> {
     const response = await AuthControllerService.login({
       requestBody: {
         phone,
@@ -89,7 +89,7 @@ export class AuthApiService implements AuthService {
     password: string,
     firstName: string,
     lastName: string,
-  ): Promise<RegisterResponse> {
+  ): Promise<AuthRegisterResponse> {
     const response = await AuthControllerService.register({
       requestBody: {
         phone,

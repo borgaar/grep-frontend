@@ -11,13 +11,20 @@ import Popover from "primevue/popover";
 import { useRoute } from "vue-router";
 
 import { useI18n } from "vue-i18n";
-import { format } from "date-fns";
+import { useToast } from "primevue";
+import { useUserStore } from "@/state/user";
+import router from "@/router";
+import { formatShort } from "@/locale/date";
 const { t } = useI18n();
-const op = ref();
+const messagePopover = ref();
+const soldPopover = ref();
 const currentMessage = ref("");
+const soldToPhone = ref("");
+const { add: addToast } = useToast();
+const { user: currentUser } = useUserStore();
 
 const showContactForm = (event: MouseEvent) => {
-  op.value.show(event);
+  messagePopover.value.show(event);
 };
 
 const sendMessage = (event: Event) => {
@@ -25,7 +32,7 @@ const sendMessage = (event: Event) => {
     return;
   }
 
-  op.value.hide(event);
+  messagePopover.value.hide(event);
   MessageControllerService.sendMessage({
     requestBody: {
       content: currentMessage.value,
@@ -58,6 +65,72 @@ const toggleBookmarked = async () => {
     },
   });
 };
+
+const reserve = async () => {
+  // Optimistic update
+  if (!listing.value) return;
+  listing.value.isReserved = true;
+
+  try {
+    await ListingControllerService.reserve({
+      id: listing.value.id,
+    });
+  } catch {
+    listing.value.isReserved = false;
+    addToast({
+      summary: t("reservation-failed"),
+      detail: t("could-not-reserve-listing"),
+      severity: "error",
+    });
+  }
+};
+
+const openSellDialog = (event: MouseEvent) => {
+  soldPopover.value.show(event);
+};
+
+const markSold = async () => {
+  if (!listing.value) return;
+
+  try {
+    await ListingControllerService.markAsSold({
+      id: listing.value.id,
+      phone: soldToPhone.value,
+    });
+    listing.value.isSold = true;
+  } catch {
+    addToast({
+      summary: t("error"),
+      detail: t("could-not-mark-listing-as-sold"),
+      severity: "error",
+    });
+    listing.value.isSold = false;
+    return;
+  }
+};
+
+const deleteListing = async () => {
+  if (!listing.value) return;
+
+  try {
+    await ListingControllerService.delete({
+      id: listing.value.id,
+    });
+    router.replace("/");
+  } catch {
+    addToast({
+      summary: t("listing-delete-failed"),
+      detail: t("could-not-delete-listing"),
+      severity: "error",
+    });
+    return;
+  }
+
+  addToast({
+    summary: t("deleted-listing"),
+    severity: "success",
+  });
+};
 </script>
 
 <template>
@@ -79,14 +152,14 @@ const toggleBookmarked = async () => {
           <p style="text-align: end">{{ listing.author.phone }}</p>
           <p>{{ $t("posted") }}:</p>
           <p style="text-align: end">
-            {{ format(new Date(listing.createdAt), "dd.MM.yyyy HH:mm") }}
+            {{ formatShort(new Date(listing.createdAt)) }}
           </p>
         </div>
         <MapBox
           class="listing-map"
           :location="{ lat: listing.location.lat, lng: listing.location.lon }"
         />
-        <div class="button-container">
+        <div v-if="listing?.author.phone !== currentUser?.phone" class="button-container">
           <Button
             class="contact-button"
             icon="pi pi-phone"
@@ -101,8 +174,34 @@ const toggleBookmarked = async () => {
             :variant="listing?.isBookmarked ? 'outlined' : undefined"
             @click="toggleBookmarked"
           />
+          <Button
+            class="contact-button"
+            icon="pi pi-calendar"
+            :label="Boolean(listing?.isReserved) ? t('reserved') : t('reserve')"
+            :disabled="Boolean(listing?.isReserved)"
+            severity="info"
+            :variant="listing?.isReserved ? 'outlined' : undefined"
+            @click="reserve"
+          />
         </div>
-        <Popover ref="op" :dismissable="false">
+        <div v-else class="button-container">
+          <Button
+            class="contact-button"
+            icon="pi pi-check"
+            :label="Boolean(listing?.isSold) ? t('sold') : t('mark-sold')"
+            security="help"
+            :disabled="Boolean(listing?.isSold)"
+            @click="openSellDialog"
+          />
+          <Button
+            class="contact-button"
+            icon="pi pi-trash"
+            severity="danger"
+            :label="t('delete')"
+            @click="deleteListing"
+          />
+        </div>
+        <Popover ref="messagePopover" :dismissable="false">
           <div class="flex flex-col gap-4">
             <div class="message-input-container">
               <InputText
@@ -113,6 +212,20 @@ const toggleBookmarked = async () => {
                 @keyup.enter="sendMessage"
               />
               <Button class="send-button" icon="pi pi-send" @click="sendMessage" />
+            </div>
+          </div>
+        </Popover>
+        <Popover ref="soldPopover" :dismissable="false">
+          <div class="flex flex-col gap-4">
+            <div class="message-input-container">
+              <InputText
+                v-model="soldToPhone"
+                type="text"
+                :placeholder="t('enter-phone-number')"
+                class="message-input"
+                @keyup.enter="markSold"
+              />
+              <Button class="send-button" icon="pi pi-send" @click="markSold" />
             </div>
           </div>
         </Popover>
