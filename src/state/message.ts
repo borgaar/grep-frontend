@@ -1,7 +1,11 @@
 // stores/counter.js
 import { defineStore } from "pinia";
 import { computed, onUnmounted, ref } from "vue";
-import { MessageControllerService, type ChatContactDTO, type SendResponse } from "../api/services";
+import {
+  MessageControllerService,
+  type ChatContactDTO,
+  type ChatMessageDTO,
+} from "../api/services";
 
 /**
  * Message mapped to userId (other user)
@@ -10,7 +14,7 @@ type Messages = {
   [key: string]: Message[];
 };
 
-export type Message = SendResponse;
+export type Message = ChatMessageDTO;
 
 export const useMessageStore = defineStore("message", () => {
   const messages = ref<Messages>({});

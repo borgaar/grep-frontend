@@ -90,5 +90,7 @@
   "reserve": "Reserver",
   "reserved": "Reservert",
   "reservation-failed": "Reservasjon feilet",
-  "could-not-reserve-listing": "Vi kunne ikke reservere denne annonsen. Last inn siden på nytt for å sjekke om noen andre har reservert den, eller prøv på nytt om noen sekunder."
+  "could-not-reserve-listing": "Vi kunne ikke reservere denne annonsen. Last inn siden på nytt for å sjekke om noen andre har reservert den, eller prøv på nytt om noen sekunder.",
+  "author-marked-sold": "{user} markerte annonsen som solgt.",
+  "user-marked-as-reserved": "{user} reserverte annonsen."
 }
