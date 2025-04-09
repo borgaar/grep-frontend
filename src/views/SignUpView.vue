@@ -97,8 +97,8 @@ const onSubmit = async ({
         life: 3000,
       });
     }
-    isLoading.value = false;
   }
+  isLoading.value = false;
 };
 </script>
 
