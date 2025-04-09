@@ -3,7 +3,7 @@
   "posted": "Posted",
   "name": "Name",
   "phone": "Phone",
-  "currency": "kr",
+  "currency": "NOK",
   "profile": "Profile",
   "create-listing": "Create listing",
   "error-fetching-categories": "Error fetching categories:",
