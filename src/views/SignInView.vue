@@ -61,7 +61,7 @@ const onSubmit = async ({
     router.push({ name: "listings" });
   } catch (error) {
     const apiError = error as ApiError;
-    if (apiError.status === 403) {
+    if ([404, 403].includes(apiError.status)) {
       toast.add({
         severity: "error",
         summary: t("invalid-credentials"),
