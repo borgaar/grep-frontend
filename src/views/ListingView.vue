@@ -12,13 +12,18 @@ import { useRoute } from "vue-router";
 
 import { useI18n } from "vue-i18n";
 import { useToast } from "primevue";
+import { useUserStore } from "@/state/user";
+import router from "@/router";
 const { t } = useI18n();
-const op = ref();
+const messagePopover = ref();
+const soldPopover = ref();
 const currentMessage = ref("");
+const soldToPhone = ref("");
 const { add: addToast } = useToast();
+const { user: currentUser } = useUserStore();
 
 const showContactForm = (event: MouseEvent) => {
-  op.value.show(event);
+  messagePopover.value.show(event);
 };
 
 const sendMessage = (event: Event) => {
@@ -26,7 +31,7 @@ const sendMessage = (event: Event) => {
     return;
   }
 
-  op.value.hide(event);
+  messagePopover.value.hide(event);
   MessageControllerService.sendMessage({
     requestBody: {
       content: currentMessage.value,
@@ -78,6 +83,53 @@ const reserve = async () => {
     });
   }
 };
+
+const openSellDialog = (event: MouseEvent) => {
+  soldPopover.value.show(event);
+};
+
+const markSold = async () => {
+  if (!listing.value) return;
+
+  try {
+    await ListingControllerService.markAsSold({
+      id: listing.value.id,
+      phone: soldToPhone.value,
+    });
+    listing.value.isSold = true;
+  } catch {
+    addToast({
+      summary: t("error"),
+      detail: t("could-not-mark-listing-as-sold"),
+      severity: "error",
+    });
+    listing.value.isSold = false;
+    return;
+  }
+};
+
+const deleteListing = async () => {
+  if (!listing.value) return;
+
+  try {
+    await ListingControllerService.delete({
+      id: listing.value.id,
+    });
+    router.replace("/");
+  } catch {
+    addToast({
+      summary: t("listing-delete-failed"),
+      detail: t("could-not-delete-listing"),
+      severity: "error",
+    });
+    return;
+  }
+
+  addToast({
+    summary: t("deleted-listing"),
+    severity: "success",
+  });
+};
 </script>
 
 <template>
@@ -106,7 +158,7 @@ const reserve = async () => {
           class="listing-map"
           :location="{ lat: listing.location.lat, lng: listing.location.lon }"
         />
-        <div class="button-container">
+        <div v-if="listing?.author.phone !== currentUser?.phone" class="button-container">
           <Button
             class="contact-button"
             icon="pi pi-phone"
@@ -131,7 +183,24 @@ const reserve = async () => {
             @click="reserve"
           />
         </div>
-        <Popover ref="op" :dismissable="false">
+        <div v-else class="button-container">
+          <Button
+            class="contact-button"
+            icon="pi pi-check"
+            :label="Boolean(listing?.isSold) ? t('sold') : t('mark-sold')"
+            security="help"
+            :disabled="Boolean(listing?.isSold)"
+            @click="openSellDialog"
+          />
+          <Button
+            class="contact-button"
+            icon="pi pi-trash"
+            severity="danger"
+            :label="t('delete')"
+            @click="deleteListing"
+          />
+        </div>
+        <Popover ref="messagePopover" :dismissable="false">
           <div class="flex flex-col gap-4">
             <div class="message-input-container">
               <InputText
@@ -142,6 +211,20 @@ const reserve = async () => {
                 @keyup.enter="sendMessage"
               />
               <Button class="send-button" icon="pi pi-send" @click="sendMessage" />
+            </div>
+          </div>
+        </Popover>
+        <Popover ref="soldPopover" :dismissable="false">
+          <div class="flex flex-col gap-4">
+            <div class="message-input-container">
+              <InputText
+                v-model="soldToPhone"
+                type="text"
+                :placeholder="t('enter-phone-number')"
+                class="message-input"
+                @keyup.enter="markSold"
+              />
+              <Button class="send-button" icon="pi pi-send" @click="markSold" />
             </div>
           </div>
         </Popover>

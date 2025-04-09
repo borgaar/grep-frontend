@@ -34,6 +34,11 @@ app.use(PrimeVue, {
 });
 
 app.use(createPinia());
+
+import { useUserStore } from "./state/user";
+const { ensureInitialized } = useUserStore();
+ensureInitialized();
+
 app.use(router);
 app.use(ToastService);
 

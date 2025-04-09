@@ -22,15 +22,29 @@ const getMessageContent = (message: Message): string => {
       ? currentUser?.firstName
       : contacts.value.find((u) => u.phone === message.senderId)?.firstName;
 
+  const recipient =
+    message.recipientId == currentUser?.phone
+      ? currentUser?.firstName
+      : contacts.value.find((u) => u.phone == message.recipientId)?.firstName;
+
   switch (message.type) {
     case "TEXT":
       return message.content;
     case "MARKED_SOLD":
       return t("author-marked-sold", {
         user: author,
+        buyer: recipient,
       });
     case "RESERVED":
       return t("user-marked-as-reserved", { user: author });
+  }
+};
+
+const getMessageClass = (message: Message) => {
+  if (message.type === "TEXT") {
+    return message.senderId === currentUser?.phone ? "sent" : "received";
+  } else {
+    return "system";
   }
 };
 </script>
@@ -87,7 +101,7 @@ const getMessageContent = (message: Message): string => {
         <div
           v-for="message in messages"
           :key="message.id"
-          :class="['message', message.senderId === currentUser?.phone ? 'sent' : 'received']"
+          :class="['message', getMessageClass(message)]"
         >
           <div class="message-content">{{ getMessageContent(message) }}</div>
           <div class="message-time">{{ formatShort(new Date(message.timestamp)) }}</div>
@@ -303,6 +317,13 @@ const getMessageContent = (message: Message): string => {
 .message.received {
   align-self: flex-start;
   background-color: #fff;
+  color: #333;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.message.system {
+  align-self: flex-start;
+  background-color: var(--p-sky-200);
   color: #333;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
