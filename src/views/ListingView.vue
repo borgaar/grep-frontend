@@ -195,6 +195,13 @@ const deleteListing = async () => {
           />
           <Button
             class="contact-button"
+            icon="pi pi-pencil"
+            severity="help"
+            :label="t('edit')"
+            @click="router.push({ name: 'edit-listing', params: { id: listing.id } })"
+          />
+          <Button
+            class="contact-button"
             icon="pi pi-trash"
             severity="danger"
             :label="t('delete')"
