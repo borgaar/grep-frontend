@@ -5,7 +5,7 @@ import GridListing from "@/components/listings/grid/GridListing.vue";
 import ListListings from "@/components/listings/list/ListListings.vue";
 import PageContainer from "@/components/PageContainer.vue";
 import router from "@/router";
-import { useFilterStore, type SortingMethod } from "@/state/filter";
+import { useFilterStore, type SortDirection, type SortingMethod } from "@/state/filter";
 import { storeToRefs } from "pinia";
 import { onMounted, ref, watch } from "vue";
 
@@ -20,7 +20,7 @@ const listings = ref<ListingDTO[]>([]);
 
 const filters = storeToRefs(useFilterStore());
 
-const { setSort } = useFilterStore();
+const { setSortingDirection, setSortingMethod, setPage, setPageSize } = useFilterStore();
 
 watch(
   () => filters,
@@ -34,11 +34,12 @@ watch(
 const fetchListings = async () => {
   try {
     const response = await ListingControllerService.getPaginated({
-      page: 0,
-      size: 100,
+      page: filters.page.value,
+      size: filters.pageSize.value,
       priceLower: filters.priceLower.value,
       priceUpper: filters.priceUpper.value,
       sortDirection: filters.sort.value,
+      sort: filters.sortingMethod.value,
       categories: filters.categories.value,
       query: filters.query.value,
     });
@@ -46,12 +47,13 @@ const fetchListings = async () => {
       console.warn("No listings found");
     }
     listings.value = response;
+    console.log("Fetched listings:", listings.value.length);
   } catch (error) {
     console.error("Error fetching listings:", error);
   }
 };
 
-const sortingMethods: { label: string; value: SortingMethod }[] = [
+const sortingDirections: { label: string; value: SortDirection }[] = [
   {
     label: "Ascending price",
     value: "asc",
@@ -62,11 +64,17 @@ const sortingMethods: { label: string; value: SortingMethod }[] = [
   },
 ];
 
-const selectedSort = ref<(typeof sortingMethods)[0]>();
+const sortingMethods: { label: string; value: SortingMethod }[] = [
+  {
+    label: t("price"),
+    value: "price",
+  },
+];
 
-onMounted(() => {
-  fetchListings();
-});
+const selectedSortingDirection = ref<(typeof sortingDirections)[0]>(sortingDirections[0]);
+const selectedSortingMethod = ref<(typeof sortingMethods)[0] | null>(null);
+
+onMounted(fetchListings);
 
 const visible = ref(false);
 </script>
@@ -97,7 +105,7 @@ const visible = ref(false);
             </template>
           </SelectButton>
           <Dropdown
-            v-model="selectedSort"
+            v-model="selectedSortingMethod"
             :options="sortingMethods"
             option-label="label"
             placeholder="Sort by"
@@ -106,9 +114,24 @@ const visible = ref(false);
             :highlight-on-select="false"
             @change="
               () => {
-                setSort(selectedSort?.value);
+                if (selectedSortingMethod) {
+                  setSortingDirection(sortingDirections[0].value);
+                } else {
+                  setSortingDirection(undefined);
+                }
+                setSortingMethod(selectedSortingMethod?.value);
               }
             "
+          />
+          <Dropdown
+            v-if="selectedSortingMethod !== null"
+            v-model="selectedSortingDirection"
+            :options="sortingDirections"
+            option-label="label"
+            placeholder="Sort direction"
+            checkmark
+            :highlight-on-select="false"
+            @change="() => setSortingDirection(selectedSortingDirection?.value)"
           />
         </div>
         <Button @click="router.push({ name: 'create-listing' })">
@@ -117,6 +140,17 @@ const visible = ref(false);
       </div>
       <ListListings v-if="selectedValue === 'list'" :listings="listings" />
       <GridListing v-if="selectedValue === 'grid'" :listings="listings" />
+      <Paginator
+        :rows="filters.pageSize.value"
+        :total-records="listings.length"
+        :rows-per-page-options="[10, 20, 30]"
+        @page="
+          (e) => {
+            setPage(e.page);
+            setPageSize(e.rows);
+          }
+        "
+      ></Paginator>
     </PageContainer>
   </div>
 </template>

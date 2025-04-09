@@ -1,14 +1,18 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
-export type SortingMethod = "asc" | "desc";
+export type SortDirection = "asc" | "desc";
+export type SortingMethod = "price";
 
 export const useFilterStore = defineStore("filter", () => {
   const categories = ref<string[]>([]);
   const priceLower = ref<number | undefined>(undefined);
   const priceUpper = ref<number | undefined>(undefined);
   const query = ref<string | undefined>(undefined);
-  const sort = ref<SortingMethod | undefined>(undefined);
+  const sort = ref<SortDirection | undefined>(undefined);
+  const sortingMethod = ref<SortingMethod | undefined>(undefined);
+  const page = ref<number>(0);
+  const pageSize = ref<number>(10);
 
   function toggleCategory(category: string) {
     if (categories.value.includes(category)) {
@@ -20,6 +24,14 @@ export const useFilterStore = defineStore("filter", () => {
 
   function setPriceLower(newPriceLower: number) {
     priceLower.value = newPriceLower;
+  }
+
+  function setPage(newPage: number) {
+    page.value = newPage;
+  }
+
+  function setPageSize(newPageSize: number) {
+    pageSize.value = newPageSize;
   }
 
   function setPriceUpper(newPriceUpper: number) {
@@ -34,8 +46,12 @@ export const useFilterStore = defineStore("filter", () => {
     query.value = newQuery === "" ? undefined : newQuery;
   }
 
-  function setSort(newSort: SortingMethod | undefined) {
+  function setSortingDirection(newSort: SortDirection | undefined) {
     sort.value = newSort;
+  }
+
+  function setSortingMethod(newSortingMethod: SortingMethod | undefined) {
+    sortingMethod.value = newSortingMethod;
   }
 
   function reset() {
@@ -52,11 +68,17 @@ export const useFilterStore = defineStore("filter", () => {
     priceUpper,
     query,
     sort,
+    page,
+    pageSize,
     toggleCategory,
     setPriceLower,
+    setSortingMethod,
+    sortingMethod,
+    setPage,
+    setPageSize,
     setPriceUpper,
     setQuery,
-    setSort,
+    setSortingDirection,
     reset,
   };
 });
