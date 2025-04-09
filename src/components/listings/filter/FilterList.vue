@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import CategoryFilter from "./CategoryFilter.vue";
-import PriceSlider from "./PriceSlider.vue";
+import PriceRangeFilter from "./PriceRangeFilter.vue";
 import QueryFilter from "./QueryFilter.vue";
 </script>
 
@@ -10,7 +10,7 @@ import QueryFilter from "./QueryFilter.vue";
       <QueryFilter />
     </div>
     <div class="price-range-container">
-      <PriceSlider />
+      <PriceRangeFilter />
     </div>
     <div class="category-container">
       <CategoryFilter />
@@ -22,15 +22,18 @@ import QueryFilter from "./QueryFilter.vue";
 .container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
   row-gap: 20px;
-  padding-top: 20px;
+  margin-top: 10px;
   align-items: center;
 }
 
 .category-container {
   width: 100%;
   height: min-content;
+}
+
+.query-container {
+  width: 100%;
 }
 
 .price-range-container {

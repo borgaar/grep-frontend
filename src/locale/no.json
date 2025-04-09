@@ -86,5 +86,9 @@
   "invalid-credentials": "Telefonnummer eller passord er feil.",
   "add-to-favorites": "Legg til i favoritter",
   "save": "Lagre",
-  "saved": "Lagret"
+  "saved": "Lagret",
+  "up-to": "Opp til",
+  "from": "Fra",
+  "to": "Til",
+  "all": "Alle"
 }

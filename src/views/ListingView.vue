@@ -11,6 +11,7 @@ import Popover from "primevue/popover";
 import { useRoute } from "vue-router";
 
 import { useI18n } from "vue-i18n";
+import { format } from "date-fns";
 const { t } = useI18n();
 const op = ref();
 const currentMessage = ref("");
@@ -78,7 +79,7 @@ const toggleBookmarked = async () => {
           <p style="text-align: end">{{ listing.author.phone }}</p>
           <p>{{ $t("posted") }}:</p>
           <p style="text-align: end">
-            {{ new Date().toLocaleDateString() }}
+            {{ format(new Date(listing.createdAt), "dd.MM.yyyy HH:mm") }}
           </p>
         </div>
         <MapBox

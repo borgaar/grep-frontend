@@ -86,5 +86,9 @@
   "invalid-credentials": "Phone number or password is incorrect.",
   "add-to-favorites": "Add to favorites",
   "save": "Save",
-  "saved": "Saved"
+  "saved": "Saved",
+  "up-to": "Up to",
+  "from": "From",
+  "to": "To",
+  "all": "All"
 }
