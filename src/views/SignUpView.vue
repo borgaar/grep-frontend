@@ -2,11 +2,12 @@
 import { ref } from "vue";
 import { zodResolver } from "@primevue/forms/resolvers/zod";
 import { z } from "zod";
-import { useToast } from "primevue";
-import { authService } from "@/api/auth-service";
+import { Toast, useToast } from "primevue";
+import { authService, type UserRole } from "@/api/auth-service";
 import router from "@/router";
 import { useUserStore } from "@/state/user";
 import { useI18n } from "vue-i18n";
+import type { ApiError } from "@/api/services/core/ApiError";
 const { t } = useI18n();
 
 const initialValues = ref({
@@ -64,24 +65,38 @@ const onSubmit = async ({
     return;
   }
   try {
-    await authService.register(values.phone, values.password, values.firstName, values.lastName);
+    const response = await authService.register(
+      values.phone,
+      values.password,
+      values.firstName,
+      values.lastName,
+    );
 
     setUser({
-      firstName: values.firstName,
-      lastName: values.lastName,
+      firstName: response.firstName,
+      lastName: response.lastName,
       phone: values.phone,
-      role: "user",
+      role: response.role as UserRole,
     });
 
     router.push({ name: "listings" });
   } catch (error) {
-    toast.add({
-      severity: "error",
-      summary: t("registration-failed"),
-      detail:
-        process.env.NODE_ENV === "development" ? error : t("an-error-occurred-during-registration"),
-      life: 3000,
-    });
+    const apiError = error as ApiError;
+    if (apiError.status === 409) {
+      toast.add({
+        severity: "error",
+        summary: t("phone-already-exists"),
+        life: 3000,
+      });
+    } else {
+      console.error(apiError);
+      toast.add({
+        severity: "error",
+        summary: t("registration-failed"),
+        detail: import.meta.env.PROD ? t("an-error-occurred-during-registration") : error,
+        life: 3000,
+      });
+    }
     isLoading.value = false;
   }
 };
@@ -89,6 +104,7 @@ const onSubmit = async ({
 
 <template>
   <div class="login-container">
+    <Toast />
     <div class="login-panel">
       <h1 class="login-title">{{ t("create-an-account") }}</h1>
 

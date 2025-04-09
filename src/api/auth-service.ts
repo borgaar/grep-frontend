@@ -102,7 +102,6 @@ export class AuthApiService implements AuthService {
 
       if (response.token) {
         this.storeToken(response.token);
-        this.storeUser({ phone, firstName, lastName, role: "user" });
       }
 
       return response;

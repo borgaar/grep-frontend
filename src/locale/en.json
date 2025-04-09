@@ -81,5 +81,6 @@
   "create-an-account": "Create an account",
   "already-have-an-account": "Already have an account?",
   "sign-in": "Sign in",
-  "search-by-keyword": "Search by keyword"
+  "search-by-keyword": "Search by keyword",
+  "phone-already-exists": "This phone number is already registered."
 }
