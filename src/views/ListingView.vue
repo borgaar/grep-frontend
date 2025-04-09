@@ -195,6 +195,13 @@ const deleteListing = async () => {
           />
           <Button
             class="contact-button"
+            icon="pi pi-pencil"
+            severity="help"
+            :label="t('edit')"
+            @click="openEditDialog"
+          />
+          <Button
+            class="contact-button"
             icon="pi pi-trash"
             severity="danger"
             :label="t('delete')"

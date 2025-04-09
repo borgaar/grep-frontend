@@ -40,6 +40,11 @@ const router = createRouter({
       component: () => import("../views/CreateListingView.vue"),
     },
     {
+      path: "/edit-listing/:id",
+      name: "create-listing",
+      component: () => import("../views/CreateListingView.vue"),
+    },
+    {
       path: "/docs",
       name: "docs",
       component: () => import("../views/ApiDocsView.vue"),
