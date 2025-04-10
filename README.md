@@ -54,7 +54,8 @@ It defaults to `http://localhost:8080`.
 
 ### Get the API clients
 
-This step will download the OpenAPI spec from the backend and generate the API clients for the frontend.
+This step will generate the API clients based on the OpenAPI spec located at `src/api/spec.json`.
+Docs for getting a new API spec can be found [here](https://github.com/borgaar/grep-backend/blob/master/README.md).
 
 ```sh
 pnpm api
