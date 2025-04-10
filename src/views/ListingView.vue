@@ -51,6 +51,9 @@ const imageData = ref<string | undefined>(undefined);
 onMounted(async () => {
   listing.value = await ListingControllerService.get({ id: route.params.id as string });
   try {
+    if (listing.value === undefined) {
+      return;
+    }
     const response = await ImageControllerService.download({
       imageIds: [listing.value.imageIds[0]],
     });
@@ -171,7 +174,7 @@ const deleteListing = async () => {
           </p>
           <p>{{ $t("updated") }}:</p>
           <p style="text-align: end">
-            {{ formatShort(new Date(listing.updatedAt)) }}
+            {{ formatShort(new Date(listing.createdAt)) }}
           </p>
         </div>
         <div style="border-radius: 5px; overflow: hidden; width: 100%">
