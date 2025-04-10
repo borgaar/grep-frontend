@@ -1,12 +1,11 @@
 <script lang="ts" setup>
-import { ImageControllerService, ListingControllerService, type ListingDTO } from "@/api/services";
+import { ListingControllerService, type ListingDTO } from "@/api/services";
 import FilterList from "@/components/listings/filter/FilterList.vue";
 import GridListing from "@/components/listings/grid/GridListing.vue";
 import ListListings from "@/components/listings/list/ListListings.vue";
 import PageContainer from "@/components/PageContainer.vue";
 import router from "@/router";
 import { useFilterStore, type SortDirection, type SortingMethod } from "@/state/filter";
-import type { Blob } from "buffer";
 import { storeToRefs } from "pinia";
 import { onMounted, ref, watch } from "vue";
 
@@ -136,7 +135,7 @@ const visible = ref(false);
             @change="() => setSortingDirection(selectedSortingDirection?.value)"
           />
         </div>
-        <Button @click="router.push({ name: 'create-listing' })">
+        <Button data-cy="create-listing" @click="router.push({ name: 'create-listing' })">
           {{ $t("create-listing") }}</Button
         >
       </div>

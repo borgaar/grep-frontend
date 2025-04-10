@@ -183,7 +183,7 @@ describe("Listing feature works", () => {
   });
 
   it("can create a new listing", () => {
-    cy.get("#app > main > div > div > div.page-container > div.toolbar > button").click();
+    cy.get("[data-cy='create-listing']").click();
 
     // Fill out the form
     cy.get('input[name="title"]').type("My new listing");
