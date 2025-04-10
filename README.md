@@ -20,7 +20,7 @@ This project is built using the following technologies:
 ### Clone the repository
 
 ```
-git clone https://github.com/borgaar/grep-frontend.git
+git clone https://github.com/borgaar/grep-frontend.git && cd grep-frontend
 ```
 
 ### Install dependencies
