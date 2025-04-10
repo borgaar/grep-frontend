@@ -122,12 +122,15 @@ const onFormSubmit = async ({ valid }: { valid: boolean }) => {
   const imageFormData = new FormData();
   imageFormData.append("file", selectedFile.value, selectedFile.value.name);
 
-  const imageResponse = await fetch("http://localhost:8080/api/image/upload", {
-    method: "POST",
-    headers: headers,
-    body: imageFormData,
-    redirect: "follow",
-  });
+  const imageResponse = await fetch(
+    `${import.meta.env.VITE_API_URL ?? "http://localhost:8080"}/api/image/upload`,
+    {
+      method: "POST",
+      headers: headers,
+      body: imageFormData,
+      redirect: "follow",
+    },
+  );
 
   const json = await imageResponse.json();
 

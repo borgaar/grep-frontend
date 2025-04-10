@@ -30,6 +30,7 @@ pnpm i
 ```
 
 ### Add you Mapbox API key
+
 You need to add your Mapbox access token to the `.env` file. You can get a free API key from [Mapbox](https://www.mapbox.com/).
 
 ```sh
@@ -66,6 +67,7 @@ pnpm dev
 ```
 pnpm build
 ```
+
 #### Serve the app
 
 ```
@@ -86,3 +88,8 @@ pnpm run test:e2e
 
 The API documentation can be found by running the backend server (instructions [here](https://github.com/borgaar/grep-backend/blob/master/README.md)) and navigating to `http://localhost:8080/swagger-ui/index.html` in your browser.
 
+You can refresh the API documentation against the server pointed to by the `VITE_API_URL` environment variable by running the following:
+
+```sh
+pnpm api
+```
