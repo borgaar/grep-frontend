@@ -66,6 +66,14 @@ export class AuthApiService implements AuthService {
   }
 
   public isAuthenticated(): boolean {
+    // Allows us to mock out authentication in testing
+    if (
+      import.meta.env.MODE === "development" &&
+      localStorage.getItem("Authorization") === "mock-token"
+    ) {
+      return true;
+    }
+
     return !this.isTokenExpired();
   }
 

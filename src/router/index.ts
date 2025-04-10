@@ -54,6 +54,8 @@ const router = createRouter({
 
 router.beforeEach((to, _, next) => {
   if (to.name !== "sign-in" && to.name !== "sign-up" && !authService.isAuthenticated()) {
+    console.log("HIT MIDDLEWARE");
+
     next({ name: "sign-in" });
   } else {
     next();

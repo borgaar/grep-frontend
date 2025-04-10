@@ -1,5 +1,13 @@
 // https://on.cypress.io/api
 
+import {
+  MOCK_FIRST_NAME,
+  MOCK_LAST_NAME,
+  MOCK_PASSWORD,
+  MOCK_PHONE,
+  MOCK_TOKEN,
+} from "../fixtures/constants";
+
 describe("Sign Up", () => {
   beforeEach(() => {
     // Visit the signup page before each test
@@ -15,9 +23,9 @@ describe("Sign Up", () => {
       {
         statusCode: 201,
         body: {
-          token: "mock-token",
-          firstName: "Cypress",
-          lastName: "Test",
+          token: MOCK_TOKEN,
+          firstName: MOCK_FIRST_NAME,
+          lastName: MOCK_LAST_NAME,
           role: "user",
         },
       },
@@ -26,10 +34,10 @@ describe("Sign Up", () => {
     cy.get("a.signup-link").click();
 
     // Fill in the signup form fields
-    cy.get('input[name="firstName"]').type("Cypress");
-    cy.get('input[name="lastName"]').type("Test");
-    cy.get('input[name="phone"]').type("11223344");
-    cy.get('input[name="password"]').type("ValidPassword123!");
+    cy.get('input[name="firstName"]').type(MOCK_FIRST_NAME);
+    cy.get('input[name="lastName"]').type(MOCK_LAST_NAME);
+    cy.get('input[name="phone"]').type(MOCK_PHONE);
+    cy.get('input[name="password"]').type(MOCK_PASSWORD);
 
     // Click the signup button
     cy.get('button[type="submit"]').click();
@@ -52,10 +60,10 @@ describe("Sign Up", () => {
     cy.get("a.signup-link").click();
 
     // Fill in the signup form fields
-    cy.get('input[name="firstName"]').type("Brotherman");
-    cy.get('input[name="lastName"]').type("Testern");
-    cy.get('input[name="phone"]').type("12345678");
-    cy.get('input[name="password"]').type("ValidPassword123!");
+    cy.get('input[name="firstName"]').type(MOCK_FIRST_NAME);
+    cy.get('input[name="lastName"]').type(MOCK_LAST_NAME);
+    cy.get('input[name="phone"]').type(MOCK_PHONE);
+    cy.get('input[name="password"]').type(MOCK_PASSWORD);
 
     // Click the signup button
     cy.get('button[type="submit"]').click();
