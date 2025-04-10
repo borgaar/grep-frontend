@@ -173,14 +173,21 @@ const onFormSubmit = async ({ valid }: { valid: boolean }) => {
         <div class="p-fluid">
           <div class="field">
             <label for="title">{{ t("title") }}</label>
-            <InputText v-model="listing.title" name="title" type="text" required fluid />
+            <InputText
+              v-model="listing.title"
+              data-cy="title"
+              name="title"
+              type="text"
+              required
+              fluid
+            />
             <Message v-if="$form.title?.invalid" severity="error" size="small" variant="simple">{{
               $form.title.error?.message
             }}</Message>
           </div>
           <div class="field">
             <label for="title">{{ t("image") }}</label>
-            <input type="file" accept="image/*" @change="handleFileChange" />
+            <input type="file" data-cy="file" accept="image/*" @change="handleFileChange" />
           </div>
 
           <div class="field">
@@ -190,6 +197,7 @@ const onFormSubmit = async ({ valid }: { valid: boolean }) => {
               v-model="listing.description"
               name="description"
               auto-resize
+              data-cy="description"
               rows="5"
               required
             />
@@ -209,6 +217,7 @@ const onFormSubmit = async ({ valid }: { valid: boolean }) => {
               v-model="listing.price"
               name="price"
               mode="currency"
+              data-cy="price"
               currency="NOK"
               required
             />
@@ -223,6 +232,7 @@ const onFormSubmit = async ({ valid }: { valid: boolean }) => {
               id="category"
               v-model="listing.category.name"
               :options="categories"
+              data-cy="category"
               :placeholder="t('select-a-category')"
               required
             />
@@ -241,6 +251,7 @@ const onFormSubmit = async ({ valid }: { valid: boolean }) => {
               id="address"
               v-model="addressSearch"
               :suggestions="addressSuggestions"
+              data-cy="address"
               :placeholder="t('search-for-an-address')"
               option-label="adressetekst"
               :delay="500"
@@ -260,7 +271,7 @@ const onFormSubmit = async ({ valid }: { valid: boolean }) => {
 
           <!-- Submit Button -->
           <div class="field">
-            <Button type="submit" :label="t('create-listing')" />
+            <Button type="submit" data-cy="submit" :label="t('create-listing')" />
           </div>
         </div>
       </Form>

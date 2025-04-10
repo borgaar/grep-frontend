@@ -186,16 +186,16 @@ describe("Listing feature works", () => {
     cy.get("[data-cy='create-listing']").click();
 
     // Fill out the form
-    cy.get('input[name="title"]').type("My new listing");
+    cy.get('[data-cy="title"]').type("My new listing");
 
-    cy.get("input[type=file]").selectFile({
+    cy.get('[data-cy="file"]').selectFile({
       contents: Cypress.Buffer.from("image"),
       fileName: "file.jpg",
       lastModified: Date.now(),
     });
 
-    cy.get('textarea[name="description"]').type("My new listing's description");
-    cy.get('input[name="price"]').type("200");
+    cy.get('[data-cy="description"]').type("My new listing's description");
+    cy.get('[data-cy="price"]').type("200");
 
     cy.get("#category").click();
     cy.get("#category_0").click();
@@ -203,6 +203,6 @@ describe("Listing feature works", () => {
     cy.get("#address").type(MOCK_ADDRESS);
     cy.get("#address_0").click();
 
-    cy.get('button[type="submit"]').click();
+    cy.get('[data-cy="submit"]').click();
   });
 });
