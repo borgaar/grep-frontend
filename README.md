@@ -78,9 +78,10 @@ pnpm preview
 
 ### Run e2e tests
 
-Make sure the development server is running before running the tests with:
+Build the release version of the app and run the end-to-end tests using Cypress.
 
 ```sh
+pnpm build
 pnpm run test:e2e
 ```
 
