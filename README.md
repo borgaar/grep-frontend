@@ -80,3 +80,7 @@ Make sure the development server is running before running the tests with:
 pnpm run test:e2e
 ```
 
+### API Documentation
+
+The API documentation can be found by running the backend server (instructions [here](https://github.com/borgaar/grep-backend/blob/master/README.md)) and navigating to `http://localhost:8080/swagger-ui/index.html` in your browser.
+
