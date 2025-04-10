@@ -177,7 +177,7 @@ const onSubmit = async ({
           </div>
         </div>
 
-        <Button type="submit" label="Sign In" class="sign-in-button" :loading="isLoading" />
+        <Button type="submit" :label="t('sign-up')" class="sign-in-button" :loading="isLoading" />
 
         <div class="signup-prompt">
           <span>{{ t("already-have-an-account") }} {{ " " }}</span>

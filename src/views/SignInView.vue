@@ -23,8 +23,11 @@ const initialValues = ref({
 
 const resolver = zodResolver(
   z.object({
-    phone: z.string().transform((v) => v.trim().replace(/\ /g, "")),
-    password: z.string(),
+    phone: z
+      .string()
+      .min(1)
+      .transform((v) => v.trim().replace(/\ /g, "")),
+    password: z.string().min(1),
     rememberMe: z.boolean(),
   }),
 );
@@ -120,7 +123,7 @@ const onSubmit = async ({
           </div>
         </div>
 
-        <Button type="submit" label="Sign In" class="sign-in-button" :loading="isLoading" />
+        <Button type="submit" :label="t('sign-in')" class="sign-in-button" :loading="isLoading" />
 
         <div class="signup-prompt">
           <span>{{ t("dont-have-an-account") }}{{ " " }}</span>

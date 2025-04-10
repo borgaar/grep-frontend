@@ -159,6 +159,26 @@ describe("Listing feature works", () => {
       },
     );
 
+    cy.intercept(
+      {
+        method: "POST",
+        url: "http://localhost:8080/api/image/upload",
+      },
+      {
+        id: "mock-image",
+      },
+    );
+
+    cy.intercept(
+      {
+        method: "PATCH",
+        url: "/api/listing/*",
+      },
+      {
+        statusCode: 200,
+      },
+    );
+
     cy.visit("/");
   });
 
@@ -167,17 +187,22 @@ describe("Listing feature works", () => {
 
     // Fill out the form
     cy.get('input[name="title"]').type("My new listing");
+
+    cy.get("input[type=file]").selectFile({
+      contents: Cypress.Buffer.from("image"),
+      fileName: "file.jpg",
+      lastModified: Date.now(),
+    });
+
     cy.get('textarea[name="description"]').type("My new listing's description");
     cy.get('input[name="price"]').type("200");
 
     cy.get("#category").click();
     cy.get("#category_0").click();
 
-    cy.get("#pv_id_44").type(MOCK_ADDRESS);
+    cy.get("#address").type(MOCK_ADDRESS);
     cy.get("#address_0").click();
 
     cy.get('button[type="submit"]').click();
-
-    // Make sure the new listing is on the front page
   });
 });

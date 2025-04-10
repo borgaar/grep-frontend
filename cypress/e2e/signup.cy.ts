@@ -10,6 +10,25 @@ import {
 
 describe("Sign Up", () => {
   beforeEach(() => {
+    window.localStorage.setItem("Authorization", MOCK_TOKEN);
+    window.localStorage.setItem("language", "en");
+    window.localStorage.setItem("colorMode", "light");
+    cy.intercept(
+      {
+        method: "GET",
+        url: "/api/user/profile",
+      },
+      {
+        statusCode: 200,
+        body: {
+          phone: MOCK_PHONE,
+          firstName: MOCK_FIRST_NAME,
+          lastName: MOCK_LAST_NAME,
+          role: "user",
+        },
+      },
+    ).as("getProfile");
+
     // Visit the signup page before each test
     cy.visit("/sign-up");
   });
@@ -30,8 +49,6 @@ describe("Sign Up", () => {
         },
       },
     ).as("registerUser");
-
-    cy.get("a.signup-link").click();
 
     // Fill in the signup form fields
     cy.get('input[name="firstName"]').type(MOCK_FIRST_NAME);
@@ -57,8 +74,6 @@ describe("Sign Up", () => {
       },
     ).as("registerUser");
 
-    cy.get("a.signup-link").click();
-
     // Fill in the signup form fields
     cy.get('input[name="firstName"]').type(MOCK_FIRST_NAME);
     cy.get('input[name="lastName"]').type(MOCK_LAST_NAME);
@@ -73,7 +88,6 @@ describe("Sign Up", () => {
   });
 
   it("validates required fields", () => {
-    cy.get("a.signup-link").click();
     // Click the signup button without filling in the fields
     cy.get('button[type="submit"]').click();
 
