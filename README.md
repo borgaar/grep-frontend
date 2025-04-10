@@ -29,6 +29,14 @@ git clone https://github.com/borgaar/grep-frontend.git
 pnpm i
 ```
 
+### Add you Mapbox API key
+You need to add your Mapbox access token to the `.env` file. You can get a free API key from [Mapbox](https://www.mapbox.com/).
+
+```sh
+# .env
+VITE_MAPBOX_ACCESS_TOKEN=your_mapbox_access_token
+```
+
 ### Run the backend
 
 Documentation for this can be found in the README.md [here](https://github.com/borgaar/grep-backend/blob/master/README.md).
