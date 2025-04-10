@@ -78,6 +78,12 @@ pnpm preview
 
 ### Run e2e tests
 
+Note that you need to add the following .env variable:
+
+```env
+VITE_TEST=true
+```
+
 Build the release version of the app and run the end-to-end tests using Cypress.
 
 ```sh
