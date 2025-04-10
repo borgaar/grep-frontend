@@ -46,7 +46,7 @@ jobs:
         run: pnpm install
 
       - name: Install clients
-        run: pnpm gen-api
+        run: pnpm api
 
       - name: Build application
         run: pnpm build
