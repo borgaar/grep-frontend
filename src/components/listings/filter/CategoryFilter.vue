@@ -1,11 +1,12 @@
 <script lang="ts" setup>
-import { CategoryControllerService } from "@/api/services";
+import { CategoryControllerService, type CategoryDTO } from "@/api/services";
 import { useUserStore } from "@/state/user";
 import { storeToRefs } from "pinia";
 import { onMounted } from "vue";
 import CreateCategoryButton from "./CreateCategoryButton.vue";
 import { useI18n } from "vue-i18n";
 import { useFilterStore, type Category } from "@/state/filter";
+import UpdateCategoryButton from "./UpdateCategoryButton.vue";
 const { t } = useI18n();
 
 const { user } = storeToRefs(useUserStore());
@@ -24,6 +25,21 @@ const fetchCategories = async () => {
     }));
   } catch (error) {
     console.error(t("error-fetching-categories"), error);
+  }
+};
+
+const updateCategory = async (category: Category, newName: string) => {
+  try {
+    await CategoryControllerService.update1({
+      requestBody: {
+        oldName: category.name,
+        new: {
+          name: newName,
+        },
+      },
+    });
+  } catch (error) {
+    console.error(t("error-updating-category"), error);
   }
 };
 
@@ -48,7 +64,12 @@ onMounted(fetchCategories);
       <label class="p-checkbox-label">
         {{ category.name }}
       </label>
-      <div style="flex-grow: 1; display: flex; justify-content: end; align-items: center">
+      <div style="display: flex; justify-content: end; align-items: center">
+        <UpdateCategoryButton
+          v-if="user?.role === 'admin'"
+          :category-name="category.name"
+          @category-updated="fetchCategories"
+        />
         <i style="cursor: pointer" class="pi pi-trash" @click="() => deleteCategory(category)" />
       </div>
     </div>
@@ -71,7 +92,6 @@ onMounted(fetchCategories);
 }
 
 .p-field-checkbox {
-  margin-bottom: 0.5rem;
   display: flex;
   align-items: center;
   width: 100%;
@@ -81,6 +101,7 @@ onMounted(fetchCategories);
   margin-left: 0.5rem;
   text-overflow: ellipsis;
   overflow: hidden;
+  flex-grow: 1;
 }
 
 .filter-actions {

@@ -108,5 +108,8 @@
   "user-marked-as-reserved": "{user} reserved the listing.",
   "image-is-required": "An image is required",
   "address-is-required": "Address is required",
-  "image": "Image"
+  "image": "Image",
+  "update-category": "Update category",
+  "update": "Update",
+  "updated": "Updated"
 }

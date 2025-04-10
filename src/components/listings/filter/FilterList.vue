@@ -22,14 +22,14 @@ import QueryFilter from "./QueryFilter.vue";
 .container {
   display: flex;
   flex-direction: column;
-  row-gap: 20px;
   margin-top: 10px;
   align-items: center;
 }
 
 .category-container {
   width: 100%;
-  height: min-content;
+  row-gap: 10px;
+  padding-block: 20px;
 }
 
 .query-container {
@@ -41,6 +41,7 @@ import QueryFilter from "./QueryFilter.vue";
   flex-direction: column;
   align-items: center;
   row-gap: 10px;
+  padding-block: 20px;
   width: 100%;
 }
 </style>

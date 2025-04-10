@@ -35,7 +35,7 @@ onMounted(async () => {
     </div>
     <div class="title-description">
       <h1 class="title">{{ listing.title }}</h1>
-      <p>{{ listing.description }}</p>
+      <p class="description">{{ listing.description }}</p>
     </div>
     <div class="expand"></div>
     <i v-if="listing.isBookmarked" class="pi pi-star bookmark"></i>
@@ -46,6 +46,13 @@ onMounted(async () => {
 .title-description {
   display: flex;
   flex-direction: column;
+}
+
+.description {
+  text-overflow: hidden;
+  overflow: hidden;
+  height: 1.4rem;
+  width: 100%;
 }
 
 .expand {
@@ -61,6 +68,7 @@ onMounted(async () => {
   display: flex;
   justify-content: center;
   align-items: center;
+  min-width: 6rem;
 }
 
 .container {

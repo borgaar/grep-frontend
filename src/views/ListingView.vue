@@ -51,7 +51,6 @@ const imageData = ref<string | undefined>(undefined);
 onMounted(async () => {
   listing.value = await ListingControllerService.get({ id: route.params.id as string });
   try {
-    console.log("fetching image");
     const response = await ImageControllerService.download({
       imageIds: [listing.value.imageIds[0]],
     });
@@ -155,7 +154,7 @@ const deleteListing = async () => {
     <div class="content-area">
       <div class="listing-text">
         <h1 class="listing-title">{{ listing.title }}</h1>
-        <p>{{ listing.description }}</p>
+        <p style="white-space: pre-line">{{ listing.description }}</p>
       </div>
       <div class="interactive-area">
         <h2 class="listing-price">{{ listing.price }} {{ $t("currency") }}</h2>
@@ -170,11 +169,17 @@ const deleteListing = async () => {
           <p style="text-align: end">
             {{ formatShort(new Date(listing.createdAt)) }}
           </p>
+          <p>{{ $t("updated") }}:</p>
+          <p style="text-align: end">
+            {{ formatShort(new Date(listing.updatedAt)) }}
+          </p>
         </div>
-        <MapBox
-          class="listing-map"
-          :location="{ lat: listing.location.lat, lng: listing.location.lon }"
-        />
+        <div style="border-radius: 5px; overflow: hidden; width: 100%">
+          <MapBox
+            class="listing-map"
+            :location="{ lat: listing.location.lat, lng: listing.location.lon }"
+          />
+        </div>
         <div v-if="listing?.author.phone !== currentUser?.phone" class="button-container">
           <Button
             class="contact-button"
@@ -339,6 +344,7 @@ const deleteListing = async () => {
   padding: 10px;
   background-color: #f0f8ff;
   align-items: center;
+  height: 100%;
 }
 
 .button-container {

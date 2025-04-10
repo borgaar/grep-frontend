@@ -1,6 +1,9 @@
 <script lang="ts" setup>
 import { ImageControllerService, type ListingDTO } from "@/api/services";
 import { onMounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 const props = defineProps<{
   listing: ListingDTO;
@@ -37,7 +40,7 @@ onMounted(async () => {
         <p class="description-container">
           {{ listing.description }}
         </p>
-        <p>Price: {{ listing.price }}</p>
+        <p class="listing-price">{{ listing.price }} {{ t("currency") }}</p>
       </div>
     </div>
   </RouterLink>
@@ -96,7 +99,13 @@ onMounted(async () => {
 }
 
 .description-container {
-  overflow-y: auto;
+  overflow-y: hidden;
   flex-grow: 1;
+}
+
+.listing-price {
+  padding-top: 10px;
+  font-weight: 500;
+  margin-top: auto;
 }
 </style>
