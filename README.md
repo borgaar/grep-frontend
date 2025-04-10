@@ -1,6 +1,7 @@
 # grep-frontend
 
-This template should help get you started developing with Vue 3 in Vite.
+Grep is a web application that allows you to post and find listings for used items.
+It is effectively a marketplace for used items, similar to Craigslist or Facebook Marketplace or finn.no.
 
 ## Project Setup
 
@@ -14,6 +15,18 @@ git clone https://github.com/borgaar/grep-frontend.git
 
 ```sh
 pnpm i
+```
+
+### Run the backend
+
+Documentation for this can be found in the README (https://github.com/borgaar/grep-backend/blob/master/README.md)[here].
+
+### Get the API clients
+
+This step will download the OpenAPI spec from the backend and generate the API clients for the frontend.
+
+```sh
+pnpm api
 ```
 
 ## Run the app
