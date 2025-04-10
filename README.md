@@ -3,6 +3,18 @@
 Grep is a web application that allows you to post and find listings for used items.
 It is effectively a marketplace for used items, similar to Craigslist or Facebook Marketplace or finn.no.
 
+## Tech stack
+
+This project is built using the following technologies:
+
+- [Vue.js](https://vuejs.org/) - A progressive JavaScript framework for building user interfaces.
+- [Vite](https://vitejs.dev/) - A fast build tool and development server.
+- [TypeScript](https://www.typescriptlang.org/) - A superset of JavaScript that adds static types.
+- [Pinia](https://pinia.vuejs.org/) - A state management library for Vue.js.
+- [Vue Router](https://router.vuejs.org/) - The official router for Vue.js.
+- [PrimeVue](https://www.primefaces.org/primevue/) - A collection of UI components for Vue.js, using raw CSS.
+- [Cypress](https://www.cypress.io/) - A JavaScript end-to-end testing framework.
+
 ## Project Setup
 
 ### Clone the repository
