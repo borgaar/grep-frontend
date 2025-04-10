@@ -37,7 +37,7 @@ const fetchListings = async () => {
       categories: filters.categories.value
         .filter((c) => c.isSelected)
         .map((category) => category.name),
-      query: filters.query.value,
+      query: filters.query.value?.trim(),
     });
     if (response.listings.length === 0) {
       console.warn("No listings found");

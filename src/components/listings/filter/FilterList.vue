@@ -20,6 +20,7 @@ import QueryFilter from "./QueryFilter.vue";
 
 <style scoped>
 .container {
+  padding-top: 50px;
   display: flex;
   flex-direction: column;
   margin-top: 10px;

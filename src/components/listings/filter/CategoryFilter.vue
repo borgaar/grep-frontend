@@ -28,21 +28,6 @@ const fetchCategories = async () => {
   }
 };
 
-const updateCategory = async (category: Category, newName: string) => {
-  try {
-    await CategoryControllerService.update1({
-      requestBody: {
-        oldName: category.name,
-        new: {
-          name: newName,
-        },
-      },
-    });
-  } catch (error) {
-    console.error(t("error-updating-category"), error);
-  }
-};
-
 const deleteCategory = async (category: Category) => {
   try {
     await CategoryControllerService.delete1({ name: category.name });
@@ -70,7 +55,12 @@ onMounted(fetchCategories);
           :category-name="category.name"
           @category-updated="fetchCategories"
         />
-        <i style="cursor: pointer" class="pi pi-trash" @click="() => deleteCategory(category)" />
+        <i
+          v-if="user?.role === 'admin'"
+          style="cursor: pointer"
+          class="pi pi-trash"
+          @click="() => deleteCategory(category)"
+        />
       </div>
     </div>
 
