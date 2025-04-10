@@ -25,6 +25,8 @@ git clone https://github.com/borgaar/grep-frontend.git && cd grep-frontend
 
 ### Install dependencies
 
+Install [pnpm](https://pnpm.io/) if you don't have it already and run:
+
 ```sh
 pnpm i
 ```
@@ -41,6 +43,14 @@ VITE_MAPBOX_ACCESS_TOKEN=your_mapbox_access_token
 ### Run the backend
 
 Documentation for this can be found in the README.md [here](https://github.com/borgaar/grep-backend/blob/master/README.md).
+
+**Note:** If you are hosting the database on a different URL, you must set this variable in the `.env` file:
+
+```
+VITE_API_URL=<your_api_url>
+```
+
+It defaults to `http://localhost:8080`.
 
 ### Get the API clients
 
