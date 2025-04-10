@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-namespace */
 /// <reference types="cypress" />
 // ***********************************************
 // This example commands.ts shows you how to
@@ -36,4 +37,16 @@
 //   }
 // }
 
-export {}
+Cypress.Commands.add("checkToast", (content: string) => {
+  cy.contains("div.p-toast-message-text > span", content).should("be.visible");
+});
+
+declare global {
+  namespace Cypress {
+    interface Chainable {
+      checkToast(content: string): Chainable<void>;
+    }
+  }
+}
+
+export {};
