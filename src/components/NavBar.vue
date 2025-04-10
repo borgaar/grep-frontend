@@ -92,11 +92,6 @@ const items = computed(() => [
     icon: "pi pi-user",
     route: "/profile",
   },
-  {
-    label: t("api-docs"),
-    icon: "pi pi-book",
-    route: "/docs",
-  },
 ]);
 </script>
 

@@ -53,6 +53,8 @@ pnpm api
 
 ### Run the development server
 
+**Please note: running the application as development will result in debug messages appearing for debug purposes**
+
 ```sh
 pnpm dev
 ```
