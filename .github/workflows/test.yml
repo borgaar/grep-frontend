@@ -48,5 +48,5 @@ jobs:
         run: pnpm build
 
       - name: Run Cypress E2E tests
-        run: pnpm run test:e2e
+        run: pnpm start-server-and-test "pnpm dev" http://localhost:5173 "pnpm run test:e2e"
 
