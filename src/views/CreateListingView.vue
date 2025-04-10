@@ -188,6 +188,7 @@ const onFormSubmit = async ({ valid }: { valid: boolean }) => {
             <Textarea
               id="description"
               v-model="listing.description"
+              name="description"
               auto-resize
               rows="5"
               required
@@ -206,6 +207,7 @@ const onFormSubmit = async ({ valid }: { valid: boolean }) => {
             <InputNumber
               id="price"
               v-model="listing.price"
+              name="price"
               mode="currency"
               currency="NOK"
               required

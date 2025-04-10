@@ -1,7 +1,14 @@
-// https://on.cypress.io/api
-import { MOCK_FIRST_NAME, MOCK_LAST_NAME, MOCK_PHONE, MOCK_TOKEN } from "../fixtures/constants";
+import {
+  MOCK_ADDRESS,
+  MOCK_FIRST_NAME,
+  MOCK_LAST_NAME,
+  MOCK_PHONE,
+  MOCK_TOKEN,
+} from "../fixtures/constants";
+import type { AddressResponse } from "../../src/api/geo-norge";
+import type { ListingDTO } from "../../src/api/services/models/ListingDTO";
 
-describe("Sign In", () => {
+describe("Listing feature works", () => {
   beforeEach(() => {
     window.localStorage.setItem("Authorization", MOCK_TOKEN);
     window.localStorage.setItem("language", "en");
@@ -10,12 +17,12 @@ describe("Sign In", () => {
     cy.intercept(
       {
         method: "GET",
-        url: "/api/listing/",
+        url: "/api/listing*",
       },
       [
         [
           {
-            id: "mock-1",
+            id: "1",
             title: "Mock Title 1",
             description: "Mock description 1",
             location: {
@@ -38,10 +45,8 @@ describe("Sign In", () => {
             isSold: false,
             imageIds: ["…"],
             isBookmarked: false,
-            reservedBy: null,
-            soldTo: null,
           },
-        ],
+        ] satisfies ListingDTO[],
       ],
     ).as("getListings");
 
@@ -61,11 +66,118 @@ describe("Sign In", () => {
       },
     ).as("getProfile");
 
+    cy.intercept(
+      {
+        method: "GET",
+        url: "/api/category*",
+      },
+      {
+        statusCode: 200,
+        body: [
+          {
+            name: "Mock Category 1",
+          },
+          {
+            name: "Mock Category 2",
+          },
+        ],
+      },
+    );
+
+    cy.intercept(
+      {
+        method: "GET",
+        url: "https://ws.geonorge.no/adresser/v1/sok?fuzzy=true&sok=Address+Road+1",
+      },
+      {
+        adresser: [
+          {
+            adressetekst: MOCK_ADDRESS,
+            postnummer: "1000",
+            poststed: "Poststed",
+            representasjonspunkt: {
+              lat: 100,
+              lon: 100,
+            },
+            displayText: "Address Road 1, 1000 Poststed",
+          },
+        ],
+      } satisfies AddressResponse,
+    );
+
+    cy.intercept(
+      {
+        method: "POST",
+        url: "/api/listing",
+      },
+      {
+        statusCode: 201,
+      },
+    );
+
+    cy.intercept(
+      {
+        method: "GET",
+        url: "/api/listing/1",
+      },
+      {
+        id: "…",
+        title: "…",
+        description: "…",
+        location: {
+          lat: 1,
+          lon: 1,
+        },
+        price: 1,
+        createdAt: "2025-04-10T12:22:58.142Z",
+        updatedAt: "2025-04-10T12:22:58.142Z",
+        category: {
+          name: "…",
+        },
+        author: {
+          id: "…",
+          phone: "…",
+          firstName: "…",
+          lastName: "…",
+        },
+        isReserved: true,
+        isSold: true,
+        imageIds: ["…"],
+        isBookmarked: true,
+        reservedBy: {
+          id: "…",
+          phone: "…",
+          firstName: "…",
+          lastName: "…",
+        },
+        soldTo: {
+          id: "…",
+          phone: "…",
+          firstName: "…",
+          lastName: "…",
+        },
+      },
+    );
+
     cy.visit("/");
   });
 
-  it("shows the listings page", () => {
-    // Assert that the listings page is displayed
-    cy.get("h1").contains("Listings").should("be.visible");
+  it("can create a new listing", () => {
+    cy.get("#app > main > div > div > div.page-container > div.toolbar > button").click();
+
+    // Fill out the form
+    cy.get('input[name="title"]').type("My new listing");
+    cy.get('textarea[name="description"]').type("My new listing's description");
+    cy.get('input[name="price"]').type("200");
+
+    cy.get("#category").click();
+    cy.get("#category_0").click();
+
+    cy.get("#pv_id_44").type(MOCK_ADDRESS);
+    cy.get("#address_0").click();
+
+    cy.get('button[type="submit"]').click();
+
+    // Make sure the new listing is on the front page
   });
 });
