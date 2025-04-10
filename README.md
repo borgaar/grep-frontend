@@ -19,7 +19,7 @@ pnpm i
 
 ### Run the backend
 
-Documentation for this can be found in the README (https://github.com/borgaar/grep-backend/blob/master/README.md)[here].
+Documentation for this can be found in the README.md [here](https://github.com/borgaar/grep-backend/blob/master/README.md).
 
 ### Get the API clients
 
