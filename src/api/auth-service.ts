@@ -54,7 +54,7 @@ export class AuthApiService implements AuthService {
   }
 
   getToken(): string | null {
-    throw new Error("Method not implemented.");
+    return localStorage.getItem("Authorization");
   }
 
   private storeToken(token: string): void {

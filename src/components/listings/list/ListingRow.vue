@@ -1,16 +1,35 @@
 <script lang="ts" setup>
-import type { ListingDTO } from "@/api/services";
+import { ImageControllerService, type ListingDTO } from "@/api/services";
+import { onMounted, ref } from "vue";
 
-defineProps<{
+const props = defineProps<{
   listing: ListingDTO;
 }>();
+
+const imageData = ref<string | undefined>(undefined);
+
+onMounted(async () => {
+  try {
+    const response = await ImageControllerService.download({
+      imageIds: [props.listing.imageIds[0]],
+    });
+
+    const base64EncodedImageData = Object.values(response)[0];
+
+    imageData.value = `data:image/jpeg;base64,${base64EncodedImageData}`;
+  } catch (error) {
+    console.error("Error fetching image:", error);
+    throw error;
+  }
+});
 </script>
 
 <template>
   <RouterLink :to="`/listing/${listing.id}`" class="container">
     <div class="image-container">
       <img
-        :src="'https://picsum.photos/id/237/200/300'"
+        :src="imageData ?? '/placeholder.png'"
+        alt="Listing image"
         style="object-fit: cover; height: 100%; width: 100%"
       />
     </div>

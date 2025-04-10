@@ -1,11 +1,12 @@
 <script lang="ts" setup>
-import { ListingControllerService, type ListingDTO } from "@/api/services";
+import { ImageControllerService, ListingControllerService, type ListingDTO } from "@/api/services";
 import FilterList from "@/components/listings/filter/FilterList.vue";
 import GridListing from "@/components/listings/grid/GridListing.vue";
 import ListListings from "@/components/listings/list/ListListings.vue";
 import PageContainer from "@/components/PageContainer.vue";
 import router from "@/router";
 import { useFilterStore, type SortDirection, type SortingMethod } from "@/state/filter";
+import type { Blob } from "buffer";
 import { storeToRefs } from "pinia";
 import { onMounted, ref, watch } from "vue";
 
@@ -17,6 +18,8 @@ const viewMethods = ref([
   { icon: "pi pi-list", value: "list" },
 ]);
 const listings = ref<ListingDTO[]>([]);
+
+const totalListings = ref(0);
 
 const filters = storeToRefs(useFilterStore());
 
@@ -36,11 +39,11 @@ const fetchListings = async () => {
         .map((category) => category.name),
       query: filters.query.value,
     });
-    if (response.length === 0) {
+    if (response.listings.length === 0) {
       console.warn("No listings found");
     }
-    listings.value = response;
-    console.log("Fetched listings:", listings.value.length);
+    listings.value = response.listings;
+    totalListings.value = response.totalListings;
   } catch (error) {
     console.error("Error fetching listings:", error);
   }
@@ -66,8 +69,12 @@ const sortingMethods: { label: string; value: SortingMethod }[] = [
   },
 ];
 
-const selectedSortingDirection = ref<(typeof sortingDirections)[0]>(sortingDirections[0]);
-const selectedSortingMethod = ref<(typeof sortingMethods)[0] | null>(null);
+const selectedSortingDirection = ref<(typeof sortingDirections)[0]>(
+  sortingDirections.find((m) => m.value === filters.sort.value)!,
+);
+const selectedSortingMethod = ref<(typeof sortingMethods)[0] | null>(
+  sortingMethods.find((m) => m.value === filters.sortingMethod.value) ?? null,
+);
 
 onMounted(fetchListings);
 
@@ -137,8 +144,8 @@ const visible = ref(false);
       <GridListing v-if="selectedValue === 'grid'" :listings="listings" />
       <Paginator
         :rows="filters.pageSize.value"
-        :total-records="listings.length"
-        :rows-per-page-options="[10, 20, 30]"
+        :total-records="totalListings"
+        :rows-per-page-options="[15, 33, 48]"
         @page="
           (e) => {
             setPage(e.page);

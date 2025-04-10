@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import type { ListingDTO } from "@/api/services";
 import ListingThumbnail from "./ListingThumbnail.vue";
-import mockListings from "@/data/mock/listings";
 
 defineProps<{
   listings: ListingDTO[];

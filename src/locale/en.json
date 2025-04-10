@@ -105,5 +105,8 @@
   "reserve": "Reserve",
   "reserved": "Reserved",
   "sold": "Sold",
-  "user-marked-as-reserved": "{user} reserved the listing."
+  "user-marked-as-reserved": "{user} reserved the listing.",
+  "image-is-required": "An image is required",
+  "address-is-required": "Address is required",
+  "image": "Image"
 }

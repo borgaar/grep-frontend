@@ -11,6 +11,7 @@ import ToastService from "primevue/toastservice";
 import { createI18n } from "vue-i18n";
 import enMessages from "./locale/en.json";
 import noMessages from "./locale/no.json";
+import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 
 const app = createApp(App);
 
@@ -33,7 +34,10 @@ app.use(PrimeVue, {
   },
 });
 
-app.use(createPinia());
+const pinia = createPinia();
+pinia.use(piniaPluginPersistedstate);
+
+app.use(pinia);
 
 import { useUserStore } from "./state/user";
 const { ensureInitialized } = useUserStore();

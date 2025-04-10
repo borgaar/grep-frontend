@@ -39,8 +39,8 @@ const resolver = zodResolver(
 
 const { priceLower, priceUpper } = storeToRefs(useFilterStore());
 
-const priceLowerModel = ref<number | null>(null);
-const priceUpperModel = ref<number | null>(null);
+const priceLowerModel = ref<number | null>(priceLower.value ?? null);
+const priceUpperModel = ref<number | null>(priceUpper.value ?? null);
 
 const onSubmit = ({ valid }: { valid: boolean }) => {
   if (!valid) {

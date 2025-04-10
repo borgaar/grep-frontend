@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import {
+  ImageControllerService,
   ListingControllerService,
   MessageControllerService,
   type ListingDTO,
@@ -45,8 +46,23 @@ const sendMessage = (event: Event) => {
 
 const route = useRoute();
 
+const imageData = ref<string | undefined>(undefined);
+
 onMounted(async () => {
   listing.value = await ListingControllerService.get({ id: route.params.id as string });
+  try {
+    console.log("fetching image");
+    const response = await ImageControllerService.download({
+      imageIds: [listing.value.imageIds[0]],
+    });
+
+    const base64EncodedImageData = Object.values(response)[0];
+
+    imageData.value = `data:image/png;base64,${base64EncodedImageData}`;
+  } catch (error) {
+    console.error("Error fetching image:", error);
+    throw error;
+  }
 });
 
 const listing = ref<ListingDTO>();
@@ -135,7 +151,7 @@ const deleteListing = async () => {
 
 <template>
   <PageContainer v-if="listing !== undefined" class="container">
-    <img :src="'https://picsum.photos/200/300'" class="listing-image" :height="500" />
+    <img :src="imageData ?? '/placeholder.png'" class="listing-image" :height="500" />
     <div class="content-area">
       <div class="listing-text">
         <h1 class="listing-title">{{ listing.title }}</h1>

@@ -7,7 +7,13 @@ import { onMounted, ref } from "vue";
 import { z } from "zod";
 import { useI18n } from "vue-i18n";
 import { GeoNorge, type Address } from "@/api/geo-norge";
+import { authService } from "@/api/auth-service";
+import Toast from "primevue/toast";
+import { useToast } from "primevue";
+
 const { t } = useI18n();
+
+const toast = useToast();
 
 const categories = ref<string[]>([]);
 const addressSearch = ref("");
@@ -74,14 +80,58 @@ const selectAddress = (event: { value: Address }) => {
   }
 };
 
+// State to store the selected file
+const selectedFile = ref<File | null>(null);
+
+// Handle file selection
+const handleFileChange = (event: Event) => {
+  const input = event.target as HTMLInputElement;
+  if (input.files && input.files.length > 0) {
+    selectedFile.value = input.files[0];
+  }
+};
+
 const onFormSubmit = async ({ valid }: { valid: boolean }) => {
   if (!valid) {
     return;
   }
 
+  if (!selectedFile.value) {
+    toast.add({
+      severity: "error",
+      summary: t("error"),
+      detail: t("image-is-required"),
+    });
+    return;
+  }
+
+  if (!selectedAddress.value) {
+    toast.add({
+      severity: "error",
+      summary: t("error"),
+      detail: t("address-is-required"),
+    });
+    return;
+  }
+
   const formData = { ...listing.value };
 
-  await ListingControllerService.create({
+  const headers = new Headers();
+  headers.append("Authorization", "Bearer " + authService.getToken());
+
+  const imageFormData = new FormData();
+  imageFormData.append("file", selectedFile.value, selectedFile.value.name);
+
+  const imageResponse = await fetch("http://localhost:8080/api/image/upload", {
+    method: "POST",
+    headers: headers,
+    body: imageFormData,
+    redirect: "follow",
+  });
+
+  const json = await imageResponse.json();
+
+  const listingResponse = await ListingControllerService.create({
     requestBody: {
       title: formData.title,
       description: formData.description,
@@ -94,12 +144,29 @@ const onFormSubmit = async ({ valid }: { valid: boolean }) => {
     },
   });
 
+  await ListingControllerService.update({
+    id: listingResponse.id,
+    requestBody: {
+      title: formData.title,
+      bookmarked: false,
+      category: formData.category.name,
+      description: formData.description,
+      price: formData.price!,
+      location: {
+        lat: formData.location.lat,
+        lon: formData.location.lon,
+      },
+      imageIds: [json.id],
+    },
+  });
+
   router.back();
 };
 </script>
 
 <template>
   <div class="container">
+    <Toast />
     <div class="card">
       <h2>{{ t("create-new-listing") }}</h2>
       <Form v-slot="$form" :resolver :initial-values="listing" @submit="onFormSubmit">
@@ -110,6 +177,10 @@ const onFormSubmit = async ({ valid }: { valid: boolean }) => {
             <Message v-if="$form.title?.invalid" severity="error" size="small" variant="simple">{{
               $form.title.error?.message
             }}</Message>
+          </div>
+          <div class="field">
+            <label for="title">{{ t("image") }}</label>
+            <input type="file" accept="image/*" @change="handleFileChange" />
           </div>
 
           <div class="field">

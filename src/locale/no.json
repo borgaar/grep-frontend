@@ -108,5 +108,8 @@
   "all": "Alle",
   "edit": "Rediger",
   "edit-listing": "Endre annonse",
-  "address-is-persisted": "Addressen forblir den samme dersom du ikke skriver noe inn her"
+  "address-is-persisted": "Addressen forblir den samme dersom du ikke skriver noe inn her",
+  "image-is-required": "Vennligst last opp et bilde",
+  "address-is-required": "Adresse er påkrevd",
+  "image": "Bilde"
 }
